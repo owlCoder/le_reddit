@@ -1,9 +1,31 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 
 const Login: React.FC = () => {
-  useEffect(() => {
-    // TODO: dodati sesijski token
-  }, []);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    // dodati proveru jel popunio ista pa ispise required
+    // dodati proveru 
+    // pozvati api
+
+    // Here you can handle form submission, for example, by sending a request to your backend API.
+    console.log("Email:", email);
+    console.log("Password:", password);
+    setErrorMessage("ne mere bekend")
+  };
+
   return (
     <>
       <section className="relative flex flex-wrap lg:h-screen lg:items-center">
@@ -15,12 +37,12 @@ const Login: React.FC = () => {
 
             <p className="mt-4 text-gray-500">
               Le Reddit is home to thousands of communities, endless
-              conversation, and authentic human connection.There's a community
+              conversation, and authentic human connection. There's a community
               for you.
             </p>
           </div>
 
-          <form action="#" className="mx-auto mb-0 mt-8 max-w-md space-y-4">
+          <form onSubmit={handleSubmit} className="mx-auto mb-0 mt-8 max-w-md space-y-4">
             <div>
               <label htmlFor="email" className="sr-only">
                 Email
@@ -29,6 +51,8 @@ const Login: React.FC = () => {
               <div className="relative">
                 <input
                   type="email"
+                  value={email}
+                  onChange={handleEmailChange}
                   className="w-full rounded-lg border-2 border-reddit-400 focus:border-reddit-600 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 pe-12 text-sm shadow-sm"
                   placeholder="Email"
                 />
@@ -60,6 +84,8 @@ const Login: React.FC = () => {
               <div className="relative">
                 <input
                   type="password"
+                  value={password}
+                  onChange={handlePasswordChange}
                   className="w-full rounded-lg border-2 border-reddit-400 focus:border-reddit-600 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 pe-12 text-sm shadow-sm"
                   placeholder="Password"
                 />
@@ -89,6 +115,10 @@ const Login: React.FC = () => {
               </div>
             </div>
 
+            {errorMessage && <p className="mt-4 text-primary-600">
+              {errorMessage}
+            </p>}
+
             <div className="flex items-center justify-between">
               <p className="text-sm text-gray-500">
                 No account?
@@ -102,7 +132,7 @@ const Login: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-32 inline-block bg-primary-500 hover:bg-primary-600 px-5 py-2 text-md font-medium  rounded-xl text-white"
+                className="w-32 inline-block bg-primary-500 hover:bg-primary-600 px-5 py-2 text-md font-medium rounded-xl text-white"
               >
                 Log in
               </button>
