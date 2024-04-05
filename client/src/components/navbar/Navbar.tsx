@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
                 alt="logo"
               />
             </a>
-            <span className="ml-2 text-xl font-semibold">Le Reddit</span>
+            <a href="/" className="ml-2 text-xl font-semibold">Le Reddit</a>
           </div>
           <div className="flex items-center gap-8">
             {/* Search Bar */}
