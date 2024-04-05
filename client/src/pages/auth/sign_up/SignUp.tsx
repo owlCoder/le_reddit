@@ -12,6 +12,7 @@ import React, { useState } from "react";
 import IUser from "../../../interfaces/auth/sign_up/IUser";
 import defaultUser from "../../../samples/auth/sign_up/SignUp";
 import { ValudateSignupData } from "../../../validators/auth/sign_up/validate_signup";
+import Navbar from "../../../components/navbar/Navbar";
 
 const SignUp: React.FC = () => {
   // State variables to manage form data, image, and error messages
@@ -75,6 +76,7 @@ const SignUp: React.FC = () => {
   // Render the sign-up form
   return (
     <>
+    <Navbar />
       <section className="relative flex flex-wrap lg:h-screen lg:items-center">
         <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-lg text-center">
@@ -173,7 +175,7 @@ const SignUp: React.FC = () => {
               />
               <label
                 htmlFor="image"
-                className="inline-block bg-primary-400 hover:bg-primary-500 focus:bg-primary-500 rounded-lg border focus:outline-none focus:ring-0 text-white font-semibold py-2 px-4 cursor-pointer shadow-sm transition duration-300 ease-in-out mr-2"
+                className="select-none rounded-lg bg-gradient-to-tr from-orange-500 to-primary-600 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-primary-900/10 transition-all hover:shadow-lg hover:shadow-primary-900/20 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none inline-block mr-2"
               >
                 Choose Image
               </label>
@@ -195,7 +197,7 @@ const SignUp: React.FC = () => {
               <p className="mt-4 text-primary-600">{errorMessage}</p>
             )}
 
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between bottom-0">
               <p className="text-sm text-gray-500">
                 Already have an account?
                 <a
@@ -208,7 +210,7 @@ const SignUp: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-32 inline-block bg-primary-500 hover:bg-primary-600 px-4 py-2 text-md font-medium rounded-xl text-white"
+                className="select-none rounded-lg bg-gradient-to-tr from-primary-600 to-primary-600 py-2 px-4 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-primary-900/10 transition-all hover:shadow-lg hover:shadow-primary-900/20 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none inline-block"
               >
                 Sign up
               </button>
@@ -216,7 +218,7 @@ const SignUp: React.FC = () => {
           </form>
         </div>
 
-        <div className="relative h-64 w-full sm:h-96 lg:h-full lg:w-1/2">
+        <div className="hidden lg:block relative h-64 w-full sm:h-96 lg:h-full lg:w-1/2">
           <img
             alt=""
             src="/images/login.jpg"

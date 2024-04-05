@@ -11,6 +11,7 @@
 import React, { useState } from "react";
 import defaultLogin from "../../../samples/auth/login/login";
 import ILogin from "../../../interfaces/auth/login/ILogin";
+import Navbar from "../../../components/navbar/Navbar";
 
 const Login: React.FC = () => {
   // State variables to manage form data and error messages
@@ -44,16 +45,17 @@ const Login: React.FC = () => {
   // Render the login form
   return (
     <>
-      <section className="relative flex flex-wrap lg:h-screen lg:items-center">
+    <Navbar />
+      <section className="relative flex flex-wrap lg:h-screen lg:items-center overflow-hidden">
         <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-lg text-center">
             <h1 className="text-2xl font-bold sm:text-3xl text-primary-600">
               Dive Into Anything
             </h1>
 
-            <p className="mt-4 text-gray-500">
+            <p className="mt-4 px-4 text-gray-500">
               Le Reddit is home to thousands of communities, endless
-              conversation, and authentic human connection. There's a community
+              conversation, and real connection. There's a community
               for you.
             </p>
           </div>
@@ -151,7 +153,7 @@ const Login: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-32 inline-block bg-primary-500 hover:bg-primary-600 px-5 py-2 text-md font-medium rounded-xl text-white"
+                className="select-none rounded-lg bg-gradient-to-tr from-primary-600 to-primary-600 py-2 px-6 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-primary-900/10 transition-all hover:shadow-lg hover:shadow-primary-900/20 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none inline-block"
               >
                 Log in
               </button>
@@ -159,7 +161,7 @@ const Login: React.FC = () => {
           </form>
         </div>
 
-        <div className="relative h-64 w-full sm:h-96 lg:h-full lg:w-1/2">
+        <div className="hidden lg:block relative h-64 w-full sm:h-96 lg:h-full lg:w-1/2">
           <img
             alt=""
             src="/images/login.jpg"
