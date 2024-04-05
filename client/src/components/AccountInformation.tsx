@@ -55,8 +55,37 @@ const AccountInformation: React.FC = () => {
           <div className="py-0" role="none">
             {/* Dropdown items */}
             <a
+            href="/create"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-200 hover:text-gray-900 rounded-t-md"
+              role="menuitem"
+              onClick={toggleDropdown}
+            >
+              <svg
+                className="h-6 w-6 mr-2 inline-block"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+              >
+                <g id="SVGRepo_bgCarrier" strokeWidth={0} />
+                <g
+                  id="SVGRepo_tracerCarrier"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <g id="SVGRepo_iconCarrier">
+                  {" "}
+                  <path
+                    fill="#087d1f"
+                    fillRule="evenodd"
+                    d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"
+                  />{" "}
+                </g>
+              </svg>
+              Create
+            </a>
+            <a
               href="/profile"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-200 rounded-t-md"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-200"
               role="menuitem"
               onClick={toggleDropdown}
             >
@@ -110,35 +139,7 @@ const AccountInformation: React.FC = () => {
               Profile
             </a>
 
-            <a
-            href="/create"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-200 hover:text-gray-900"
-              role="menuitem"
-              onClick={toggleDropdown}
-            >
-              <svg
-                className="h-6 w-6 mr-2 inline-block"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-              >
-                <g id="SVGRepo_bgCarrier" strokeWidth={0} />
-                <g
-                  id="SVGRepo_tracerCarrier"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <g id="SVGRepo_iconCarrier">
-                  {" "}
-                  <path
-                    fill="#087d1f"
-                    fillRule="evenodd"
-                    d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"
-                  />{" "}
-                </g>
-              </svg>
-              Create
-            </a>
+            
             <hr className=" bg-primary-500 h-0.5" />
             <button
               className="w-full block items-start text-start px-4 py-2 text-sm text-gray-700 rounded-b-md hover:bg-primary-200 hover:text-gray-900"
