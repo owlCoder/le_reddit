@@ -1,17 +1,27 @@
+/**
+ * SignUp Component
+ * 
+ * This component provides a sign-up form for users to register with their information.
+ * 
+ * It uses the IUser interface to define the shape of the form data and defaultUser
+ * for initializing the form with default values.
+ * 
+ * @returns JSX.Element
+ */
 import React, { useState } from "react";
 import IUser from "../../../interfaces/auth/sign_up/IUser";
 import defaultUser from "../../../samples/auth/sign_up/signup";
 
-type FormDataKeys = keyof IUser;
-
-const Register: React.FC = () => {
+const SignUp: React.FC = () => {
+  // State variables to manage form data, image, and error messages
   const [formData, setFormData] = useState<IUser>(defaultUser);
   const [image, setImage] = useState<File | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
+  // Function to handle changes in form inputs
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-    key: FormDataKeys
+    key: keyof IUser
   ) => {
     setFormData({
       ...formData,
@@ -19,12 +29,14 @@ const Register: React.FC = () => {
     });
   };
 
+  // Function to handle image file change
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       setImage(event.target.files[0]);
     }
   };
 
+  // Function to handle form submission
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Handle form submission, API calls, etc.
@@ -37,6 +49,7 @@ const Register: React.FC = () => {
     setErrorMessage("Backend is not available");
   };
 
+  // Render the sign-up form
   return (
     <>
       <section className="relative flex flex-wrap lg:h-screen lg:items-center">
@@ -125,7 +138,7 @@ const Register: React.FC = () => {
                   <input
                     type={key === "email" ? "email" : "text"}
                     value={value}
-                    onChange={(e) => handleChange(e, key as FormDataKeys)}
+                    onChange={(e) => handleChange(e, key as keyof IUser)}
                     className="w-full rounded-lg border-2 border-reddit-400 focus:border-reddit-600 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
                     placeholder={key.charAt(0).toUpperCase() + key.slice(1)}
                     required
@@ -182,4 +195,4 @@ const Register: React.FC = () => {
   );
 };
 
-export default Register;
+export default SignUp;

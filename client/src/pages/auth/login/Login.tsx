@@ -1,31 +1,47 @@
+/**
+ * Login Component
+ *
+ * This component provides a login form for users to enter their email and password.
+ *
+ * It uses the ILogin interface to define the shape of the form data and defaultLogin
+ * for initializing the form with default values.
+ *
+ * @returns JSX.Element
+ */
 import React, { useState } from "react";
+import defaultLogin from "../../../samples/auth/login/login";
+import ILogin from "../../../interfaces/auth/login/ILogin";
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  // State variables to manage form data and error messages
+  const [formData, setFormData] = useState<ILogin>(defaultLogin);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
+  // Function to handle changes in form inputs
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    key: keyof ILogin
+  ) => {
+    setFormData({
+      ...formData,
+      [key]: event.target.value,
+    });
   };
 
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  };
-
+  // Function to handle form submission
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // dodati proveru jel popunio ista pa ispise required
-    // dodati proveru
-    // pozvati api
-
-    // Here you can handle form submission, for example, by sending a request to your backend API.
-    console.log("Email:", email);
-    console.log("Password:", password);
-    setErrorMessage("ne mere bekend");
+    // Handle form submission, API calls, etc.
+    // proveri da li su sva polja prazna
+    // da li je sifra min duzine 6 i te gluposti
+    // mozda regex za email
+    // najbolje napravi validators i njoj samo prosledi form data i cao
+    console.log("Form Data:", formData);
+    setErrorMessage("Backend is not available");
   };
 
+  // Render the login form
   return (
     <>
       <section className="relative flex flex-wrap lg:h-screen lg:items-center">
@@ -54,8 +70,8 @@ const Login: React.FC = () => {
               <div className="relative">
                 <input
                   type="email"
-                  value={email}
-                  onChange={handleEmailChange}
+                  value={formData.email}
+                  onChange={(e) => handleChange(e, "email")}
                   className="w-full rounded-lg border-2 border-reddit-400 focus:border-reddit-600 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 pe-12 text-sm shadow-sm"
                   placeholder="Email"
                 />
@@ -87,8 +103,8 @@ const Login: React.FC = () => {
               <div className="relative">
                 <input
                   type="password"
-                  value={password}
-                  onChange={handlePasswordChange}
+                  value={formData.password}
+                  onChange={(e) => handleChange(e, "password")}
                   className="w-full rounded-lg border-2 border-reddit-400 focus:border-reddit-600 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 pe-12 text-sm shadow-sm"
                   placeholder="Password"
                 />

@@ -12,7 +12,6 @@ const defaultUser: IUser = {
     phone: "",
     email: "",
     password: "",
-    imageUrl: "",
 };
 
 export default defaultUser;
