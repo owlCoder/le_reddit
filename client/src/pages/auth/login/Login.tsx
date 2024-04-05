@@ -127,7 +127,7 @@ const Login: React.FC = () => {
                 No account?
                 <a
                   className="text-primary-600 hover:text-primary-700"
-                  href="/register"
+                  href="/signup"
                 >
                   &nbsp;Sign up
                 </a>

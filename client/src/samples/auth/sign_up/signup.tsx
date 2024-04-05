@@ -1,0 +1,18 @@
+import IUser from "../../../interfaces/auth/sign_up/IUser";
+
+/**
+ * Default sign up credentials.
+ */
+const defaultUser: IUser = {
+    firstName: "",
+    lastName: "",
+    address: "",
+    city: "",
+    country: "",
+    phone: "",
+    email: "",
+    password: "",
+    imageUrl: "",
+};
+
+export default defaultUser;
