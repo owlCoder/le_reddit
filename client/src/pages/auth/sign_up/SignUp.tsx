@@ -65,6 +65,9 @@ const SignUp: React.FC = () => {
         if (image == null) {
           newErrorMessage += " and image.";
         }
+        else {
+          newErrorMessage += ".";
+        }
         return newErrorMessage;
       });
     }
@@ -162,21 +165,33 @@ const SignUp: React.FC = () => {
                 </div>
               );
             })}
+            <div className="relative flex items-center">
+  <input
+    type="file"
+    onChange={handleImageChange}
+    className="hidden"
+    id="image"
+  />
+  <label
+    htmlFor="image"
+    className="inline-block bg-primary-400 hover:bg-primary-500 focus:bg-primary-500 rounded-lg border focus:outline-none focus:ring-0 text-white font-semibold py-2 px-4 cursor-pointer shadow-sm transition duration-300 ease-in-out mr-2"
+  >
+    Choose Image
+  </label>
+  <span className="text-sm text-primary-500 mr-2">
+    {image && image.name}
+  </span>
+  {image && (
+    <div className="mt-2 ml-auto">
+      <img
+        src={URL.createObjectURL(image)}
+        alt="Image Preview"
+        className="w-16 h-16 rounded-lg object-cover"
+      />
+    </div>
+  )}
+</div>
 
-            <div className="relative">
-              <input
-                type="file"
-                onChange={handleImageChange}
-                className="hidden"
-                id="image"
-              />
-              <label
-                htmlFor="image"
-                className="inline-block bg-primary-400 hover:bg-primary-500 focus:bg-primary-500 rounded-lg border  focus:outline-none focus:ring-0 text-white font-semibold py-2 px-4 cursor-pointer shadow-sm transition duration-300 ease-in-out"
-              >
-                Choose Image
-              </label>
-            </div>
 
             {errorMessage && (
               <p className="mt-4 text-primary-600">{errorMessage}</p>
