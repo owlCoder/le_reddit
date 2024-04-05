@@ -12,6 +12,7 @@ import React, { useState } from "react";
 import defaultLogin from "../../../samples/auth/login/login";
 import ILogin from "../../../interfaces/auth/login/ILogin";
 import Navbar from "../../../components/navbar/Navbar";
+import { ValudateLoginData } from "../../../validators/auth/login/validate_login";
 
 const Login: React.FC = () => {
   // State variables to manage form data and error messages
@@ -34,12 +35,29 @@ const Login: React.FC = () => {
     event.preventDefault();
 
     // Handle form submission, API calls, etc.
-    // proveri da li su sva polja prazna
-    // da li je sifra min duzine 6 i te gluposti
-    // mozda regex za email
-    // najbolje napravi validators i njoj samo prosledi form data i cao
-    console.log("Form Data:", formData);
-    setErrorMessage("Backend is not available");
+    // Reset errors
+    setErrorMessage("");
+
+    // Client-Side data verification
+    const errors: string[] = ValudateLoginData(formData);
+
+    if (errors.length === 0) {
+      // Call API
+      console.log("Form Data:", formData);
+      setErrorMessage("Backend is not available");
+    } else {
+      // Show all errors
+      setErrorMessage((prevErrorMessage) => {
+        let newErrorMessage = prevErrorMessage + "Check next fields: ";
+        errors.forEach((error, index) => {
+          newErrorMessage += error;
+          if (index !== errors.length - 1) {
+            newErrorMessage += ", ";
+          }
+        });
+        return newErrorMessage;
+      });
+    }
   };
 
   // Render the login form
