@@ -98,7 +98,7 @@ const SignUp: React.FC = () => {
                   type="text"
                   value={formData.firstName}
                   onChange={(e) => handleChange(e, "firstName")}
-                  className="w-full rounded-lg border-2 border-reddit-400 focus:border-reddit-600 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
+                  className="w-full rounded-lg border-2 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
                   placeholder="First Name"
                 />
               </div>
@@ -110,7 +110,7 @@ const SignUp: React.FC = () => {
                   type="text"
                   value={formData.lastName}
                   onChange={(e) => handleChange(e, "lastName")}
-                  className="w-full rounded-lg border-2 border-reddit-400 focus:border-reddit-600 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
+                  className="w-full rounded-lg border-2 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
                   placeholder="Last Name"
                 />
               </div>
@@ -125,7 +125,7 @@ const SignUp: React.FC = () => {
                   type="text"
                   value={formData.address}
                   onChange={(e) => handleChange(e, "address")}
-                  className="w-full rounded-lg border-2 border-reddit-400 focus:border-reddit-600 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
+                  className="w-full rounded-lg border-2  focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
                   placeholder="Address"
                 />
               </div>
@@ -137,7 +137,7 @@ const SignUp: React.FC = () => {
                   type="text"
                   value={formData.city}
                   onChange={(e) => handleChange(e, "city")}
-                  className="w-full rounded-lg border-2 border-reddit-400 focus:border-reddit-600 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
+                  className="w-full rounded-lg border-2  focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
                   placeholder="City"
                 />
               </div>
@@ -156,22 +156,26 @@ const SignUp: React.FC = () => {
                     type={key === "email" ? "email" : "text"}
                     value={value}
                     onChange={(e) => handleChange(e, key as keyof IUser)}
-                    className="w-full rounded-lg border-2 border-reddit-400 focus:border-reddit-600 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
+                    className="w-full rounded-lg border-2  focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
                     placeholder={key.charAt(0).toUpperCase() + key.slice(1)}
                   />
                 </div>
               );
             })}
 
-            <div>
-              <label htmlFor="image" className="sr-only">
-                Image
-              </label>
+            <div className="relative">
               <input
                 type="file"
                 onChange={handleImageChange}
-                className="w-full rounded-lg border-2 border-reddit-400 focus:border-reddit-600 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
+                className="hidden"
+                id="image"
               />
+              <label
+                htmlFor="image"
+                className="inline-block bg-primary-400 hover:bg-primary-500 focus:bg-primary-500 rounded-lg border  focus:outline-none focus:ring-0 text-white font-semibold py-2 px-4 cursor-pointer shadow-sm transition duration-300 ease-in-out"
+              >
+                Choose Image
+              </label>
             </div>
 
             {errorMessage && (
