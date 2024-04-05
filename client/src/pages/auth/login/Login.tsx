@@ -17,13 +17,13 @@ const Login: React.FC = () => {
     event.preventDefault();
 
     // dodati proveru jel popunio ista pa ispise required
-    // dodati proveru 
+    // dodati proveru
     // pozvati api
 
     // Here you can handle form submission, for example, by sending a request to your backend API.
     console.log("Email:", email);
     console.log("Password:", password);
-    setErrorMessage("ne mere bekend")
+    setErrorMessage("ne mere bekend");
   };
 
   return (
@@ -42,7 +42,10 @@ const Login: React.FC = () => {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="mx-auto mb-0 mt-8 max-w-md space-y-4">
+          <form
+            onSubmit={handleSubmit}
+            className="mx-auto mb-0 mt-8 max-w-md space-y-4"
+          >
             <div>
               <label htmlFor="email" className="sr-only">
                 Email
@@ -115,9 +118,9 @@ const Login: React.FC = () => {
               </div>
             </div>
 
-            {errorMessage && <p className="mt-4 text-primary-600">
-              {errorMessage}
-            </p>}
+            {errorMessage && (
+              <p className="mt-4 text-primary-600">{errorMessage}</p>
+            )}
 
             <div className="flex items-center justify-between">
               <p className="text-sm text-gray-500">
