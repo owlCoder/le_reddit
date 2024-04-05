@@ -13,7 +13,7 @@ const Navbar: React.FC = () => {
     <>
       <div className="relative">
         <div className="grid sticky top-0 z-50 min-h-[140px] w-full place-items-center rounded-lg  -mb-20">
-          <div className="m-12 max-h-[768px] w-[calc(100%+48px)] p-6 -mt-8">
+          <div className="m-12 max-h-[768px] w-[calc(100%+48px)] px-6 py-4 -mt-8">
             <nav className="sticky top-0 z-10 block w-full max-w-full px-4 py-2 text-white bg-white border rounded-none shadow-md h-max border-white/80 bg-opacity-80 backdrop-blur-2xl backdrop-saturate-200 lg:px-8 lg:py-4">
               <div className="flex items-center justify-between text-primary-900">
                 <a
