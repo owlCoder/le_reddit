@@ -13,7 +13,7 @@ const AccountInformation: React.FC = () => {
       <div>
         <button
           type="button"
-          className="inline-flex justify-center w-full rounded-md border shadow-sm px-4 py-2 bg-transparent text-sm font-medium text-gray-700 focus:outline-none focus:ring-1 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+          className="inline-flex justify-center w-full rounded-md border shadow-sm px-4 py-2 bg-transparent text-sm font-medium text-gray-700 focus:outline-none focus:ring-offset-2 focus:ring-offset-gray-100"
           id="options-menu"
           aria-haspopup="true"
           aria-expanded="true"
