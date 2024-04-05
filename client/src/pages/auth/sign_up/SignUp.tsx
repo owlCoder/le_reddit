@@ -1,16 +1,17 @@
 /**
  * SignUp Component
- * 
+ *
  * This component provides a sign-up form for users to register with their information.
- * 
+ *
  * It uses the IUser interface to define the shape of the form data and defaultUser
  * for initializing the form with default values.
- * 
+ *
  * @returns JSX.Element
  */
 import React, { useState } from "react";
 import IUser from "../../../interfaces/auth/sign_up/IUser";
-import defaultUser from "../../../samples/auth/sign_up/signup";
+import defaultUser from "../../../samples/auth/sign_up/SignUp";
+import { ValudateSignupData } from "../../../validators/auth/sign_up/validate_signup";
 
 const SignUp: React.FC = () => {
   // State variables to manage form data, image, and error messages
@@ -39,14 +40,34 @@ const SignUp: React.FC = () => {
   // Function to handle form submission
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Handle form submission, API calls, etc.
-    // proveri da li su sva polja prazna
-    // da li je sifra min duzine 6 i te gluposti
-    // mozda regex za email
-    // najbolje napravi validators i njoj samo prosledi form data i cao
-    console.log("Form Data:", formData);
-    console.log("Image:", image);
-    setErrorMessage("Backend is not available");
+
+    // Reset errors
+    setErrorMessage("");
+
+    // Client-Side data verification
+    const errors: string[] = ValudateSignupData(formData);
+
+    if (errors.length === 0 && image != null) {
+      // Call API
+      console.log("Form Data:", formData);
+      console.log("Image:", image);
+      setErrorMessage("Backend is not available");
+    } else {
+      // Show all errors
+      setErrorMessage((prevErrorMessage) => {
+        let newErrorMessage = prevErrorMessage + "Check next fields: ";
+        errors.forEach((error, index) => {
+          newErrorMessage += error;
+          if (index !== errors.length - 1) {
+            newErrorMessage += ", ";
+          }
+        });
+        if (image == null) {
+          newErrorMessage += " and image.";
+        }
+        return newErrorMessage;
+      });
+    }
   };
 
   // Render the sign-up form
@@ -79,7 +100,6 @@ const SignUp: React.FC = () => {
                   onChange={(e) => handleChange(e, "firstName")}
                   className="w-full rounded-lg border-2 border-reddit-400 focus:border-reddit-600 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
                   placeholder="First Name"
-                  required
                 />
               </div>
               <div className="w-1/2">
@@ -92,7 +112,6 @@ const SignUp: React.FC = () => {
                   onChange={(e) => handleChange(e, "lastName")}
                   className="w-full rounded-lg border-2 border-reddit-400 focus:border-reddit-600 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
                   placeholder="Last Name"
-                  required
                 />
               </div>
             </div>
@@ -108,7 +127,6 @@ const SignUp: React.FC = () => {
                   onChange={(e) => handleChange(e, "address")}
                   className="w-full rounded-lg border-2 border-reddit-400 focus:border-reddit-600 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
                   placeholder="Address"
-                  required
                 />
               </div>
               <div className="w-1/2">
@@ -121,7 +139,6 @@ const SignUp: React.FC = () => {
                   onChange={(e) => handleChange(e, "city")}
                   className="w-full rounded-lg border-2 border-reddit-400 focus:border-reddit-600 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
                   placeholder="City"
-                  required
                 />
               </div>
             </div>
@@ -141,7 +158,6 @@ const SignUp: React.FC = () => {
                     onChange={(e) => handleChange(e, key as keyof IUser)}
                     className="w-full rounded-lg border-2 border-reddit-400 focus:border-reddit-600 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
                     placeholder={key.charAt(0).toUpperCase() + key.slice(1)}
-                    required
                   />
                 </div>
               );
