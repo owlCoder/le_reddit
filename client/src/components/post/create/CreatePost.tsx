@@ -5,52 +5,69 @@ import {
   BoldItalicUnderlineToggles,
   CodeToggle,
   toolbarPlugin,
+  MDXEditorMethods,
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 import ImageIcon from "../../icons/image/ImageIcon";
 
 const CreatePostForm: React.FC = () => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const ref = React.useRef<MDXEditorMethods>(null); // grab markdown text
+
+  // State to manage form data
+  const [formData, setFormData] = useState({
+    title: "",
+    content: "",
+    image: null, // Initially, no image is selected
+  });
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you can implement your logic to handle form submission
-    console.log("Title:", title);
-    console.log("Content:", content);
+
+    // Do whatever you need with formData here
+    console.log("Form data:", formData);
+
     // Reset form fields after submission
-    setTitle("");
-    setContent("");
-    setImagePreview(null); // Clear the image preview
+    // setImage(null);
+    // setImagePreview(null); // Clear the image preview
   };
 
-  // Function to handle image upload
+  // Handle image upload
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Read the file and set image preview
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      setImage(file);
+      // Set image preview
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
-  // Function to handle inserting an image
-  // const handleInsertImage = () => {
-  //   if (imagePreview) {
-  //     // Append image markdown to the content
-  //     setContent(content + `\n\n![Alt text](${imagePreview})`);
-  //     // Clear the image preview after insertion
-  //     setImagePreview(null);
-  //   }
-  // };
+  const handleContentChange = (markdown: string) => {
+    // Handle MDXEditor changes
+    // Update state or perform any necessary actions with the markdown content
+    setFormData({
+      ...formData,
+      content: markdown,
+    });
+  };
 
   return (
     <div className="max-w-4xl mx-auto bg-white rounded-lg">
-      <form onSubmit={handleSubmit} className="mt-8 space-y-6 p-4">
+      <form
+        onSubmit={handleSubmit}
+        className="mt-8 space-y-6 p-4"
+        encType="multipart/form-data"
+      >
+        {/* Title input */}
         <div>
           <label
             htmlFor="title"
@@ -62,13 +79,15 @@ const CreatePostForm: React.FC = () => {
             <input
               id="title"
               type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
               required
               className="block w-full border-gray-300 h-10 px-2 border focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500 text-md font-regular"
             />
           </div>
         </div>
+        {/* MDX Editor */}
         <div>
           <label
             htmlFor="content"
@@ -78,6 +97,8 @@ const CreatePostForm: React.FC = () => {
           </label>
           <div className="mt-1">
             <MDXEditor
+              onChange={handleContentChange}
+              ref={ref}
               markdown=""
               className="h-72 w-full border border-gray-300 focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500"
               plugins={[
@@ -126,6 +147,7 @@ const CreatePostForm: React.FC = () => {
             )}
           </div>
         </div>
+        {/* Submit Button */}
         <div className="flex justify-end">
           <button
             type="submit"
