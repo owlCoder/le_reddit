@@ -9,14 +9,14 @@ import {
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 import ImageIcon from "../../icons/image/ImageIcon";
+import ICreatePost from "../../../interfaces/post/create/ICreatePost";
 
 const CreatePostForm: React.FC = () => {
-  const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const ref = React.useRef<MDXEditorMethods>(null); // grab markdown text
 
   // State to manage form data
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ICreatePost>({
     title: "",
     content: "",
     image: null, // Initially, no image is selected
@@ -44,8 +44,13 @@ const CreatePostForm: React.FC = () => {
   // Handle image upload
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    console.log(file)
     if (file) {
-      setImage(file);
+      setFormData({
+        ...formData,
+        image: file,
+      })
+      
       // Set image preview
       setImagePreview(URL.createObjectURL(file));
     }
