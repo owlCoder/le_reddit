@@ -17,3 +17,8 @@
         /* Firefox */
     }
 }
+
+/* Hide div popup */
+.mdxeditor-popup-container {
+    display: none !important;
+  }
