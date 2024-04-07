@@ -33,6 +33,12 @@ const CreatePostForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // TODO: 
+    // pozvati validator pre slanja create_post.tsx
+    // slika je opciona!!
+    // dodati error labelu
+    // mozda neki tailwind popup dodaj kao uspesno dodato ili redirect
+
     // Do whatever you need with formData here
     console.log("Form data:", formData);
 
@@ -87,7 +93,6 @@ const CreatePostForm: React.FC = () => {
               name="title"
               value={formData.title}
               onChange={handleInputChange}
-              required
               className="block w-full border-gray-300 h-10 px-2 border focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500 text-md font-regular"
             />
           </div>

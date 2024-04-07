@@ -1,0 +1,27 @@
+import ICreatePost from "../../interfaces/post/create/ICreatePost";
+
+/**
+ * Validates the data for creating a post.
+ * 
+ * @param postData - The data to be validated.
+ * @returns An array of error messages. If the array is empty, it means the data is valid.
+ */
+const ValidateCreatePostData = (postData: ICreatePost): string[] => {
+    const errors: string[] = [];
+  
+    // Check if title is empty
+    if (!postData.title.trim()) {
+      errors.push('Title is required.');
+    }
+  
+    // Check if content is empty
+    if (!postData.content.trim()) {
+      errors.push('Content is required.');
+    }
+  
+    // Additional validation logic can be added here
+  
+    return errors;
+  };
+  
+  export default ValidateCreatePostData;
