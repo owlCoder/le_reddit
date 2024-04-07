@@ -78,3 +78,5 @@
 /backend/packages
 /backend/RedditServiceWorker/obj
 /backend/RedditServiceWorker/obj
+backend/RedditService/ecf/RedditServiceWorkerContent/diagnostics.wadcfgx
+/backend/RedditServiceWorker/obj
