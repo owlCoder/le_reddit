@@ -76,3 +76,5 @@
 /backend/*.swn
 /backend/.vs
 /backend/packages
+/backend/RedditServiceWorker/obj
+/backend/RedditServiceWorker/obj
