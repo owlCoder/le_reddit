@@ -120,7 +120,7 @@ const CreatePostForm: React.FC = () => {
                 <img
                   src={imagePreview}
                   alt="Preview"
-                  className="h-64 w-64 mt-4"
+                  className="h-56 w-64 mt-4"
                 />
               </div>
             )}
