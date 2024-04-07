@@ -1,0 +1,97 @@
+# General
+*.suo
+*.user
+*.vscode
+.vs/
+bin/
+obj/
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Ll]og/
+[Tt]emp/
+[Tt]est[Rr]esults/
+
+# Visual Studio files
+*.vspscc
+*.vssscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.[Cc]ache
+*.ilk
+*.log
+*.sbr
+*.sdf
+*.lib
+*.pdb
+*.idb
+*.aps
+*.res
+*.scc
+*.vspscc
+*.vssscc
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.asm
+*.psess
+*.vsp
+*.vspx
+*.vspx.user
+
+# NuGet
+packages/
+*.nupkg
+*.paket.restore.log
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings
+*.vscode
+
+# Rider
+.idea/
+*.sln.iml
+
+# Miscellaneous
+node_modules/
+*.bak
+*.swp
+*.swo
+*.swn
+*.swo
+*.swn
