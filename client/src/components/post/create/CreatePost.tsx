@@ -39,18 +39,18 @@ const CreatePostForm: React.FC = () => {
   };
 
   // Function to handle inserting an image
-  const handleInsertImage = () => {
-    if (imagePreview) {
-      // Append image markdown to the content
-      setContent(content + `\n\n![Alt text](${imagePreview})`);
-      // Clear the image preview after insertion
-      setImagePreview(null);
-    }
-  };
+  // const handleInsertImage = () => {
+  //   if (imagePreview) {
+  //     // Append image markdown to the content
+  //     setContent(content + `\n\n![Alt text](${imagePreview})`);
+  //     // Clear the image preview after insertion
+  //     setImagePreview(null);
+  //   }
+  // };
 
   return (
-    <div className="max-w-lg mx-auto">
-      <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+    <div className="max-w-4xl mx-auto bg-white rounded-lg">
+      <form onSubmit={handleSubmit} className="mt-8 space-y-6 bg-white-300 rounded-lg p-4">
         <div>
           <label
             htmlFor="title"
@@ -65,7 +65,7 @@ const CreatePostForm: React.FC = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+              className="block w-full border-gray-300 h-10 px-2 border rounded-lg focus:ring-primary-500 focus:border-primary-500 text-md font-regular"
             />
           </div>
         </div>
@@ -79,7 +79,7 @@ const CreatePostForm: React.FC = () => {
           <div className="mt-1">
             <MDXEditor
               markdown=""
-              className="h-64 w-full"
+              className="h-72 w-full border rounded-lg border-gray-200"
               plugins={[
                 toolbarPlugin({
                   toolbarContents: () => (
@@ -113,7 +113,7 @@ const CreatePostForm: React.FC = () => {
               <img
                 src={imagePreview}
                 alt="Preview"
-                style={{ maxWidth: "100%", marginTop: "10px" }}
+                className="h-64 w-64 mt-4"
               />
             )}
           </div>
@@ -121,7 +121,7 @@ const CreatePostForm: React.FC = () => {
         <div>
           <button
             type="submit"
-            className="inline-flex justify-center w-24 rounded-full px-4 py-2 text-base font-medium text-white bg-primary-600 border border-transparent font-semibold shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+            className="inline-flex justify-center w-24 rounded-full px-4 py-2 text-base text-white bg-primary-600 border border-transparent font-semibold shadow-sm hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
           >
             Post
           </button>

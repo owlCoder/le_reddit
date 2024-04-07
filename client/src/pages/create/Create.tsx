@@ -3,11 +3,12 @@ import Navbar from "../../components/navbar/Navbar";
 import CreatePostForm from "../../components/post/create/CreatePost";
 
 const Create: React.FC = () => {
-
   return (
     <>
       <Navbar />
-      <CreatePostForm />
+      <div className="bg-primary-200 py-12">
+        <CreatePostForm />
+      </div>
     </>
   );
 };
