@@ -10,8 +10,10 @@ import {
 import "@mdxeditor/editor/style.css";
 import ImageIcon from "../../icons/image/ImageIcon";
 import ICreatePost from "../../../interfaces/post/create/ICreatePost";
+import ValidateCreatePostData from "../../../validators/post/create_post";
 
 const CreatePostForm: React.FC = () => {
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const ref = React.useRef<MDXEditorMethods>(null); // grab markdown text
 
@@ -33,30 +35,46 @@ const CreatePostForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // TODO: 
-    // pozvati validator pre slanja create_post.tsx
-    // slika je opciona!!
-    // dodati error labelu
+    // TODO:
     // mozda neki tailwind popup dodaj kao uspesno dodato ili redirect
 
-    // Do whatever you need with formData here
-    console.log("Form data:", formData);
+    // Reset errors
+    setErrorMessage("");
 
-    // Reset form fields after submission
-    // setImage(null);
-    // setImagePreview(null); // Clear the image preview
+    // Client-Side data verification
+    const errors: string[] = ValidateCreatePostData(formData);
+
+    if (errors.length === 0) {
+      // Call API
+      console.log("Form Data:", formData);
+      setErrorMessage("Backend is not available");
+    } else {
+      // Show all errors
+      setErrorMessage((prevErrorMessage) => {
+        let newErrorMessage = prevErrorMessage + "Check next fields: ";
+        errors.forEach((error, index) => {
+          newErrorMessage += error;
+          if (index !== errors.length - 1) {
+            newErrorMessage += ", ";
+          } else {
+            newErrorMessage += ".";
+          }
+        });
+        return newErrorMessage;
+      });
+    }
   };
 
   // Handle image upload
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    console.log(file)
+    console.log(file);
     if (file) {
       setFormData({
         ...formData,
         image: file,
-      })
-      
+      });
+
       // Set image preview
       setImagePreview(URL.createObjectURL(file));
     }
@@ -157,6 +175,9 @@ const CreatePostForm: React.FC = () => {
             )}
           </div>
         </div>
+        {errorMessage && (
+          <p className="mt-4 text-primary-600">{errorMessage}</p>
+        )}
         {/* Submit Button */}
         <div className="flex justify-end">
           <button

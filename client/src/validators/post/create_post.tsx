@@ -11,12 +11,12 @@ const ValidateCreatePostData = (postData: ICreatePost): string[] => {
   
     // Check if title is empty
     if (!postData.title.trim()) {
-      errors.push('Title is required.');
+      errors.push('title');
     }
   
     // Check if content is empty
     if (!postData.content.trim()) {
-      errors.push('Content is required.');
+      errors.push('content');
     }
   
     // Additional validation logic can be added here
