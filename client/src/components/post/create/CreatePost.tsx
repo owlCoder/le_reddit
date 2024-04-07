@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import MarkdownIt from 'markdown-it';
 import MdEditor from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
-
-const mdParser = new MarkdownIt(/* Markdown-it options */);
+import * as marked from 'marked'; // Import marked as a named import
 
 const CreatePostForm: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -21,6 +19,11 @@ const CreatePostForm: React.FC = () => {
     // Reset form fields after submission
     setTitle('');
     setContent('');
+  };
+
+  // Custom function to convert Markdown to HTML
+  const renderHTML = (markdownText: string) => {
+    return marked.parse(markdownText);
   };
 
   return (
@@ -48,9 +51,9 @@ const CreatePostForm: React.FC = () => {
           <div className="mt-1">
             <MdEditor
               value={content}
-              style={{ height: '300px' }}
-              renderHTML={(text) => mdParser.render(text)}
+              style={{ height: '200px' }} // Adjust height as needed
               onChange={handleEditorChange}
+              renderHTML={renderHTML}
             />
           </div>
         </div>
