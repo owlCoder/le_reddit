@@ -56,7 +56,7 @@ const AccountInformation: React.FC = () => {
             {/* Dropdown items */}
             <a
             href="/create"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-200 hover:text-gray-900 rounded-t-md"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 hover:text-gray-900 rounded-t-md"
               role="menuitem"
               onClick={toggleDropdown}
             >
@@ -85,7 +85,7 @@ const AccountInformation: React.FC = () => {
             </a>
             <a
               href="/profile"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-200"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
               role="menuitem"
               onClick={toggleDropdown}
             >
@@ -142,7 +142,7 @@ const AccountInformation: React.FC = () => {
             
             <hr className=" bg-primary-500 h-0.5" />
             <button
-              className="w-full block items-start text-start px-4 py-2 text-sm text-gray-700 rounded-b-md hover:bg-primary-200 hover:text-gray-900"
+              className="w-full block items-start text-start px-4 py-2 text-sm text-gray-700 rounded-b-md hover:bg-gray-200 hover:text-gray-900"
               role="menuitem"
               onClick={() => {alert('odjavi')}}
             >

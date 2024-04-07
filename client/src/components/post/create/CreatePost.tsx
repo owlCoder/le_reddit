@@ -1,36 +1,61 @@
-import React, { useState } from 'react';
-import MdEditor from 'react-markdown-editor-lite';
-import 'react-markdown-editor-lite/lib/index.css';
-import * as marked from 'marked'; // Import marked as a named import
+import React, { useState } from "react";
+import {
+  MDXEditor,
+  UndoRedo,
+  BoldItalicUnderlineToggles,
+  CodeToggle,
+  toolbarPlugin,
+} from "@mdxeditor/editor";
+import "@mdxeditor/editor/style.css";
+import ImageIcon from "../../icons/image/ImageIcon";
 
 const CreatePostForm: React.FC = () => {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-
-  const handleEditorChange = ({ text }: { text: string }) => {
-    setContent(text);
-  };
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Here you can implement your logic to handle form submission
-    console.log('Title:', title);
-    console.log('Content:', content);
+    console.log("Title:", title);
+    console.log("Content:", content);
     // Reset form fields after submission
-    setTitle('');
-    setContent('');
+    setTitle("");
+    setContent("");
+    setImagePreview(null); // Clear the image preview
   };
 
-  // Custom function to convert Markdown to HTML
-  const renderHTML = (markdownText: string) => {
-    return marked.parse(markdownText);
+  // Function to handle image upload
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Read the file and set image preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Function to handle inserting an image
+  const handleInsertImage = () => {
+    if (imagePreview) {
+      // Append image markdown to the content
+      setContent(content + `\n\n![Alt text](${imagePreview})`);
+      // Clear the image preview after insertion
+      setImagePreview(null);
+    }
   };
 
   return (
     <div className="max-w-lg mx-auto">
       <form onSubmit={handleSubmit} className="mt-8 space-y-6">
         <div>
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="title"
+            className="block text-sm font-medium text-gray-700"
+          >
             Title
           </label>
           <div className="mt-1">
@@ -40,29 +65,65 @@ const CreatePostForm: React.FC = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
             />
           </div>
         </div>
         <div>
-          <label htmlFor="content" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="content"
+            className="block text-sm font-medium text-gray-700"
+          >
             Content
           </label>
           <div className="mt-1">
-            <MdEditor
-              value={content}
-              style={{ height: '200px' }} // Adjust height as needed
-              onChange={handleEditorChange}
-              renderHTML={renderHTML}
+            <MDXEditor
+              markdown=""
+              className="h-64 w-full"
+              plugins={[
+                toolbarPlugin({
+                  toolbarContents: () => (
+                    <>
+                      {" "}
+                      <UndoRedo />
+                      <BoldItalicUnderlineToggles />
+                      <CodeToggle />
+                      {/* Button to insert image */}
+                      <label
+                        htmlFor="imageUpload"
+                        className="cursor-pointer h-5 w-5 text-gray-500 hover:bg-gray-200"
+                      >
+                        <ImageIcon />
+                      </label>
+                      {/* Input for image upload */}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        style={{ display: "none" }}
+                        id="imageUpload"
+                      />
+                    </>
+                  ),
+                }),
+              ]}
             />
+            {/* Show image preview if available */}
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                alt="Preview"
+                style={{ maxWidth: "100%", marginTop: "10px" }}
+              />
+            )}
           </div>
         </div>
         <div>
           <button
             type="submit"
-            className="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="inline-flex justify-center w-24 rounded-full px-4 py-2 text-base font-medium text-white bg-primary-600 border border-transparent font-semibold shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
           >
-            Create Post
+            Post
           </button>
         </div>
       </form>
