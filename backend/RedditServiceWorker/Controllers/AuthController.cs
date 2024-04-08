@@ -13,6 +13,8 @@ using System.IO;
 using Microsoft.Azure;
 using RedditDataRepository.blobs.images;
 using RedditDataRepository.classes.UserDTO;
+using RedditDataRepository.users.Create;
+using Common.cloud.account;
 
 namespace RedditServiceWorker.Controllers
 {
@@ -80,8 +82,22 @@ namespace RedditServiceWorker.Controllers
                     user.ImageBlobUrl = blobUrl;
 
                     // Put user into table
+                    bool insert_result = InsertUser.Add(AzureTableStorageCloudAccount.GetCloudTable("users"), user);
 
-                    return Created();
+                    if (insert_result)
+                    {
+                        // User was successfully added to the table
+                        return Ok(); // Return 200 OK
+                    }
+                    else
+                    {
+                        // User was not successfully added to the table
+                        // Delete the image associated with the user
+                        await AzureBlobStorage.RemoveFileFromBlobStorage(user.ImageBlobUrl);
+
+                        return BadRequest("User creation failed"); // Return 400 Bad Request with an error message
+                    }
+
                 }
             }
             catch (Exception e)

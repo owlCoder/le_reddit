@@ -203,7 +203,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\auth\login\Login.cs" />
-    <Compile Include="Models\auth\sign_up\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebRole.cs" />
   </ItemGroup>
@@ -228,6 +227,10 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{3319454F-4841-4707-A279-82BD5DBF3658}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RedditDataRepository\RedditDataRepository.csproj">
+      <Project>{8EA83E5D-3354-478E-AAA4-6FCCB5A9CBB1}</Project>
+      <Name>RedditDataRepository</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

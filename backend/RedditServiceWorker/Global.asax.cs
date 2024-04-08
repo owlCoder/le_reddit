@@ -1,4 +1,6 @@
-﻿using System.Net.Http.Formatting;
+﻿using Common.cloud.account;
+using Microsoft.WindowsAzure.Storage.Table;
+using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -16,6 +18,9 @@ namespace RedditServiceWorker
             // Clear existing formatters and add JSON formatter
             //GlobalConfiguration.Configuration.Formatters.Clear();
             //GlobalConfiguration.Configuration.Formatters.Add(new JsonMediaTypeFormatter());
+
+            // Create AzureTableStorageCloudAccount instance
+            AzureTableStorageCloudAccount table = new AzureTableStorageCloudAccount();
         }
     }
 }

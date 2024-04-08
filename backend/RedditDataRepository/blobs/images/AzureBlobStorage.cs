@@ -1,8 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using Common.cloud.account;
 using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace RedditDataRepository.blobs.images
 {
@@ -25,9 +28,7 @@ namespace RedditDataRepository.blobs.images
         {
             try
             {
-                var storageConnectionString = CloudConfigurationManager.GetSetting("DataConnectionString");
-
-                var storageAccount = CloudStorageAccount.Parse(storageConnectionString);
+                var storageAccount = AzureTableStorageCloudAccount.GetAccount();
                 var blobClient = storageAccount.CreateCloudBlobClient();
                 var container = blobClient.GetContainerReference(containerName);
                 await container.CreateIfNotExistsAsync();
@@ -46,6 +47,48 @@ namespace RedditDataRepository.blobs.images
             catch (Exception)
             {
                 return (false, null); // Upload failed, return null URL
+            }
+        }
+
+        public static async Task<bool> RemoveFileFromBlobStorage(string imageBlobUrl)
+        {
+            try
+            {
+                var storageAccount = AzureTableStorageCloudAccount.GetAccount();
+
+                // Create the blob client
+                CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+
+                // Parse the blob URL
+                if (Uri.TryCreate(imageBlobUrl, UriKind.Absolute, out Uri blobUri))
+                {
+                    // Create a blob container reference
+                    string containerName = "images";
+                    CloudBlobContainer container = blobClient.GetContainerReference(containerName);
+
+                    // Get the blob name from the URL
+                    string blobName = blobUri.Segments.Last();
+
+                    // Get a reference to the blob
+                    CloudBlockBlob blob = container.GetBlockBlobReference(blobName);
+
+                    // Delete the blob
+                    await blob.DeleteIfExistsAsync();
+
+                    // Blob deleted successfully
+                    return true;
+                }
+                else
+                {
+                    // Invalid imageBlobUrl
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                // An error occurred while deleting the blob
+                return false;
+
             }
         }
     }
