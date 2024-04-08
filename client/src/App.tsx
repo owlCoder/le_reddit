@@ -4,6 +4,7 @@ import Register from "./pages/auth/sign_up/SignUp";
 import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile";
 import Create from "./pages/posts/create/Create";
+import Error404 from "./pages/errors/Error404";
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Register />} />
+
+          <Route path="*" element={<Error404 />} />
         </Routes>
       </Router>
     </>
