@@ -16,6 +16,11 @@ import Navbar from "../../../components/navbar/Navbar";
 import SignUpService from "../../../services/auth/sign_up/SignUpService";
 import useAuth from "../../../contexts/use_auth/UseAuth";
 import { useNavigate } from "react-router-dom";
+import LoginService from "../../../services/auth/login/LoginService";
+import ILogin from "../../../interfaces/auth/login/ILogin";
+import IToken from "../../../interfaces/auth/jwt/IToken";
+import { saveTokenToLocalstorage } from "../../../services/jwt/JWTTokenizationService";
+import { jwtDecode } from "jwt-decode";
 
 const SignUp: React.FC = () => {
   // State variables to manage form data, image, and error messages
@@ -23,7 +28,7 @@ const SignUp: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const navigate = useNavigate();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, setToken, setEmail } = useAuth();
 
   useEffect(() => {
     if(isLoggedIn) {
@@ -68,10 +73,27 @@ const SignUp: React.FC = () => {
       const success: boolean = await SignUpService(formData);
 
       if(success) {
-        alert("bravo majmune uspeo si uneti podatke");
+        // login user if registration is done
+        const login: ILogin = {email: formData.email, password: formData.password };
+        const token: (IToken | null) = await LoginService(login);
+
+      if(token) {
+        // Set token and change logged in state
+        saveTokenToLocalstorage(token);
+        setToken(token);
+
+        // set email address
+        const decodedToken: IToken = jwtDecode(token.token ?? "");
+        setEmail(decodedToken.email ?? "");
+
+        navigate("/");
       }
       else {
-        alert("e bajo moj, neko ti zauzeo mejl");
+        setErrorMessage("Entered credentials are incorrect.");
+      }
+      }
+      else {
+        setErrorMessage("Entered email address is used by another used.");
       }
 
     } else {
