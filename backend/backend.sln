@@ -7,6 +7,10 @@ Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "RedditService", "RedditServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedditServiceWorker", "RedditServiceWorker\RedditServiceWorker.csproj", "{0BF7DAC0-9D6E-4571-B009-7F5861FAC700}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedditDataRepository", "RedditDataRepository\RedditDataRepository.csproj", "{8EA83E5D-3354-478E-AAA4-6FCCB5A9CBB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{3319454F-4841-4707-A279-82BD5DBF3658}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{0BF7DAC0-9D6E-4571-B009-7F5861FAC700}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BF7DAC0-9D6E-4571-B009-7F5861FAC700}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BF7DAC0-9D6E-4571-B009-7F5861FAC700}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EA83E5D-3354-478E-AAA4-6FCCB5A9CBB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EA83E5D-3354-478E-AAA4-6FCCB5A9CBB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EA83E5D-3354-478E-AAA4-6FCCB5A9CBB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EA83E5D-3354-478E-AAA4-6FCCB5A9CBB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3319454F-4841-4707-A279-82BD5DBF3658}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3319454F-4841-4707-A279-82BD5DBF3658}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3319454F-4841-4707-A279-82BD5DBF3658}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3319454F-4841-4707-A279-82BD5DBF3658}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
