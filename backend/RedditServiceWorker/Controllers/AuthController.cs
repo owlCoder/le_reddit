@@ -1,29 +1,30 @@
 ﻿using Common.auth;
 using Common.config;
-using Newtonsoft.Json;
 using RedditServiceWorker.Models.auth.login;
 using System.Web.Http;
 
 namespace RedditServiceWorker.Controllers
 {
-    //[Route("api/auth/")]
+    // Define route prefix for the controller
+    [RoutePrefix("api/auth")]
     public class AuthController : ApiController
     {
         // Create a JWT instance
-        public static readonly JWT _jwtTokenGenerator = new JWT(JWTKeyStorage.SecretKey, "MIRKO", "SELJOBERI");
+        private static readonly JWT _jwtTokenGenerator = new JWT(JWTKeyStorage.SecretKey, "MIRKO", "SELJOBERI");
 
-        [Route("api/auth/login")]
+        [Route("login")] // Define route for the login action
         [HttpPost]
         public IHttpActionResult Authenticate(Login model)
         {
-            // Authenticate user using email and password
-            if (IsValidUser(model.Email, model.Password))
-            {
-                var token = _jwtTokenGenerator.GenerateToken(model.Email);
-                return Ok(new { Token = token });
-            }
+            // Check if any data is entered
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            return Unauthorized();
+            // If user exists, generate token
+            if (IsValidUser(model.Email, model.Password))
+                return Ok(new { Token = _jwtTokenGenerator.GenerateToken(model.Email) });
+            else
+                return Unauthorized();
         }
 
         private bool IsValidUser(string email, string password)
@@ -31,6 +32,16 @@ namespace RedditServiceWorker.Controllers
             // Your authentication logic here
             // Example: Check if email and password match in the database
             return email == "danijel.xda@gmail.com" && password == "123456";
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("protected")]
+        public IHttpActionResult Zasticeno()
+        {
+            var user = User.Identity.Name;
+            // Return protected data
+            return Ok($"Hello, {user}. This is protected data.");
         }
     }
 }
