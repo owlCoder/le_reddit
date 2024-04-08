@@ -7,6 +7,7 @@ namespace RedditServiceWorker.Models.auth.sign_up
 {
     using System.ComponentModel.DataAnnotations;
     using System.IO;
+    using System.Net.Http;
 
     /// <summary>
     /// Represents a user object with various properties.
@@ -68,6 +69,18 @@ namespace RedditServiceWorker.Models.auth.sign_up
         /// The user profile image.
         /// </summary>
         [Required(ErrorMessage = "Profile picture is required")]
-        public HttpPostedFileBase Image { get; set; }
+        public string ImageBlogUrl { get; set; }
+
+        public User(MultipartFormDataStreamProvider provider)
+        {
+            FirstName = provider.FormData["firstName"];
+            LastName = provider.FormData["lastName"];
+            Address = provider.FormData["address"];
+            City = provider.FormData["city"];
+            Country = provider.FormData["country"];
+            Phone = provider.FormData["phone"];
+            Email = provider.FormData["email"];
+            Password = provider.FormData["password"];
+        }
     }
 }

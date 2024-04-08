@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using System.IO;
 using Microsoft.Azure;
+using RedditDataRepository.blobs.images;
 
 namespace RedditServiceWorker.Controllers
 {
@@ -46,42 +47,29 @@ namespace RedditServiceWorker.Controllers
                 return StatusCode(HttpStatusCode.UnsupportedMediaType);
             }
 
+            // Store form data locally
             var provider = new MultipartFormDataStreamProvider(HttpContext.Current.Server.MapPath("~/App_Data"));
 
             try
             {
                 await Request.Content.ReadAsMultipartAsync(provider);
 
-                // Access form data
-                var firstName = provider.FormData["firstName"];
-                var lastName = provider.FormData["lastName"];
-                var address = provider.FormData["address"];
-                var city = provider.FormData["city"];
-                var country = provider.FormData["country"];
-                var phone = provider.FormData["phone"];
-                var email = provider.FormData["email"];
-                var password = provider.FormData["password"];
+                // Access form data and put into user object
+                User user = new User(provider);
 
-                // Access file
-                var file = provider.FileData[0]; // Assuming only one file is uploaded
+                // Access profile picture
+                var file = provider.FileData[0]; // Only one file is uploaded
+                var name = file.Headers.ContentDisposition.FileName;
 
-                // Process user data here
+                // Just get extension of file name
+                name = name.Substring(1, name.Length - 2);
+                var fileExtension = Path.GetExtension(name).ToLower(); // Get the file extension
 
                 // Upload file to Azure Blob Storage
-                var storageConnectionString = CloudConfigurationManager.GetSetting("DataConnectionString"); // Your Azure Storage connection string
-                var containerName = "images"; // Your Blob Storage container name
+                await AzureBlobStorage.
 
-                var storageAccount = CloudStorageAccount.Parse(storageConnectionString);
-                var blobClient = storageAccount.CreateCloudBlobClient();
-                var container = blobClient.GetContainerReference(containerName);
-                await container.CreateIfNotExistsAsync();
-
-                var fileName = Guid.NewGuid().ToString(); // You can generate a unique filename here
-                var blob = container.GetBlockBlobReference(fileName);
-                using (var fileStream = File.OpenRead(file.LocalFileName))
-                {
-                    await blob.UploadFromStreamAsync(fileStream);
-                }
+                // If image uploaded get image url in blob storage
+                // and put into user table
 
                 return Ok(); // Return appropriate response
             }
