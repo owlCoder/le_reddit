@@ -18,13 +18,14 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../../../contexts/use_auth/UseAuth";
 import IToken from "../../../interfaces/auth/jwt/IToken";
 import { saveTokenToLocalstorage } from "../../../services/jwt/JWTTokenizationService";
+import { jwtDecode } from "jwt-decode";
 
 const Login: React.FC = () => {
   // State variables to manage form data and error messages
   const [formData, setFormData] = useState<ILogin>(defaultLogin);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const navigate = useNavigate();
-  const { isLoggedIn, setToken } = useAuth();
+  const { isLoggedIn, setToken, setEmail } = useAuth();
 
   useEffect(() => {
     if(isLoggedIn) {
@@ -62,6 +63,11 @@ const Login: React.FC = () => {
         // Set token and change logged in state
         saveTokenToLocalstorage(token);
         setToken(token);
+
+        // set email address
+        const decodedToken: IToken = jwtDecode(token.token ?? "");
+        setEmail(decodedToken.email ?? "");
+
         navigate("/");
       }
       else {

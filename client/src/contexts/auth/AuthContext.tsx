@@ -7,7 +7,9 @@ import { removeTokenFromLocalStorage } from "../../services/jwt/JWTTokenizationS
 // Create the AuthContext
 export const AuthContext = createContext<IAuthContextType>({
   token: null,
+  email: "",
   setToken: () => {},
+  setEmail: () => {},
   isLoggedIn: false,
   isTokenValid: false,
 });
@@ -19,17 +21,21 @@ export const AuthContext = createContext<IAuthContextType>({
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  // State to store the authentication token
+  // State to store the authentication token and user email
   const [token, setToken] = useState<IToken | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
 
   // useEffect to check if token is present in localStorage
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    const data: IToken  = { token: storedToken };
-    if (data && data.token) {
-      setToken(data);
+    if (storedToken) {
+      setToken({ token: storedToken });
+
+      // Decode token to get user email
+      const decodedToken: IToken = jwtDecode(storedToken);
+      setEmail(decodedToken.email ?? "");
     }
-  }, [token]);
+  }, []);
 
   // Boolean indicating whether the user is logged in or not
   const isLoggedIn = !!token;
@@ -45,6 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       // Token is expired, log out the user
       removeTokenFromLocalStorage();
       setToken(null);
+      setEmail("");
       return false;
     }
 
@@ -53,7 +60,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Return the AuthContext provider with the authentication context value
   return (
-    <AuthContext.Provider value={{ token, setToken, isLoggedIn, isTokenValid }}>
+    <AuthContext.Provider
+      value={{ token, email, setToken, setEmail, isLoggedIn, isTokenValid }}
+    >
       {children}
     </AuthContext.Provider>
   );
