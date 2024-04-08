@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace RedditDataRepository.blobs.images
 {
     /// <summary>
-    /// Provides functionality to upload files to Azure Blob Storage.
+    /// Provides functionality to upload and remove files from Azure Blob Storage.
     /// </summary>
     public class AzureBlobStorage
     {
@@ -48,6 +48,11 @@ namespace RedditDataRepository.blobs.images
             }
         }
 
+        /// <summary>
+        /// Removes a file from Azure Blob Storage.
+        /// </summary>
+        /// <param name="imageBlobUrl">The URL of the blob to be removed.</param>
+        /// <returns>A boolean indicating whether the removal was successful.</returns>
         public static async Task<bool> RemoveFileFromBlobStorage(string imageBlobUrl)
         {
             try
@@ -86,7 +91,6 @@ namespace RedditDataRepository.blobs.images
             {
                 // An error occurred while deleting the blob
                 return false;
-
             }
         }
     }

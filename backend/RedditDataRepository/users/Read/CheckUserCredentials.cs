@@ -3,7 +3,7 @@ using RedditDataRepository.classes.UserDTO;
 
 namespace RedditDataRepository.users.Read
 {
-    public class ICheckUserCredentials
+    public class CheckUserCredentials
     {
         public static bool RunCheck(CloudTable table, string email, string password)
         {

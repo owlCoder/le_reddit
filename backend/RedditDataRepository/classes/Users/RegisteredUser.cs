@@ -15,6 +15,8 @@ namespace RedditDataRepository.classes.UserDTO
         public string Password { get; set; }
         public string ImageBlobUrl { get; set; }
 
+        public RegisteredUser() { }
+
         public RegisteredUser(MultipartFormDataStreamProvider provider)
         {
             PartitionKey = "User";
