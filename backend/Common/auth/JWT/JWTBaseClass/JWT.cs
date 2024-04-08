@@ -46,7 +46,7 @@ namespace Common.auth
                         new Claim(ClaimTypes.Email, email),
                     }
                 ),
-                Expires = DateTime.UtcNow.AddMinutes(expirationMinutes),
+                Expires = DateTime.UtcNow.AddMinutes(1),
                 Issuer = _issuer,
                 Audience = _audience,
                 SigningCredentials = new SigningCredentials(

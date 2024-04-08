@@ -59,6 +59,13 @@ public class JwtAuthenticationFilter : AuthorizeAttribute
 
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(tokenString);
+
+            // Check if the token has expired
+            if (token.ValidTo < DateTime.UtcNow)
+            {
+                return false;
+            }
+
             var principal = new ClaimsPrincipal(new ClaimsIdentity(token.Claims, "jwt"));
 
             Thread.CurrentPrincipal = principal;
