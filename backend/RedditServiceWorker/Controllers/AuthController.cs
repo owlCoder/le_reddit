@@ -4,6 +4,7 @@ using Common.config;
 using RedditDataRepository.blobs.images;
 using RedditDataRepository.classes.UserDTO;
 using RedditDataRepository.users.Create;
+using RedditDataRepository.users.Read;
 using RedditServiceWorker.Models.auth.login;
 using System;
 using System.IO;
@@ -32,7 +33,7 @@ namespace RedditServiceWorker.Controllers
                 return BadRequest(ModelState);
 
             // If user exists, generate token
-            if (IsValidUser(user.Email, user.Password))
+            if (CheckUserCredentials.RunCheck(AzureTableStorageCloudAccount.GetCloudTable("Users"), user.Email, user.Password))
                 return Ok(new { token = _jwtTokenGenerator.GenerateToken(user.Email) });
             else
                 return Unauthorized();
