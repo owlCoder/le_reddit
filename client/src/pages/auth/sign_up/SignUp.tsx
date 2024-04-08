@@ -66,12 +66,10 @@ const SignUp: React.FC = () => {
           if (index !== errors.length - 1) {
             newErrorMessage += ", ";
           }
+          else {
+            newErrorMessage += ".";
+          }
         });
-        if (image == null) {
-          newErrorMessage += " and image.";
-        } else {
-          newErrorMessage += ".";
-        }
         return newErrorMessage;
       });
     }
