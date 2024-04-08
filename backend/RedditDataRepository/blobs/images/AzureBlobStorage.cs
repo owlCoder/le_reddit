@@ -1,11 +1,9 @@
-﻿using System;
+﻿using Common.cloud.account;
+using Microsoft.WindowsAzure.Storage.Blob;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Common.cloud.account;
-using Microsoft.Azure;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace RedditDataRepository.blobs.images
 {

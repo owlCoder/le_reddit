@@ -1,20 +1,18 @@
 ﻿using Common.auth;
+using Common.cloud.account;
 using Common.config;
-using RedditServiceWorker.Models.auth.login;
-using System;
-using System.Net.Http;
-using System.Net;
-using System.Security.Claims;
-using System.Web.Http;
-using System.Web;
-using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage;
-using System.IO;
-using Microsoft.Azure;
 using RedditDataRepository.blobs.images;
 using RedditDataRepository.classes.UserDTO;
 using RedditDataRepository.users.Create;
-using Common.cloud.account;
+using RedditServiceWorker.Models.auth.login;
+using System;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Http;
 
 namespace RedditServiceWorker.Controllers
 {
@@ -72,7 +70,7 @@ namespace RedditServiceWorker.Controllers
 
                 // If image uploaded get image url in blob storage
                 // and put into user table
-                if(success == false)
+                if (success == false)
                 {
                     return BadRequest();
                 }
@@ -106,17 +104,6 @@ namespace RedditServiceWorker.Controllers
             }
         }
 
-        private bool IsEmailAlreadyRegistered(string email)
-        {
-            throw new NotImplementedException();
-        }
-
-        private bool IsValidUser(string email, string password)
-        {
-            // Your authentication logic here
-            // Example: Check if email and password match in the database
-            return email == "danijel.xda@gmail.com" && password == "123456";
-        }
 
         [HttpGet]
         [Route("protected")]
