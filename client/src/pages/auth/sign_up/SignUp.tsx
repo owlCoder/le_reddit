@@ -167,7 +167,7 @@ const SignUp: React.FC = () => {
                     {key.charAt(0).toUpperCase() + key.slice(1)}
                   </label>
                   <input
-                    type={key === "email" ? "email" : "text"}
+                    type={key === "email" ? "email" : key === "password" ? "password" : "text"}
                     value={value}
                     onChange={(e) => handleChange(e, key as keyof IUser)}
                     className="w-full rounded-lg border-2  focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"

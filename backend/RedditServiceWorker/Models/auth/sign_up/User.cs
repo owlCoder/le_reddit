@@ -68,7 +68,6 @@ namespace RedditServiceWorker.Models.auth.sign_up
         /// The user profile image.
         /// </summary>
         [Required(ErrorMessage = "Profile picture is required")]
-        public byte[] Image { get; set; }
+        public HttpPostedFileBase Image { get; set; }
     }
-
 }

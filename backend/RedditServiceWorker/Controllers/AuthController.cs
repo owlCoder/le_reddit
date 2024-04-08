@@ -7,6 +7,11 @@ using System.Net.Http;
 using System.Net;
 using System.Security.Claims;
 using System.Web.Http;
+using System.Web;
+using System.Threading.Tasks;
+using Microsoft.WindowsAzure.Storage;
+using System.IO;
+using Microsoft.Azure;
 
 namespace RedditServiceWorker.Controllers
 {
@@ -32,28 +37,57 @@ namespace RedditServiceWorker.Controllers
                 return Unauthorized();
         }
 
-        [Route("signup")]
         [HttpPost]
-        public IHttpActionResult SignUp(User user)
+        [Route("signup")]
+        public async Task<IHttpActionResult> SignUp()
         {
-            // Check if any data is entered
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            // If user exists, return error, email exist
-            if (IsEmailAlreadyRegistered(user.Email))
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Conflict)
-                {
-                    Content = new StringContent("Email address is already registered")
-                });
-
-                //return Ok(new { Token = _jwtTokenGenerator.GenerateToken(user.Email) });
-            else
+            if (!Request.Content.IsMimeMultipartContent())
             {
-                // TODO pozovi metodu da doda korisnika
-                // ako postoji slika
-                
-                return Unauthorized();
+                return StatusCode(HttpStatusCode.UnsupportedMediaType);
+            }
+
+            var provider = new MultipartFormDataStreamProvider(HttpContext.Current.Server.MapPath("~/App_Data"));
+
+            try
+            {
+                await Request.Content.ReadAsMultipartAsync(provider);
+
+                // Access form data
+                var firstName = provider.FormData["firstName"];
+                var lastName = provider.FormData["lastName"];
+                var address = provider.FormData["address"];
+                var city = provider.FormData["city"];
+                var country = provider.FormData["country"];
+                var phone = provider.FormData["phone"];
+                var email = provider.FormData["email"];
+                var password = provider.FormData["password"];
+
+                // Access file
+                var file = provider.FileData[0]; // Assuming only one file is uploaded
+
+                // Process user data here
+
+                // Upload file to Azure Blob Storage
+                var storageConnectionString = CloudConfigurationManager.GetSetting("DataConnectionString"); // Your Azure Storage connection string
+                var containerName = "images"; // Your Blob Storage container name
+
+                var storageAccount = CloudStorageAccount.Parse(storageConnectionString);
+                var blobClient = storageAccount.CreateCloudBlobClient();
+                var container = blobClient.GetContainerReference(containerName);
+                await container.CreateIfNotExistsAsync();
+
+                var fileName = Guid.NewGuid().ToString(); // You can generate a unique filename here
+                var blob = container.GetBlockBlobReference(fileName);
+                using (var fileStream = File.OpenRead(file.LocalFileName))
+                {
+                    await blob.UploadFromStreamAsync(fileStream);
+                }
+
+                return Ok(); // Return appropriate response
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
             }
         }
 

@@ -13,9 +13,9 @@ namespace RedditServiceWorker
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
-            //Force JSON responses on all requests
-            GlobalConfiguration.Configuration.Formatters.Clear();
-            GlobalConfiguration.Configuration.Formatters.Add(new JsonMediaTypeFormatter());
+            // Clear existing formatters and add JSON formatter
+            //GlobalConfiguration.Configuration.Formatters.Clear();
+            //GlobalConfiguration.Configuration.Formatters.Add(new JsonMediaTypeFormatter());
         }
     }
 }
