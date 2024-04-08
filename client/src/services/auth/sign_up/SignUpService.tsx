@@ -4,26 +4,22 @@ import { API_ENDPOINT } from "../../../App";
 
 const SignUpService = async (user: IUser): Promise<boolean> => {
   try {
-    // Make the POST request with FormData
-    const response: AxiosResponse = await axios.post(API_ENDPOINT + 'auth/signup', user, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
+    const response: AxiosResponse = await axios.post(
+      API_ENDPOINT + "auth/signup",
+      user,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       }
-    });
+    );
 
-    console.log(response);
-
-    if (response.status === 200) {
-      // User registered successfully
+    if (response.status === 200 || response.status === 204) {
       return true;
     } else {
-      // Handle other status codes
-      console.error('Registration failed with status code:', response.status);
       return false;
     }
-  } catch (error) {
-    // Handle errors
-    console.error('Error:', error);
+  } catch {
     return false;
   }
 };
