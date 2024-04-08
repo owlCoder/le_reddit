@@ -9,3 +9,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <App />
   </React.StrictMode>,
 )
+
+// Global API endpoint
+export const API_ENDPOINT: string = "http://localhost/api/"
