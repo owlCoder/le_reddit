@@ -5,7 +5,7 @@ import IAuthContextType from "../../interfaces/auth/auth_context/IAuthContextTyp
 import { removeTokenFromLocalStorage } from "../../services/jwt/JWTTokenizationService";
 
 // Create the AuthContext
-const AuthContext = createContext<IAuthContextType>({
+export const AuthContext = createContext<IAuthContextType>({
   token: null,
   setToken: () => {},
   isLoggedIn: false,
@@ -25,8 +25,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   // useEffect to check if token is present in localStorage
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setToken(JSON.parse(storedToken));
+    const data: IToken  = { token: storedToken };
+    if (data && data.token) {
+      setToken(data);
     }
   }, []);
 
@@ -37,15 +38,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const isTokenValid = useMemo(() => {
     if (!token) return false;
 
-    const decodedToken: { exp: number } = jwtDecode(token.token);
+    const decodedToken: { exp: number } = jwtDecode(token.token ?? "");
     const currentTime = Date.now() / 1000; // Convert milliseconds to seconds
 
-    if(decodedToken.exp > currentTime) {
-        removeTokenFromLocalStorage();
-        setToken(null);
+    if (decodedToken.exp <= currentTime) {
+      // Token is expired, log out the user
+      removeTokenFromLocalStorage();
+      setToken(null);
+      return false;
     }
 
-    return decodedToken.exp > currentTime;
+    return true;
   }, [token]);
 
   // Return the AuthContext provider with the authentication context value

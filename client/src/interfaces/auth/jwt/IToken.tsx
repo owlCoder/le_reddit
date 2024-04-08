@@ -5,7 +5,7 @@ interface IToken {
     /**
      * The JWT token string.
      */
-    token: string;
+    token: string | null;
 }
 
 export default IToken;

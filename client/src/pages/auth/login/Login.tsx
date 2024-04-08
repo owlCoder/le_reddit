@@ -13,11 +13,14 @@ import defaultLogin from "../../../samples/auth/login/login";
 import ILogin from "../../../interfaces/auth/login/ILogin";
 import Navbar from "../../../components/navbar/Navbar";
 import { ValudateLoginData } from "../../../validators/auth/login/validate_login";
+import LoginService from "../../../services/auth/login/LoginService";
+import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
   // State variables to manage form data and error messages
   const [formData, setFormData] = useState<ILogin>(defaultLogin);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const navigate = useNavigate();
 
   // Function to handle changes in form inputs
   const handleChange = (
@@ -31,7 +34,7 @@ const Login: React.FC = () => {
   };
 
   // Function to handle form submission
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     // Handle form submission, API calls, etc.
@@ -43,8 +46,15 @@ const Login: React.FC = () => {
 
     if (errors.length === 0) {
       // Call API
-      console.log("Form Data:", formData);
-      setErrorMessage("Backend is not available");
+      const success: boolean = await LoginService(formData);
+
+      if(success) {
+        navigate("/");
+      }
+      else {
+        setErrorMessage("Entered credentials are incorrect.");
+      }
+      
     } else {
       // Show all errors
       setErrorMessage((prevErrorMessage) => {
