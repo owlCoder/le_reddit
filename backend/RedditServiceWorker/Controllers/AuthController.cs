@@ -13,6 +13,7 @@ using Microsoft.WindowsAzure.Storage;
 using System.IO;
 using Microsoft.Azure;
 using RedditDataRepository.blobs.images;
+using RedditDataRepository.classes.UserDTO;
 
 namespace RedditServiceWorker.Controllers
 {
@@ -55,7 +56,7 @@ namespace RedditServiceWorker.Controllers
                 await Request.Content.ReadAsMultipartAsync(provider);
 
                 // Access form data and put into user object
-                User user = new User(provider);
+                RegisteredUser user = new RegisteredUser(provider);
 
                 // Access profile picture
                 var file = provider.FileData[0]; // Only one file is uploaded
@@ -66,10 +67,19 @@ namespace RedditServiceWorker.Controllers
                 var fileExtension = Path.GetExtension(name).ToLower(); // Get the file extension
 
                 // Upload file to Azure Blob Storage
-                await AzureBlobStorage.
+                (bool success, string blobUrl) = await AzureBlobStorage.UploadFileToBlobStorage(file.LocalFileName, fileExtension, "images");
 
                 // If image uploaded get image url in blob storage
                 // and put into user table
+                if(success == false)
+                {
+                    return BadRequest();
+                }
+                else
+                {
+                    // Save blob url to user 
+                    user.ImageBlobUrl = blobUrl;
+                }
 
                 return Ok(); // Return appropriate response
             }
