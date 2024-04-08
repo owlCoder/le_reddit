@@ -21,4 +21,7 @@ function App() {
   );
 }
 
+// Global API endpoint
+export const API_ENDPOINT: string = "http://localhost/api/"
+
 export default App;

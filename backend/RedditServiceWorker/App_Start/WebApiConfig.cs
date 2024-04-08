@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace RedditServiceWorker
 {
@@ -8,8 +9,12 @@ namespace RedditServiceWorker
         {
             config.MapHttpAttributeRoutes();
 
+            // Enable CORS globally
+            var cors = new EnableCorsAttribute("http://localhost:5173", "*", "*");
+            config.EnableCors(cors);
+
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
+                name: "api",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );

@@ -6,6 +6,7 @@ using System.Web;
 namespace RedditServiceWorker.Models.auth.sign_up
 {
     using System.ComponentModel.DataAnnotations;
+    using System.IO;
 
     /// <summary>
     /// Represents a user object with various properties.
@@ -64,9 +65,10 @@ namespace RedditServiceWorker.Models.auth.sign_up
         public string Password { get; set; }
 
         /// <summary>
-        /// (Optional) The URL of the user's profile image.
+        /// The user profile image.
         /// </summary>
-        public string ImageUrl { get; set; }
+        [Required(ErrorMessage = "Profile picture is required")]
+        public byte[] Image { get; set; }
     }
 
 }

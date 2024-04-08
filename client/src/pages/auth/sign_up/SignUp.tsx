@@ -158,7 +158,7 @@ const SignUp: React.FC = () => {
             </div>
 
             {Object.entries(formData).map(([key, value]) => {
-              if (["firstName", "lastName", "address", "city"].includes(key)) {
+              if (["firstName", "lastName", "address", "city", "image"].includes(key)) {
                 return null; // Skip first name, last name, address, and city
               }
               return (
