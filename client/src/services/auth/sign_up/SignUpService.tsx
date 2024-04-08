@@ -4,7 +4,11 @@ import { API_ENDPOINT } from "../../../App";
 
 const SignUpService = async (user: IUser): Promise<boolean> => {
   try {
-    const response: AxiosResponse = await axios.post(API_ENDPOINT + "auth/signup", user);
+    const response: AxiosResponse = await axios.post(API_ENDPOINT + "auth/signup", user, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
     if (response.status === 200) {
       // User registered successfully
       return true;
