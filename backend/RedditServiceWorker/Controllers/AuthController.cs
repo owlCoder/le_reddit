@@ -104,19 +104,5 @@ namespace RedditServiceWorker.Controllers
                 return InternalServerError(e);
             }
         }
-
-
-        [HttpGet]
-        [Route("protected")]
-        [JwtAuthenticationFilter] // Apply the authentication filter here
-        public IHttpActionResult GetData()
-        {
-            // Access authenticated user information
-            var user = User as ClaimsPrincipal;
-            var username = user.Identity.Name;
-
-            // Return protected data
-            return Ok(new { resposne = $"Hello, {username}. This is protected data." });
-        }
     }
 }
