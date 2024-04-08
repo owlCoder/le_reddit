@@ -1,7 +1,6 @@
 ﻿using Common.auth;
 using Common.config;
 using RedditServiceWorker.Models.auth.login;
-using RedditServiceWorker.Models.auth.sign_up;
 using System;
 using System.Net.Http;
 using System.Net;
@@ -79,9 +78,11 @@ namespace RedditServiceWorker.Controllers
                 {
                     // Save blob url to user 
                     user.ImageBlobUrl = blobUrl;
-                }
 
-                return Ok(); // Return appropriate response
+                    // Put user into table
+
+                    return Created();
+                }
             }
             catch (Exception e)
             {
