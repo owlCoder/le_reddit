@@ -2,6 +2,7 @@ import { createContext, useEffect, useMemo, useState } from "react";
 import { jwtDecode } from "jwt-decode"; // Correct import statement for jwt-decode
 import IToken from "../../interfaces/auth/jwt/IToken";
 import IAuthContextType from "../../interfaces/auth/auth_context/IAuthContextType";
+import { removeTokenFromLocalStorage } from "../../services/jwt/JWTTokenizationService";
 
 // Create the AuthContext
 const AuthContext = createContext<IAuthContextType>({
@@ -38,6 +39,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const decodedToken: { exp: number } = jwtDecode(token.token);
     const currentTime = Date.now() / 1000; // Convert milliseconds to seconds
+
+    if(decodedToken.exp > currentTime) {
+        removeTokenFromLocalStorage();
+        setToken(null);
+    }
 
     return decodedToken.exp > currentTime;
   }, [token]);
