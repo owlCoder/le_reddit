@@ -11,7 +11,7 @@
 import React, { useState } from "react";
 import IUser from "../../../interfaces/auth/sign_up/IUser";
 import defaultUser from "../../../samples/auth/sign_up/SignUp";
-import { ValudateSignupData } from "../../../validators/auth/sign_up/validate_signup";
+import { ValidateSignupData } from "../../../validators/auth/sign_up/validate_signup";
 import Navbar from "../../../components/navbar/Navbar";
 
 const SignUp: React.FC = () => {
@@ -35,6 +35,10 @@ const SignUp: React.FC = () => {
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       setImage(event.target.files[0]);
+      setFormData({
+        ...formData,
+        image: event.target.files[0]
+      })
     }
   };
 
@@ -46,7 +50,7 @@ const SignUp: React.FC = () => {
     setErrorMessage("");
 
     // Client-Side data verification
-    const errors: string[] = ValudateSignupData(formData);
+    const errors: string[] = ValidateSignupData(formData);
 
     if (errors.length === 0 && image != null) {
       // Call API
@@ -92,6 +96,7 @@ const SignUp: React.FC = () => {
           <form
             onSubmit={handleSubmit}
             className="mx-auto mb-0 mt-8 max-w-md space-y-4"
+            encType="multipart/form-data"
           >
             <div className="flex space-x-4">
               <div className="w-1/2">

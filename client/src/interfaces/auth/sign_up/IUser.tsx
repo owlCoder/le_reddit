@@ -43,7 +43,7 @@ export default interface IUser {
   password: string;
 
   /**
-   * (Optional) The URL of the user's profile image.
+   * User's profile image.
    */
-  imageUrl?: string;
+  image: File | null;
 }

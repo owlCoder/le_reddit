@@ -1,6 +1,6 @@
 import React from "react";
-import Navbar from "../../components/navbar/Navbar";
-import CreatePostForm from "../../components/post/create/CreatePost";
+import Navbar from "../../../components/navbar/Navbar";
+import CreatePostForm from "../../../components/post/create/CreatePost";
 
 const Create: React.FC = () => {
   return (

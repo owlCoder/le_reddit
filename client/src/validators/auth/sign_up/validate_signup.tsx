@@ -6,7 +6,7 @@ import IUser from "../../../interfaces/auth/sign_up/IUser";
  * @param user The user object to validate
  * @returns Array of error messages
  */
-const ValudateSignupData = (user: IUser): string[] => {
+const ValidateSignupData = (user: IUser): string[] => {
   const errors: string[] = [];
 
   // Check if required fields are empty
@@ -43,6 +43,10 @@ const ValudateSignupData = (user: IUser): string[] => {
     errors.push("password");
   }
 
+  if(user.image == null) {
+    errors.push("image");
+  }
+
   return errors;
 };
-export { ValudateSignupData };
+export { ValidateSignupData };

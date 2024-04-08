@@ -3,7 +3,7 @@ import Login from "./pages/auth/login/Login";
 import Register from "./pages/auth/sign_up/SignUp";
 import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile";
-import Create from "./pages/create/Create";
+import Create from "./pages/posts/create/Create";
 
 function App() {
   return (

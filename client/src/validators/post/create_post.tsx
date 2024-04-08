@@ -18,9 +18,7 @@ const ValidateCreatePostData = (postData: ICreatePost): string[] => {
     if (!postData.content.trim()) {
       errors.push('content');
     }
-  
-    // Additional validation logic can be added here
-  
+    
     return errors;
   };
   

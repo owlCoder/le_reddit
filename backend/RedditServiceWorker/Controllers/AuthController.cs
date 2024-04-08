@@ -1,6 +1,10 @@
 ﻿using Common.auth;
 using Common.config;
 using RedditServiceWorker.Models.auth.login;
+using RedditServiceWorker.Models.auth.sign_up;
+using System;
+using System.Net.Http;
+using System.Net;
 using System.Security.Claims;
 using System.Web.Http;
 
@@ -13,19 +17,44 @@ namespace RedditServiceWorker.Controllers
         // Create a JWT instance
         private static readonly JWT _jwtTokenGenerator = new JWT(JWTKeyStorage.SecretKey, "RCA", "students");
 
-        [Route("login")] // Define route for the login action
+        [Route("login")]
         [HttpPost]
-        public IHttpActionResult Authenticate(Login model)
+        public IHttpActionResult Authenticate(Login user)
         {
             // Check if any data is entered
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             // If user exists, generate token
-            if (IsValidUser(model.Email, model.Password))
-                return Ok(new { Token = _jwtTokenGenerator.GenerateToken(model.Email) });
+            if (IsValidUser(user.Email, user.Password))
+                return Ok(new { token = _jwtTokenGenerator.GenerateToken(user.Email) });
             else
                 return Unauthorized();
+        }
+
+        [Route("signup")]
+        [HttpPost]
+        public IHttpActionResult SignUp(User user)
+        {
+            // Check if any data is entered
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            // If user exists, return error, email exist
+            if (IsUserExists(user.Email))
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Conflict)
+                {
+                    Content = new StringContent("Email address is already registered")
+                });
+
+                //return Ok(new { Token = _jwtTokenGenerator.GenerateToken(user.Email) });
+            else
+                return Unauthorized();
+        }
+
+        private bool IsUserExists(string email)
+        {
+            throw new NotImplementedException();
         }
 
         private bool IsValidUser(string email, string password)
