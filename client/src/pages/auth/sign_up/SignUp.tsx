@@ -52,11 +52,10 @@ const SignUp: React.FC = () => {
     // Client-Side data verification
     const errors: string[] = ValidateSignupData(formData);
 
-    if (errors.length === 0 && image != null) {
-      // Call API
-      console.log("Form Data:", formData);
-      console.log("Image:", image);
-      setErrorMessage("Backend is not available");
+    if (errors.length === 0) {
+      // Call service to pass data to API
+      
+
     } else {
       // Show all errors
       setErrorMessage((prevErrorMessage) => {
