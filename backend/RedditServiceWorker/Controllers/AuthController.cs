@@ -41,7 +41,7 @@ namespace RedditServiceWorker.Controllers
                 return BadRequest(ModelState);
 
             // If user exists, return error, email exist
-            if (IsUserExists(user.Email))
+            if (IsEmailAlreadyRegistered(user.Email))
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Conflict)
                 {
                     Content = new StringContent("Email address is already registered")
@@ -49,10 +49,15 @@ namespace RedditServiceWorker.Controllers
 
                 //return Ok(new { Token = _jwtTokenGenerator.GenerateToken(user.Email) });
             else
+            {
+                // TODO pozovi metodu da doda korisnika
+                // ako postoji slika
+                
                 return Unauthorized();
+            }
         }
 
-        private bool IsUserExists(string email)
+        private bool IsEmailAlreadyRegistered(string email)
         {
             throw new NotImplementedException();
         }

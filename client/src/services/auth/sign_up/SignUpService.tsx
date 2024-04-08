@@ -2,9 +2,9 @@ import axios, { AxiosResponse, AxiosError } from "axios";
 import IUser from "../../../interfaces/auth/sign_up/IUser";
 import { API_ENDPOINT } from "../../../main";
 
-const SignUp = async (user: IUser): Promise<boolean> => {
+const SignUpService = async (user: IUser): Promise<boolean> => {
   try {
-    const response: AxiosResponse = await axios.post(API_ENDPOINT + "auth/", user);
+    const response: AxiosResponse = await axios.post(API_ENDPOINT + "auth/signup", user);
     if (response.status === 200) {
       // User registered successfully
       return true;
@@ -38,4 +38,4 @@ const SignUp = async (user: IUser): Promise<boolean> => {
   }
 };
 
-export default SignUp;
+export default SignUpService;

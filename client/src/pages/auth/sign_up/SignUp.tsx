@@ -13,6 +13,7 @@ import IUser from "../../../interfaces/auth/sign_up/IUser";
 import defaultUser from "../../../samples/auth/sign_up/SignUp";
 import { ValidateSignupData } from "../../../validators/auth/sign_up/validate_signup";
 import Navbar from "../../../components/navbar/Navbar";
+import SignUpService from "../../../services/auth/sign_up/SignUpService";
 
 const SignUp: React.FC = () => {
   // State variables to manage form data, image, and error messages
@@ -43,7 +44,7 @@ const SignUp: React.FC = () => {
   };
 
   // Function to handle form submission
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     // Reset errors
@@ -54,7 +55,14 @@ const SignUp: React.FC = () => {
 
     if (errors.length === 0) {
       // Call service to pass data to API
-      
+      const success: boolean = await SignUpService(formData);
+
+      if(success) {
+        alert("bravo majmune uspeo si uneti podatke");
+      }
+      else {
+        alert("e bajo moj, neko ti zauzeo mejl");
+      }
 
     } else {
       // Show all errors
