@@ -1,14 +1,25 @@
 import React, { useState } from "react";
 import StatusOnline from "./navbar/StatusOnline";
 import useAuth from "../contexts/use_auth/UseAuth";
+import { removeTokenFromLocalStorage } from "../services/jwt/JWTTokenizationService";
+import { useNavigate } from "react-router-dom";
 
 const AccountInformation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { email } = useAuth();
+  const { email, setEmail, setToken } = useAuth();
+  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
+
+  const SignOut = () => {
+    setEmail("");
+    removeTokenFromLocalStorage();
+    setToken(null);
+    navigate("/");
+  };
+
 
   return (
     <div className="relative inline-block text-left">
@@ -21,7 +32,6 @@ const AccountInformation: React.FC = () => {
           aria-expanded="true"
           onClick={toggleDropdown}
         >
-          {/* TODO add life data later!!! */}
           <div className="flex items-center h-8">
             <StatusOnline profileImageUrl="/reddit.svg" isOnline={true} />
             <div className="ml-2">
@@ -146,7 +156,7 @@ const AccountInformation: React.FC = () => {
             <button
               className="w-full block items-start text-start px-4 py-2 text-sm text-gray-700 rounded-b-md hover:bg-gray-200 hover:text-gray-900"
               role="menuitem"
-              onClick={() => {alert('odjavi')}}
+              onClick={() => { SignOut(); }}
             >
               <svg
                 className="h-6 w-6 mr-2 inline-block"
