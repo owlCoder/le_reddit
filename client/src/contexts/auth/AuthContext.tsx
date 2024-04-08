@@ -11,13 +11,17 @@ const AuthContext = createContext<IAuthContextType>({
   isTokenValid: false,
 });
 
-// AuthProvider component to wrap your app and provide the AuthContext
+/**
+ * Represents the authentication context provider component.
+ * It wraps the app and provides the authentication context.
+ */
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  // State to store the authentication token
   const [token, setToken] = useState<IToken | null>(null);
 
-  // Example: useEffect to check if token is present in localStorage
+  // useEffect to check if token is present in localStorage
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
@@ -25,9 +29,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, []);
 
+  // Boolean indicating whether the user is logged in or not
   const isLoggedIn = !!token;
 
-  // Check if token is valid
+  // useMemo hook to check if the token is valid
   const isTokenValid = useMemo(() => {
     if (!token) return false;
 
@@ -37,6 +42,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     return decodedToken.exp > currentTime;
   }, [token]);
 
+  // Return the AuthContext provider with the authentication context value
   return (
     <AuthContext.Provider value={{ token, setToken, isLoggedIn, isTokenValid }}>
       {children}
