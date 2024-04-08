@@ -1,6 +1,9 @@
 ﻿using Common.auth;
 using Common.config;
+using Microsoft.Ajax.Utilities;
 using RedditServiceWorker.Models.auth.login;
+using System;
+using System.Security.Claims;
 using System.Web.Http;
 
 namespace RedditServiceWorker.Controllers
@@ -34,14 +37,17 @@ namespace RedditServiceWorker.Controllers
             return email == "danijel.xda@gmail.com" && password == "123456";
         }
 
-        [Authorize]
         [HttpGet]
         [Route("protected")]
-        public IHttpActionResult Zasticeno()
+        [JwtAuthenticationFilter] // Apply the authentication filter here
+        public IHttpActionResult GetData()
         {
-            var user = User.Identity.Name;
+            // Access authenticated user information
+            var user = User as ClaimsPrincipal;
+            var username = user.Identity.Name;
+
             // Return protected data
-            return Ok($"Hello, {user}. This is protected data.");
+            return Ok($"Hello, {username}. This is protected data.");
         }
     }
 }
