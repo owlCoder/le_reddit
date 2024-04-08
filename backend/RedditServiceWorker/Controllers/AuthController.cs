@@ -2,7 +2,7 @@
 using Common.cloud.account;
 using Common.config;
 using RedditDataRepository.blobs.images;
-using RedditDataRepository.classes.UserDTO;
+using RedditDataRepository.Classes.Users;
 using RedditDataRepository.users.Create;
 using RedditDataRepository.users.Read;
 using RedditServiceWorker.Models.auth.login;

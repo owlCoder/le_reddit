@@ -1,5 +1,5 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
-using RedditDataRepository.classes.UserDTO;
+using RedditDataRepository.Classes.Users;
 using RedditDataRepository.users.Read;
 using System.Threading.Tasks;
 
