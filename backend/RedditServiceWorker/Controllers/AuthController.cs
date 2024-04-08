@@ -1,8 +1,6 @@
 ﻿using Common.auth;
 using Common.config;
-using Microsoft.Ajax.Utilities;
 using RedditServiceWorker.Models.auth.login;
-using System;
 using System.Security.Claims;
 using System.Web.Http;
 
@@ -13,7 +11,7 @@ namespace RedditServiceWorker.Controllers
     public class AuthController : ApiController
     {
         // Create a JWT instance
-        private static readonly JWT _jwtTokenGenerator = new JWT(JWTKeyStorage.SecretKey, "MIRKO", "SELJOBERI");
+        private static readonly JWT _jwtTokenGenerator = new JWT(JWTKeyStorage.SecretKey, "RCA", "students");
 
         [Route("login")] // Define route for the login action
         [HttpPost]
@@ -47,7 +45,7 @@ namespace RedditServiceWorker.Controllers
             var username = user.Identity.Name;
 
             // Return protected data
-            return Ok($"Hello, {username}. This is protected data.");
+            return Ok(new { resposne = $"Hello, {username}. This is protected data." });
         }
     }
 }

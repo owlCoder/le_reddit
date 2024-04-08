@@ -32,9 +32,9 @@ namespace Common.auth
         /// Generates a JWT token with the provided email and expiration time.
         /// </summary>
         /// <param name="email">The email associated with the token.</param>
-        /// <param name="expirationMinutes">Optional. The expiration time of the token in minutes. Default is 30 minutes.</param>
+        /// <param name="expirationMinutes">Optional. The expiration time of the token in minutes. Default is 15 minutes.</param>
         /// <returns>The generated JWT token.</returns>
-        public string GenerateToken(string email, int expirationMinutes = 30)
+        public string GenerateToken(string email, int expirationMinutes = 15)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_secretKey);
@@ -46,7 +46,7 @@ namespace Common.auth
                         new Claim(ClaimTypes.Email, email),
                     }
                 ),
-                Expires = DateTime.UtcNow.AddMinutes(1),
+                Expires = DateTime.UtcNow.AddMinutes(expirationMinutes),
                 Issuer = _issuer,
                 Audience = _audience,
                 SigningCredentials = new SigningCredentials(
