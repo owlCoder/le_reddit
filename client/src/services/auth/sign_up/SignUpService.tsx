@@ -2,6 +2,11 @@ import axios, { AxiosResponse } from "axios";
 import IUser from "../../../interfaces/auth/sign_up/IUser";
 import { API_ENDPOINT } from "../../../App";
 
+/**
+ * Signs up a user by sending their information to the signup endpoint.
+ * @param user The user object containing signup information.
+ * @returns A Promise that resolves to a boolean indicating whether the signup was successful.
+ */
 const SignUpService = async (user: IUser): Promise<boolean> => {
   try {
     const response: AxiosResponse = await axios.post(
@@ -15,12 +20,12 @@ const SignUpService = async (user: IUser): Promise<boolean> => {
     );
 
     if (response.status === 200 || response.status === 204) {
-      return true;
+      return true; // Return true if signup is successful
     } else {
-      return false;
+      return false; // Return false if signup fails
     }
   } catch {
-    return false;
+    return false; // Return false if an error occurs during signup
   }
 };
 
