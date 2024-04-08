@@ -8,19 +8,29 @@
  *
  * @returns JSX.Element
  */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import defaultLogin from "../../../samples/auth/login/login";
 import ILogin from "../../../interfaces/auth/login/ILogin";
 import Navbar from "../../../components/navbar/Navbar";
 import { ValudateLoginData } from "../../../validators/auth/login/validate_login";
 import LoginService from "../../../services/auth/login/LoginService";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../../contexts/use_auth/UseAuth";
+import IToken from "../../../interfaces/auth/jwt/IToken";
+import { saveTokenToLocalstorage } from "../../../services/jwt/JWTTokenizationService";
 
 const Login: React.FC = () => {
   // State variables to manage form data and error messages
   const [formData, setFormData] = useState<ILogin>(defaultLogin);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const navigate = useNavigate();
+  const { isLoggedIn, setToken } = useAuth();
+
+  useEffect(() => {
+    if(isLoggedIn) {
+      navigate("/");
+    }
+  }, [isLoggedIn, navigate]);
 
   // Function to handle changes in form inputs
   const handleChange = (
@@ -46,9 +56,12 @@ const Login: React.FC = () => {
 
     if (errors.length === 0) {
       // Call API
-      const success: boolean = await LoginService(formData);
+      const token: (IToken | null) = await LoginService(formData);
 
-      if(success) {
+      if(token) {
+        // Set token and change logged in state
+        saveTokenToLocalstorage(token);
+        setToken(token);
         navigate("/");
       }
       else {
@@ -100,6 +113,7 @@ const Login: React.FC = () => {
               <div className="relative">
                 <input
                   type="email"
+                  autoFocus
                   value={formData.email}
                   onChange={(e) => handleChange(e, "email")}
                   className="w-full rounded-lg border-2 border-reddit-400 focus:border-reddit-600 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 pe-12 text-sm shadow-sm"

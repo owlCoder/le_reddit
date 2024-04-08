@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import AccountInformation from "../AccountInformation";
 import SearchBar from "../search/SearchBar";
@@ -7,12 +7,6 @@ import useAuth from "../../contexts/use_auth/UseAuth";
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
-
-  useEffect(() => {
-    if(isLoggedIn) {
-      navigate("/");
-    }
-  }, [isLoggedIn, navigate]);
 
   return (
     <div className="sticky top-0 z-10 bg-white border-b border-gray-200">

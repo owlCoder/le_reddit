@@ -8,18 +8,28 @@
  *
  * @returns JSX.Element
  */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import IUser from "../../../interfaces/auth/sign_up/IUser";
 import defaultUser from "../../../samples/auth/sign_up/SignUp";
 import { ValidateSignupData } from "../../../validators/auth/sign_up/validate_signup";
 import Navbar from "../../../components/navbar/Navbar";
 import SignUpService from "../../../services/auth/sign_up/SignUpService";
+import useAuth from "../../../contexts/use_auth/UseAuth";
+import { useNavigate } from "react-router-dom";
 
 const SignUp: React.FC = () => {
   // State variables to manage form data, image, and error messages
   const [formData, setFormData] = useState<IUser>(defaultUser);
   const [image, setImage] = useState<File | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
+
+  useEffect(() => {
+    if(isLoggedIn) {
+      navigate("/");
+    }
+  }, [isLoggedIn, navigate]);
 
   // Function to handle changes in form inputs
   const handleChange = (

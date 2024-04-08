@@ -29,7 +29,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     if (data && data.token) {
       setToken(data);
     }
-  }, []);
+  }, [token]);
 
   // Boolean indicating whether the user is logged in or not
   const isLoggedIn = !!token;
