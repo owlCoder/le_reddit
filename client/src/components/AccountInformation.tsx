@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import StatusOnline from "./navbar/StatusOnline";
+import useAuth from "../contexts/use_auth/UseAuth";
 
 const AccountInformation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { email } = useAuth();
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -23,9 +25,9 @@ const AccountInformation: React.FC = () => {
           <div className="flex items-center h-8">
             <StatusOnline profileImageUrl="/reddit.svg" isOnline={true} />
             <div className="ml-2">
-              <div>danijel.xda@gmail.com</div>
-              <div className="text-gray-500 text-left font-demibold text-sm">
-                820 karma
+              <div>{email}</div>
+              <div className="text-gray-500 text-left font-demibold text-xs">
+                u/{email?.split('@')[0]}
               </div>
             </div>
           </div>
