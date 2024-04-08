@@ -106,12 +106,20 @@ namespace RedditServiceWorker.Controllers
 
                         return BadRequest("User creation failed"); // Return 400 Bad Request with an error message
                     }
-
                 }
             }
             catch (Exception e)
             {
                 return InternalServerError(e);
+            }
+            finally
+            {
+                // Delete the saved file from the App_Data directory
+                foreach (var fileData in provider.FileData)
+                {
+                    var localFilePath = fileData.LocalFileName;
+                    File.Delete(localFilePath);
+                }
             }
         }
         #endregion
