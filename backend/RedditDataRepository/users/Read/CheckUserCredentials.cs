@@ -16,7 +16,7 @@ namespace RedditDataRepository.users.Read
         /// <param name="email">The email of the user to be checked.</param>
         /// <param name="password">The password of the user to be checked.</param>
         /// <returns>A Task representing the asynchronous operation that yields a boolean indicating whether the provided email and password match a user record.</returns>
-        public static async Task<bool> RunCheckAsync(CloudTable table, string email, string password)
+        public static async Task<bool> RunCheck(CloudTable table, string email, string password)
         {
             // Create a TableOperation object to retrieve the entity
             TableOperation retrieveOperation = TableOperation.Retrieve<RegisteredUser>("User", email);

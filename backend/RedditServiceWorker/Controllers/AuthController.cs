@@ -20,24 +20,35 @@ namespace RedditServiceWorker.Controllers
     [RoutePrefix("api/auth")]
     public class AuthController : ApiController
     {
+        #region JWT
         // Create a JWT instance
         private static readonly JWT _jwtTokenGenerator = new JWT(JWTKeyStorage.SecretKey, "RCA", "students");
+        #endregion
 
+        #region LOGIN
+        /// <summary>
+        /// Authenticates a user and generates a JWT token.
+        /// </summary>
         [Route("login")]
         [HttpPost]
-        public IHttpActionResult Authenticate(Login user)
+        public async Task<IHttpActionResult> Authenticate(Login user)
         {
             // Check if any data is entered
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             // If user exists, generate token
-            if (CheckUserCredentials.RunCheck(AzureTableStorageCloudAccount.GetCloudTable("Users"), user.Email, user.Password))
+            if (await CheckUserCredentials.RunCheck(AzureTableStorageCloudAccount.GetCloudTable("Users"), user.Email, user.Password))
                 return Ok(new { token = _jwtTokenGenerator.GenerateToken(user.Email) });
             else
                 return Unauthorized();
         }
+        #endregion
 
+        #region SIGN UP
+        /// <summary>
+        /// Signs up a new user.
+        /// </summary>
         [HttpPost]
         [Route("signup")]
         public async Task<IHttpActionResult> SignUp()
@@ -70,7 +81,7 @@ namespace RedditServiceWorker.Controllers
 
                 // If image uploaded get image url in blob storage
                 // and put into user table
-                if (success == false)
+                if (!success)
                 {
                     return BadRequest();
                 }
@@ -80,7 +91,7 @@ namespace RedditServiceWorker.Controllers
                     user.ImageBlobUrl = blobUrl;
 
                     // Put user into table
-                    bool insert_result = InsertUser.Add(AzureTableStorageCloudAccount.GetCloudTable("users"), user);
+                    bool insert_result = await InsertUser.Add(AzureTableStorageCloudAccount.GetCloudTable("users"), user);
 
                     if (insert_result)
                     {
@@ -103,5 +114,6 @@ namespace RedditServiceWorker.Controllers
                 return InternalServerError(e);
             }
         }
+        #endregion
     }
 }
