@@ -13,6 +13,7 @@ namespace RedditServiceWorker.Controllers
     [RoutePrefix("api/user")]
     public class UserController : ApiController
     {
+        #region GET
         /// <summary>
         /// Retrieves a user by email.
         /// </summary>
@@ -25,7 +26,7 @@ namespace RedditServiceWorker.Controllers
         [Route("{email}")]
         [HttpGet]
         [JwtAuthenticationFilter]
-        public async Task<IHttpActionResult> GetUser(string email)
+        public async Task<IHttpActionResult> Get(string email)
         {
             // Check if the request is authorized
             if (!ResourceGuard.RunCheck(ActionContext, email))
@@ -48,5 +49,10 @@ namespace RedditServiceWorker.Controllers
                 return NotFound();
             }
         }
+        #endregion
+
+        #region UPDATE
+
+        #endregion
     }
 }
