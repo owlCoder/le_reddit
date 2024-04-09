@@ -84,44 +84,63 @@ namespace RedditServiceWorker.Controllers
 
                 // Access profile picture
                 var file = provider.FileData[0]; // Only one file is uploaded
-                var name = file.Headers.ContentDisposition.FileName;
 
-                // Just get extension of file name
-                name = name.Substring(1, name.Length - 2);
-                var fileExtension = Path.GetExtension(name).ToLower(); // Get the file extension
-
-                // Upload file to Azure Blob Storage
-                (bool success, string blobUrl) = await AzureBlobStorage.UploadFileToBlobStorage(file.LocalFileName, fileExtension, "images");
-
-                // If image uploaded get image url in blob storage
-                // and put into user table
-                if (!success)
+                // if new image not provided file will be null
+                if (file != null)
                 {
-                    return BadRequest();
+                    var name = file.Headers.ContentDisposition.FileName;
+
+                    // Just get extension of file name
+                    name = name.Substring(1, name.Length - 2);
+                    var fileExtension = Path.GetExtension(name).ToLower(); // Get the file extension
+
+                    // Upload file to Azure Blob Storage
+                    (bool success, string blobUrl) = await AzureBlobStorage.UploadFileToBlobStorage(file.LocalFileName, fileExtension, "images");
+
+                    // If image uploaded get image url in blob storage
+                    // and put into user table
+                    if (!success)
+                    {
+                        return BadRequest();
+                    }
+                    else
+                    {
+                        // Save blob url to user 
+                        user.ImageBlobUrl = blobUrl;
+
+                        // Put user into table
+                        bool insert_result = await InsertUser.Add(AzureTableStorageCloudAccount.GetCloudTable("users"), user);
+
+                        if (insert_result)
+                        {
+                            // User was successfully added to the table
+                            // Remove old image from blob storage
+                            await AzureBlobStorage.RemoveFileFromBlobStorage(provider.FormData["imageBlobUrl"]);
+
+                            return Ok(); // Return 200 OK
+                        }
+                        else
+                        {
+                            // User was not successfully added to the table
+                            // Delete the image associated with the user
+                            await AzureBlobStorage.RemoveFileFromBlobStorage(user.ImageBlobUrl);
+
+                            return BadRequest("User creation failed"); // Return 400 Bad Request with an error message
+                        }
+                    }
                 }
                 else
                 {
-                    // Save blob url to user 
-                    user.ImageBlobUrl = blobUrl;
-
                     // Put user into table
                     bool insert_result = await InsertUser.Add(AzureTableStorageCloudAccount.GetCloudTable("users"), user);
 
                     if (insert_result)
                     {
-                        // User was successfully added to the table
-                        // Remove old image from blob storage
-                        await AzureBlobStorage.RemoveFileFromBlobStorage(provider.FormData["imageBlobUrl"]);
-
                         return Ok(); // Return 200 OK
                     }
                     else
                     {
-                        // User was not successfully added to the table
-                        // Delete the image associated with the user
-                        await AzureBlobStorage.RemoveFileFromBlobStorage(user.ImageBlobUrl);
-
-                        return BadRequest("User creation failed"); // Return 400 Bad Request with an error message
+                        return BadRequest("User information can't be update");
                     }
                 }
             }
