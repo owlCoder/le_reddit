@@ -37,7 +37,6 @@ namespace RedditServiceWorker.Controllers
         [JwtAuthenticationFilter]
         public async Task<IHttpActionResult> Get(string email)
         {
-            Trace.WriteLine($"Request done by instance id = {RoleEnvironment.CurrentRoleInstance.Id}");
             // Check if the request is authorized
             if (!ResourceGuard.RunCheck(ActionContext, email))
             {
