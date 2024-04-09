@@ -7,16 +7,21 @@ namespace RedditServiceWorker
     {
         public static void Register(HttpConfiguration config)
         {
-            config.MapHttpAttributeRoutes();
-
             // Enable CORS globally
             var cors = new EnableCorsAttribute("http://localhost:5173", "*", "*");
             config.EnableCors(cors);
 
+            config.MapHttpAttributeRoutes();
+
             config.Routes.MapHttpRoute(
-                name: "api",
+                name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "ExtendedApi",
+                routeTemplate: "api/{controller}/{email}"
             );
         }
     }
