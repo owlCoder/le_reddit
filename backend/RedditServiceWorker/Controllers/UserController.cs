@@ -1,12 +1,10 @@
 ﻿using Common.auth.guard;
 using Common.cloud.account;
-using Microsoft.WindowsAzure.ServiceRuntime;
 using RedditDataRepository.blobs.images;
 using RedditDataRepository.Classes.Users;
 using RedditDataRepository.users.Read;
 using RedditDataRepository.users.Update;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
