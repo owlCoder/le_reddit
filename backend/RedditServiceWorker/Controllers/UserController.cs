@@ -2,41 +2,51 @@
 using Common.cloud.account;
 using RedditDataRepository.Classes.Users;
 using RedditDataRepository.users.Read;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Runtime.Remoting.Messaging;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Controllers;
 
 namespace RedditServiceWorker.Controllers
 {
+    /// <summary>
+    /// Controller for managing user-related operations.
+    /// </summary>
     [RoutePrefix("api/user")]
     public class UserController : ApiController
     {
+        /// <summary>
+        /// Retrieves a user by email.
+        /// </summary>
+        /// <param name="email">The email of the user to retrieve.</param>
+        /// <returns>
+        /// HTTP 200 OK with the user data if found,
+        /// HTTP 404 Not Found if the user is not found,
+        /// or HTTP 401 Unauthorized if the request is not authorized.
+        /// </returns>
         [Route("{email}")]
         [HttpGet]
-        [JwtAuthenticationFilter] // Apply the authentication filter
+        [JwtAuthenticationFilter]
         public async Task<IHttpActionResult> GetUser(string email)
         {
-            if(ResourceGuard.RunCheck(ActionContext, email))
+            // Check if the request is authorized
+            if (!ResourceGuard.RunCheck(ActionContext, email))
             {
-                User user = await ReadUser.Run(AzureTableStorageCloudAccount.GetCloudTable("users"), "User", email);
+                // Return unauthorized if the request is not authorized
+                return Unauthorized();
+            }
 
-                if (user != null)
-                    return Ok(user);
-                else
-                    return NotFound();
+            // Retrieve the user from the data repository
+            User user = await ReadUser.Run(AzureTableStorageCloudAccount.GetCloudTable("users"), "User", email);
+
+            // Return the user data if found
+            if (user != null)
+            {
+                return Ok(user);
             }
             else
             {
-                return Unauthorized();
+                // Return 404 Not Found if the user is not found
+                return NotFound();
             }
-            
         }
     }
 }
