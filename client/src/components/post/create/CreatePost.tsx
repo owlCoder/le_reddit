@@ -11,8 +11,11 @@ import "@mdxeditor/editor/style.css";
 import ImageIcon from "../../icons/image/ImageIcon";
 import ICreatePost from "../../../interfaces/post/create/ICreatePost";
 import ValidateCreatePostData from "../../../validators/post/create_post";
+import useAuth from "../../../contexts/use_auth/UseAuth";
+import CreatePostService from "../../../services/posts/create/CreatePostService";
 
 const CreatePostForm: React.FC = () => {
+  const { token } = useAuth();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const ref = React.useRef<MDXEditorMethods>(null); // grab markdown text
@@ -45,11 +48,8 @@ const CreatePostForm: React.FC = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // TODO:
-    // mozda neki tailwind popup dodaj kao uspesno dodato ili redirect
 
     // Reset errors
     setErrorMessage("");
@@ -59,8 +59,16 @@ const CreatePostForm: React.FC = () => {
 
     if (errors.length === 0) {
       // Call API
-      console.log("Form Data:", formData);
-      setErrorMessage("Backend is not available");
+      const post_id: string = await CreatePostService(formData, token?.token ?? "");
+
+      if(post_id !== "") {
+        console.log(post_id);
+        // navigate post --> pa prosledis id i bole te kok
+      }
+      else {
+        setErrorMessage("Post can't be created.");
+      }
+
     } else {
       // Show all errors
       setErrorMessage((prevErrorMessage) => {

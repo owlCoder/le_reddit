@@ -25,7 +25,7 @@ namespace RedditServiceWorker.Controllers
         /// An <see cref="IHttpActionResult"/> representing the result of the operation.
         /// </returns>
         [Route("create")]
-        [HttpGet]
+        [HttpPost]
         [JwtAuthenticationFilter] // Requires JWT authentication
         public async Task<IHttpActionResult> Create()
         {
@@ -83,7 +83,7 @@ namespace RedditServiceWorker.Controllers
                 if (insert_result)
                 {
                     // User was successfully added to the table
-                    return Ok(); // Return 200 OK
+                    return Ok(post.Id); // Return 200 OK and post id
                 }
                 else
                 {
