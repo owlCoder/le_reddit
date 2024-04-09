@@ -1,10 +1,12 @@
 ﻿using Common.auth.guard;
 using Common.cloud.account;
+using Microsoft.WindowsAzure.ServiceRuntime;
 using RedditDataRepository.blobs.images;
 using RedditDataRepository.Classes.Users;
 using RedditDataRepository.users.Read;
 using RedditDataRepository.users.Update;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -35,6 +37,7 @@ namespace RedditServiceWorker.Controllers
         [JwtAuthenticationFilter]
         public async Task<IHttpActionResult> Get(string email)
         {
+            Trace.WriteLine($"Request done by instance id = {RoleEnvironment.CurrentRoleInstance.Id}");
             // Check if the request is authorized
             if (!ResourceGuard.RunCheck(ActionContext, email))
             {

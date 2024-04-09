@@ -1,13 +1,52 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import StatusOnline from "./navbar/StatusOnline";
 import useAuth from "../contexts/use_auth/UseAuth";
 import { removeTokenFromLocalStorage } from "../services/jwt/JWTTokenizationService";
 import { useNavigate } from "react-router-dom";
+import IUser from "../interfaces/users/user/IUser";
+import GetUserByEmail from "../services/users/profile/GetAccountDataService";
 
 const AccountInformation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { email, setEmail, setToken } = useAuth();
+  const { email, setEmail, setToken, isLoggedIn, token } = useAuth();
+  const [profilePicture, setProfilePicture] = useState<string>("");
+  const [pageLoaded, setPageLoaded] = useState<boolean>(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setPageLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (pageLoaded && !isLoggedIn) {
+      navigate("/");
+    }
+
+    const fetchData = async () => {
+      try {
+        if (email) {
+          const userData: IUser | null = await GetUserByEmail(
+            email,
+            token?.token
+          );
+          if (userData) {
+            setProfilePicture(userData?.ImageBlobUrl)
+          } else {
+            setEmail("");
+            removeTokenFromLocalStorage();
+            setToken(null);
+            navigate("/");
+          }
+        }
+      } catch (error) {
+        navigate("/404");
+      } finally {
+        setPageLoaded(true);
+      }
+    };
+
+    fetchData();
+  }, [email, token, navigate, isLoggedIn, pageLoaded, setEmail, setToken]);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -33,7 +72,7 @@ const AccountInformation: React.FC = () => {
           onClick={toggleDropdown}
         >
           <div className="flex items-center h-8">
-            <StatusOnline profileImageUrl="/reddit.svg" isOnline={true} />
+            <StatusOnline profileImageUrl={profilePicture} isOnline={true} />
             <div className="ml-2">
               <div>{email}</div>
               <div className="text-gray-500 text-left font-demibold text-xs">
