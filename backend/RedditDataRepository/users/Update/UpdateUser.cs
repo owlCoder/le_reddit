@@ -1,16 +1,21 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using RedditDataRepository.Classes.Users;
 using RedditDataRepository.users.Read;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RedditDataRepository.users.Update
 {
+    /// <summary>
+    /// Provides functionality to update a user entity in Azure Table Storage.
+    /// </summary>
     public class UpdateUser
     {
+        /// <summary>
+        /// Executes the update operation for a user entity in the specified CloudTable.
+        /// </summary>
+        /// <param name="table">The CloudTable object representing the Azure Table where the user entity is stored.</param>
+        /// <param name="user">The User object representing the user entity to be updated.</param>
+        /// <returns>A Task object representing the asynchronous operation with a boolean value indicating whether the update was successful.</returns>
         public static async Task<bool> Execute(CloudTable table, User user)
         {
             // Check if user or table is null
