@@ -1,5 +1,4 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
-using System.Collections.Concurrent;
 using System.Net.Http;
 
 namespace RedditDataRepository.Classes.Users
@@ -7,7 +6,7 @@ namespace RedditDataRepository.Classes.Users
     /// <summary>
     /// Represents a registered user entity in the storage table.
     /// </summary>
-    public class RegisteredUser : TableEntity
+    public class User : TableEntity
     {
         /// <summary>
         /// Gets or sets the first name of the registered user.
@@ -55,15 +54,15 @@ namespace RedditDataRepository.Classes.Users
         public string ImageBlobUrl { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RegisteredUser"/> class.
+        /// Initializes a new instance of the <see cref="User"/> class.
         /// </summary>
-        public RegisteredUser() { }
+        public User() { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RegisteredUser"/> class using data from a <see cref="MultipartFormDataStreamProvider"/>.
+        /// Initializes a new instance of the <see cref="User"/> class using data from a <see cref="MultipartFormDataStreamProvider"/>.
         /// </summary>
         /// <param name="provider">The <see cref="MultipartFormDataStreamProvider"/> containing the form data.</param>
-        public RegisteredUser(MultipartFormDataStreamProvider provider)
+        public User(MultipartFormDataStreamProvider provider)
         {
             // Set the partition key to "User"
             PartitionKey = "User";

@@ -66,7 +66,7 @@ namespace RedditServiceWorker.Controllers
                 await Request.Content.ReadAsMultipartAsync(provider);
 
                 // Access form data and put into user object
-                RegisteredUser user = new RegisteredUser(provider);
+                User user = new User(provider);
 
                 // Access profile picture
                 var file = provider.FileData[0]; // Only one file is uploaded

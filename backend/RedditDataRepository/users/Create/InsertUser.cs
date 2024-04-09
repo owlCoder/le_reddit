@@ -16,7 +16,7 @@ namespace RedditDataRepository.users.Create
         /// <param name="table">The CloudTable object representing the Azure Table Storage.</param>
         /// <param name="user">The user entity to be inserted.</param>
         /// <returns>A boolean indicating whether the insertion was successful.</returns>
-        public static async Task<bool> Add(CloudTable table, RegisteredUser user)
+        public static async Task<bool> Add(CloudTable table, User user)
         {
             // Check if user or table is null
             if (user == null || table == null)

@@ -19,7 +19,7 @@ namespace RedditDataRepository.users.Read
         public static async Task<bool> RunCheck(CloudTable table, string email, string password)
         {
             // Create a TableOperation object to retrieve the entity
-            TableOperation retrieveOperation = TableOperation.Retrieve<RegisteredUser>("User", email);
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>("User", email);
 
             // Execute the operation asynchronously
             TableResult result = await table.ExecuteAsync(retrieveOperation);
@@ -28,7 +28,7 @@ namespace RedditDataRepository.users.Read
             if (result.Result != null)
             {
                 // If the user exists, check if the provided password matches
-                RegisteredUser user = (RegisteredUser)result.Result;
+                User user = (User)result.Result;
                 return user.Password == password;
             }
             else

@@ -1,4 +1,7 @@
 ﻿using Common.auth.guard;
+using Common.cloud.account;
+using RedditDataRepository.Classes.Users;
+using RedditDataRepository.users.Read;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -22,7 +25,12 @@ namespace RedditServiceWorker.Controllers
         {
             if(ResourceGuard.RunCheck(ActionContext, email))
             {
+                User user = await ReadUser.Run(AzureTableStorageCloudAccount.GetCloudTable("users"), "User", email);
 
+                if (user != null)
+                    return Ok(user);
+                else
+                    return NotFound();
             }
             else
             {

@@ -18,7 +18,7 @@ namespace RedditDataRepository.users.Read
         public static async Task<bool> RunCheckAsync(CloudTable table, string email)
         {
             // Create a TableOperation object to retrieve the entity
-            TableOperation retrieveOperation = TableOperation.Retrieve<RegisteredUser>("User", email);
+            TableOperation retrieveOperation = TableOperation.Retrieve<User>("User", email);
 
             // Execute the operation asynchronously
             TableResult result = await table.ExecuteAsync(retrieveOperation);

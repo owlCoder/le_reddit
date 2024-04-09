@@ -116,6 +116,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="auth\guard\ResourceGuard.cs" />
     <Compile Include="auth\JWT\JWTBaseClass\JWT.cs" />
     <Compile Include="auth\JWT\JWTHandler\JwtAuthenticationFilter.cs" />
     <Compile Include="auth\JWT\JWTStorage\KeyStorage\JWTKeyStorage.cs" />
