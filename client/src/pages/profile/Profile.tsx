@@ -6,6 +6,7 @@ import Navbar from "../../components/navbar/Navbar";
 import IUser from "../../interfaces/users/user/IUser";
 import emptyUser from "../../samples/users/user";
 import { removeTokenFromLocalStorage } from "../../services/jwt/JWTTokenizationService";
+import { ValidateUpdateData } from "../../validators/users/validate_new_user_info";
 
 const Profile: React.FC = () => {
   const { email, token, isLoggedIn, setEmail, setToken } = useAuth();
@@ -24,7 +25,7 @@ const Profile: React.FC = () => {
     if (pageLoaded && !isLoggedIn) {
       navigate("/");
     }
-  
+
     const fetchData = async () => {
       try {
         if (email) {
@@ -39,15 +40,14 @@ const Profile: React.FC = () => {
               throw new Error(`Failed to fetch image: ${response.status}`);
             }
             const blob: Blob = await response.blob();
-  
+
             // Create a File object from the Blob
-            const file = new File([blob], "image.jpg", {
+            const file = new File([blob], "", {
               type: "image/jpeg",
             });
-  
+
             setImage(file);
-          }
-          else {
+          } else {
             setEmail("");
             removeTokenFromLocalStorage();
             setToken(null);
@@ -55,15 +55,15 @@ const Profile: React.FC = () => {
           }
         }
       } catch (error) {
-//navigate("/404");
+        navigate("/404");
       } finally {
         setLoading(false);
       }
     };
-  
+
     fetchData();
   }, [email, token, navigate, isLoggedIn, pageLoaded, setEmail, setToken]);
-  
+
   // Function to handle image file change
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -87,7 +87,32 @@ const Profile: React.FC = () => {
     event.preventDefault();
     // Validate form data and update user data
 
-    setErrorMessage("lmao");
+    // Client-Side data verification
+    const errors: string[] = ValidateUpdateData(userData ?? emptyUser);
+
+    if (errors.length === 0) {
+      // Call service to pass data to API
+      const success: boolean = await UpdateUserInformationService(userData, image);
+
+      if(!success) {
+        setErrorMessage("Entered data are incorrect.");
+      }
+    } else {
+      // Show all errors
+      setErrorMessage((prevErrorMessage) => {
+        let newErrorMessage = prevErrorMessage + "Check next fields: ";
+        errors.forEach((error, index) => {
+          newErrorMessage += error;
+          if (index !== errors.length - 1) {
+            newErrorMessage += ", ";
+          }
+          else {
+            newErrorMessage += ".";
+          }
+        });
+        return newErrorMessage;
+      });
+    }
   };
 
   return (
@@ -102,7 +127,7 @@ const Profile: React.FC = () => {
               Profile
             </h1>
             <p className=" text-gray-500 text-center mb-8">
-              Keep your information up-to-dated
+              Keep your information up-to-date
             </p>
             <form
               onSubmit={handleSubmit}
@@ -178,7 +203,7 @@ const Profile: React.FC = () => {
                   htmlFor="image"
                   className="select-none rounded-lg bg-gradient-to-tr from-orange-500 to-primary-600 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-primary-900/10 transition-all hover:shadow-lg hover:shadow-primary-900/20 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none inline-block mr-2"
                 >
-                  Choose Image
+                  Change Image
                 </label>
                 <span className="text-sm text-primary-500 mr-2">
                   {image && image.name}

@@ -1,8 +1,15 @@
 ﻿using Common.auth.guard;
 using Common.cloud.account;
+using RedditDataRepository.blobs.images;
 using RedditDataRepository.Classes.Users;
+using RedditDataRepository.users.Create;
 using RedditDataRepository.users.Read;
+using System.IO;
+using System.Net.Http;
+using System.Net;
+using System;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 
 namespace RedditServiceWorker.Controllers
@@ -52,7 +59,86 @@ namespace RedditServiceWorker.Controllers
         #endregion
 
         #region UPDATE
+        /// <summary>
+        /// Updates user profile information.
+        /// </summary>
+        [HttpPost]
+        [Route("update")]
+        [JwtAuthenticationFilter]
+        public async Task<IHttpActionResult> Update()
+        {
+            if (!Request.Content.IsMimeMultipartContent())
+            {
+                return StatusCode(HttpStatusCode.UnsupportedMediaType);
+            }
 
+            // Store form data locally
+            var provider = new MultipartFormDataStreamProvider(HttpContext.Current.Server.MapPath("~/App_Data"));
+
+            try
+            {
+                await Request.Content.ReadAsMultipartAsync(provider);
+
+                // Access form data and put into user object
+                User user = new User(provider);
+
+                // Access profile picture
+                var file = provider.FileData[0]; // Only one file is uploaded
+                var name = file.Headers.ContentDisposition.FileName;
+
+                // Just get extension of file name
+                name = name.Substring(1, name.Length - 2);
+                var fileExtension = Path.GetExtension(name).ToLower(); // Get the file extension
+
+                // Upload file to Azure Blob Storage
+                (bool success, string blobUrl) = await AzureBlobStorage.UploadFileToBlobStorage(file.LocalFileName, fileExtension, "images");
+
+                // If image uploaded get image url in blob storage
+                // and put into user table
+                if (!success)
+                {
+                    return BadRequest();
+                }
+                else
+                {
+                    // Save blob url to user 
+                    user.ImageBlobUrl = blobUrl;
+
+                    // Put user into table
+                    bool insert_result = await InsertUser.Add(AzureTableStorageCloudAccount.GetCloudTable("users"), user);
+
+                    if (insert_result)
+                    {
+                        // User was successfully added to the table
+                        // Remove old image from blob storage
+                        await AzureBlobStorage.RemoveFileFromBlobStorage(provider.FormData["imageBlobUrl"]);
+
+                        return Ok(); // Return 200 OK
+                    }
+                    else
+                    {
+                        // User was not successfully added to the table
+                        // Delete the image associated with the user
+                        await AzureBlobStorage.RemoveFileFromBlobStorage(user.ImageBlobUrl);
+
+                        return BadRequest("User creation failed"); // Return 400 Bad Request with an error message
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+            finally
+            {
+                // Delete the saved file from the App_Data directory
+                foreach (var fileData in provider.FileData)
+                {
+                    var localFilePath = fileData.LocalFileName;
+                    File.Delete(localFilePath);
+                }
+            }
+        }
         #endregion
     }
 }

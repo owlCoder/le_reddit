@@ -95,7 +95,6 @@ const SignUp: React.FC = () => {
       else {
         setErrorMessage("Entered email address is used by another used.");
       }
-
     } else {
       // Show all errors
       setErrorMessage((prevErrorMessage) => {
