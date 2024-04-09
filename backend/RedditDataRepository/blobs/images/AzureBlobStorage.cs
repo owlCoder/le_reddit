@@ -1,5 +1,6 @@
 ﻿using Common.cloud.account;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.Shared.Protocol;
 using System;
 using System.IO;
 using System.Linq;
@@ -40,6 +41,23 @@ namespace RedditDataRepository.blobs.images
                     PublicAccess = BlobContainerPublicAccessType.Container
                 };
                 await container.SetPermissionsAsync(permissions);
+
+                // Get a reference to the service properties
+                ServiceProperties serviceProperties = blobClient.GetServiceProperties();
+
+                // Define the CORS rules
+                serviceProperties.Cors.CorsRules.Clear();
+                serviceProperties.Cors.CorsRules.Add(new CorsRule
+                {
+                    AllowedOrigins = new[] { "*" }, // Allow all origins
+                    AllowedMethods = CorsHttpMethods.Get,
+                    AllowedHeaders = new[] { "*" }, // Allow all headers
+                    ExposedHeaders = new[] { "*" }, // Expose all headers
+                    MaxAgeInSeconds = 3600
+                });
+
+                // Set the updated service properties
+                blobClient.SetServiceProperties(serviceProperties);
 
                 using (var fileStream = File.OpenRead(localFilePath))
                 {

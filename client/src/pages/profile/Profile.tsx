@@ -5,9 +5,10 @@ import GetUserByEmail from "../../services/users/profile/GetAccountDataService";
 import Navbar from "../../components/navbar/Navbar";
 import IUser from "../../interfaces/users/user/IUser";
 import emptyUser from "../../samples/users/user";
+import { removeTokenFromLocalStorage } from "../../services/jwt/JWTTokenizationService";
 
 const Profile: React.FC = () => {
-  const { email, token, isLoggedIn } = useAuth();
+  const { email, token, isLoggedIn, setEmail, setToken } = useAuth();
   const [userData, setUserData] = useState<IUser | null>(emptyUser);
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -23,7 +24,7 @@ const Profile: React.FC = () => {
     if (pageLoaded && !isLoggedIn) {
       navigate("/");
     }
-
+  
     const fetchData = async () => {
       try {
         if (email) {
@@ -33,20 +34,36 @@ const Profile: React.FC = () => {
           );
           if (userData) {
             setUserData(userData);
-            return;
+            const response: Response = await fetch(userData.ImageBlobUrl);
+            if (!response.ok) {
+              throw new Error(`Failed to fetch image: ${response.status}`);
+            }
+            const blob: Blob = await response.blob();
+  
+            // Create a File object from the Blob
+            const file = new File([blob], "image.jpg", {
+              type: "image/jpeg",
+            });
+  
+            setImage(file);
           }
-        } else {
-          //navigate("/404");
+          else {
+            setEmail("");
+            removeTokenFromLocalStorage();
+            setToken(null);
+            navigate("/");
+          }
         }
       } catch (error) {
-        navigate("/404");
+//navigate("/404");
       } finally {
         setLoading(false);
       }
     };
+  
     fetchData();
-  }, [email, token, navigate, isLoggedIn, pageLoaded]);
-
+  }, [email, token, navigate, isLoggedIn, pageLoaded, setEmail, setToken]);
+  
   // Function to handle image file change
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -169,7 +186,7 @@ const Profile: React.FC = () => {
                 {image && (
                   <div className="mt-2 ml-auto">
                     <img
-                      src={URL.createObjectURL(image) || userData?.ImageBlobUrl}
+                      src={URL.createObjectURL(image)}
                       alt="Image Preview"
                       className="w-16 h-16 rounded-lg object-cover"
                     />
