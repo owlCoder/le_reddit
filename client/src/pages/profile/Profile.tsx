@@ -15,6 +15,7 @@ const Profile: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [successMessage, setSuccessMessage] = useState<string>("");
   const [pageLoaded, setPageLoaded] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -93,10 +94,15 @@ const Profile: React.FC = () => {
 
     if (errors.length === 0 && userData) {
       // Call service to pass data to API
-      const success: boolean = await UpdateUserInformationService(userData, image?.name === "" ? null : image, token?.token ?? "");
+      const success: boolean = await UpdateUserInformationService(userData, image, token?.token ?? "");
 
       if(!success) {
         setErrorMessage("Entered data are incorrect.");
+        setSuccessMessage("");
+      }
+      else {
+        setErrorMessage("");
+        setSuccessMessage("Your information has been updated.");
       }
     } else {
       // Show all errors
@@ -221,6 +227,9 @@ const Profile: React.FC = () => {
               </div>
               {errorMessage && (
                 <p className="text-primary-600">{errorMessage}</p>
+              )}
+              {successMessage && (
+                <p className="text-emerald-600">{successMessage}</p>
               )}
               <div className="flex justify-end items-end">
                 <button
