@@ -34,6 +34,13 @@ namespace RedditDataRepository.blobs.images
                 var fileName = Guid.NewGuid().ToString() + fileExtension;
                 var blob = container.GetBlockBlobReference(fileName);
 
+                // Set container access level to allow public access
+                var permissions = new BlobContainerPermissions
+                {
+                    PublicAccess = BlobContainerPublicAccessType.Container
+                };
+                await container.SetPermissionsAsync(permissions);
+
                 using (var fileStream = File.OpenRead(localFilePath))
                 {
                     await blob.UploadFromStreamAsync(fileStream);

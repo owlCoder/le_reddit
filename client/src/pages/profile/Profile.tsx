@@ -124,6 +124,46 @@ const Profile: React.FC = () => {
               </div>
             </div>
 
+            <div>
+            <div className="mb-4">
+                <label htmlFor="country" className="sr-only">
+                  Country
+                </label>
+                <input
+                  type="text"
+                  value={userData?.Country}
+                  onChange={(e) => handleChange(e, "Country")}
+                  className="w-full rounded-lg border-2 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
+                  placeholder="Country"
+                />
+              </div>
+              <div>
+                <label htmlFor="Phone" className="sr-only">
+                  City
+                </label>
+                <input
+                  type="text"
+                  value={userData?.Phone}
+                  onChange={(e) => handleChange(e, "Phone")}
+                  className="w-full rounded-lg border-2 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
+                  placeholder="Phone"
+                />
+              </div>
+            </div>
+            <div>
+                <label htmlFor="Password" className="sr-only">
+                  City
+                </label>
+                <input
+                  type="password"
+                  value={userData?.Password}
+                  onChange={(e) => handleChange(e, "Password")}
+                  className="w-full rounded-lg border-2 focus:outline-none focus:ring-0 focus:border-primary-500 p-3 text-sm shadow-sm"
+                  placeholder="Password"
+                />
+              </div>
+
+              <img src={userData?.ImageBlobUrl} />
             <div className="flex items-center justify-between">
               {errorMessage && (
                 <p className="text-primary-600">{errorMessage}</p>
