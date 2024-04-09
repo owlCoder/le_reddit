@@ -1,6 +1,6 @@
-﻿using System.Web.Http.Controllers;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Web.Http.Controllers;
 
 namespace Common.auth.guard
 {

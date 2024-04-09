@@ -2,16 +2,15 @@
 using Common.cloud.account;
 using RedditDataRepository.blobs.images;
 using RedditDataRepository.Classes.Users;
-using RedditDataRepository.users.Create;
 using RedditDataRepository.users.Read;
-using System.IO;
-using System.Net.Http;
-using System.Net;
+using RedditDataRepository.users.Update;
 using System;
+using System.IO;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using RedditDataRepository.users.Update;
 
 namespace RedditServiceWorker.Controllers
 {
