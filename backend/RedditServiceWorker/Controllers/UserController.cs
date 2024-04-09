@@ -11,6 +11,7 @@ using System;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using RedditDataRepository.users.Update;
 
 namespace RedditServiceWorker.Controllers
 {
@@ -82,11 +83,15 @@ namespace RedditServiceWorker.Controllers
                 // Access form data and put into user object
                 User user = new User(provider);
 
+                user.ImageBlobUrl = provider.FormData["imageBlobUrl"];
+                user.ETag = provider.FormData["ETag"];
+                user.Timestamp = DateTime.UtcNow;
+
                 // Access profile picture
                 var file = provider.FileData[0]; // Only one file is uploaded
-
+                var newImage = provider.FormData["newImage"];
                 // if new image not provided file will be null
-                if (file != null)
+                if (bool.Parse(newImage))
                 {
                     var name = file.Headers.ContentDisposition.FileName;
 
@@ -109,7 +114,7 @@ namespace RedditServiceWorker.Controllers
                         user.ImageBlobUrl = blobUrl;
 
                         // Put user into table
-                        bool insert_result = await InsertUser.Add(AzureTableStorageCloudAccount.GetCloudTable("users"), user);
+                        bool insert_result = await UpdateUser.Execute(AzureTableStorageCloudAccount.GetCloudTable("users"), user);
 
                         if (insert_result)
                         {
@@ -132,7 +137,7 @@ namespace RedditServiceWorker.Controllers
                 else
                 {
                     // Put user into table
-                    bool insert_result = await InsertUser.Add(AzureTableStorageCloudAccount.GetCloudTable("users"), user);
+                    bool insert_result = await UpdateUser.Execute(AzureTableStorageCloudAccount.GetCloudTable("users"), user);
 
                     if (insert_result)
                     {

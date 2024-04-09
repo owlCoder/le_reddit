@@ -1,29 +1,24 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using RedditDataRepository.Classes.Users;
 using RedditDataRepository.users.Read;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace RedditDataRepository.users.Create
+namespace RedditDataRepository.users.Update
 {
-    /// <summary>
-    /// Provides functionality to insert a user entity into an Azure Table Storage.
-    /// </summary>
-    public class InsertUser
+    public class UpdateUser
     {
-        /// <summary>
-        /// Inserts a user entity into an Azure Table Storage.
-        /// </summary>
-        /// <param name="table">The CloudTable object representing the Azure Table Storage.</param>
-        /// <param name="user">The user entity to be inserted.</param>
-        /// <returns>A boolean indicating whether the insertion was successful.</returns>
         public static async Task<bool> Execute(CloudTable table, User user)
         {
             // Check if user or table is null
             if (user == null || table == null)
                 return false;
 
-            // Check if user already exists
-            if (await IsUserExists.RunCheckAsync(table, user.Email))
+            // Check if user doesn't exist
+            if (!await IsUserExists.RunCheckAsync(table, user.Email))
                 return false;
 
             try

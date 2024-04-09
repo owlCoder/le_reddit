@@ -7,6 +7,7 @@ import IUser from "../../interfaces/users/user/IUser";
 import emptyUser from "../../samples/users/user";
 import { removeTokenFromLocalStorage } from "../../services/jwt/JWTTokenizationService";
 import { ValidateUpdateData } from "../../validators/users/validate_new_user_info";
+import UpdateUserInformationService from "../../services/users/update/UpdateService";
 
 const Profile: React.FC = () => {
   const { email, token, isLoggedIn, setEmail, setToken } = useAuth();
@@ -90,9 +91,9 @@ const Profile: React.FC = () => {
     // Client-Side data verification
     const errors: string[] = ValidateUpdateData(userData ?? emptyUser);
 
-    if (errors.length === 0) {
+    if (errors.length === 0 && userData) {
       // Call service to pass data to API
-      const success: boolean = await UpdateUserInformationService(userData, image);
+      const success: boolean = await UpdateUserInformationService(userData, image?.name === "" ? null : image, token?.token ?? "");
 
       if(!success) {
         setErrorMessage("Entered data are incorrect.");

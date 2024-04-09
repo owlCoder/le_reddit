@@ -91,7 +91,7 @@ namespace RedditServiceWorker.Controllers
                     user.ImageBlobUrl = blobUrl;
 
                     // Put user into table
-                    bool insert_result = await InsertUser.Add(AzureTableStorageCloudAccount.GetCloudTable("users"), user);
+                    bool insert_result = await InsertUser.Execute(AzureTableStorageCloudAccount.GetCloudTable("users"), user);
 
                     if (insert_result)
                     {
