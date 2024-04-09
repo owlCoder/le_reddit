@@ -26,7 +26,7 @@ const Create: React.FC = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-slate-200 py-8 h-screen" style={{overflow: 'hidden'}}>
+      <div className="bg-slate-200 py-8 min-h-screen">
         <CreatePostForm />
       </div>
     </>

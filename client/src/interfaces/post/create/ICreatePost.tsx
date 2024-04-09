@@ -1,22 +1,26 @@
 /**
- * Represents the structure of data for creating a post.
+ * Represents a post entity.
  */
 interface ICreatePost {
-    /**
-     * The title of the post.
-     */
-    title: string;
-  
-    /**
-     * The content of the post.
-     */
-    content: string;
-  
-    /**
-     * An optional image file associated with the post.
-     */
-    image: File | null;
-  }
-  
-  export default ICreatePost;
-  
+  /**
+   * Gets or sets the title of the post.
+   */
+  title: string;
+
+  /**
+   * Gets or sets the content of the post.
+   */
+  content: string;
+
+  /**
+   * User's profile image.
+   */
+  image: File | null;
+
+  /**
+   * Gets or sets a value indicating whether the post has an associated image.
+   */
+  hasImage: boolean;
+}
+
+export default ICreatePost;

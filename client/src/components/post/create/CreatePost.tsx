@@ -22,6 +22,7 @@ const CreatePostForm: React.FC = () => {
     title: "",
     content: "",
     image: null, // Initially, no image is selected
+    hasImage: false,
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,6 +30,18 @@ const CreatePostForm: React.FC = () => {
     setFormData({
       ...formData,
       [name]: value,
+    });
+  };
+
+  const handleRemoveImage = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setImagePreview(null);
+
+    setFormData({
+      ...formData,
+      image: null,
+      hasImage: false,
     });
   };
 
@@ -68,11 +81,12 @@ const CreatePostForm: React.FC = () => {
   // Handle image upload
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    console.log(file);
+
     if (file) {
       setFormData({
         ...formData,
         image: file,
+        hasImage: true,
       });
 
       // Set image preview
@@ -171,6 +185,13 @@ const CreatePostForm: React.FC = () => {
                   alt="Preview"
                   className="h-56 w-64 mt-4"
                 />
+                {/* Remove image button */}
+                <button
+                  onClick={handleRemoveImage}
+                  className="mt-4 bg-red-600 rounded-full hover:bg-red-500 text-white font-bold py-1.5 px-4  inline-block"
+                >
+                  Remove
+                </button>
               </div>
             )}
           </div>
