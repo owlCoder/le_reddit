@@ -132,6 +132,11 @@ namespace RedditServiceWorker.Controllers
                 List<Comment> comments = await ReadComments.Execute(AzureTableStorageCloudAccount.GetCloudTable("comments"), postId);
                 Post post = await ReadPost.Run(AzureTableStorageCloudAccount.GetCloudTable("posts"), "Post", postId);
 
+                if(post == null)
+                {
+                    return NotFound();
+                }
+
                 // Create DTO object of post with comments
                 GetPost getPost = new GetPost(post.Id, post.Author, post.Title, post.Content, post.HasImage, post.ImageBlobUrl, comments.OrderByDescending(x => x.Timestamp).ToList());
 

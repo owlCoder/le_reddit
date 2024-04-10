@@ -17,13 +17,15 @@ import GetPostByIdService from "../../../services/post/read/ReadPostService";
 import GetProfilePictureByEmailService from "../../../services/users/profile/GetProfilePictureService";
 import IPostProp from "../../../interfaces/post/prop/IPostProp";
 import Comment from "../../comment/view/Comment";
+import { useNavigate } from "react-router-dom";
 
 const Post: React.FC<IPostProp> = ({ postId }) => {
   const [authorImage, setAuthorImage] = useState<string>("/reddit.svg");
   const { token, isLoggedIn } = useAuth();
   const [post, setPost] = useState<IPost>(emptyPost);
   const [loaded, setLoaded] = useState<boolean>(false);
-
+  const navigate = useNavigate();
+  
   useEffect(() => {
     // Fetch post data by post_id
     const fetchData = async () => {
@@ -38,6 +40,9 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
         );
 
         setAuthorImage(image);
+      }
+      else {
+        navigate("/404");
       }
 
       setLoaded(true);
@@ -73,30 +78,30 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
             />
           </div>
           <br />
-          <hr className="h-0.5 bg-gray-100 border-0 dark:bg-gray-100" />
+          <hr className="mx-4" />
 
           {/* Comment form */}
           {isLoggedIn && (
-            <div className="p-0">
+            <div className="p-0 mb-4">
               <CreateCommentForm post={post} />
             </div>
           )}
-          
-            {/* Render no comments if there are no comments */}
-            {post.Comments?.length === 0 ? (
+
+          {/* Render no comments if there are no comments */}
+          {post.Comments?.length === 0 ? (
+            <div className="mb-8">
               <div className="p-4 mt-2">
-              <NoComments />
+                <NoComments />
               </div>
-            ) : (
-              <>
-                {post.Comments.map((comment) => (
-                  <Comment key={comment.Id} comment={comment} />
-                ))}
-              </>
-            )}
-            {/* You can add comment components with map and for each here */}
-          </div>
-        
+            </div>
+          ) : (
+            <div className="mb-12">
+              {post.Comments.map((comment) => (
+                <Comment key={comment.Id} comment={comment} />
+              ))}
+            </div>
+          )}
+        </div>
       )}
     </>
   );

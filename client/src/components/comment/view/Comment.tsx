@@ -8,7 +8,7 @@ const Comment: React.FC<{ comment: IComment }> = ({
 }) => {
   return (
     <div className="bg-white rounded-lg ml-4">
-      <form className="mt-8 space-y-6 p-4">
+      <form className="space-y-6 p-4 border border-gray-200 rounded-xl mb-2">
         {/* MDX Editor */}
         <div>
             <PostHeading imageBlobUrl="/reddit.svg" author={Author} isCommentHeading={true} />
