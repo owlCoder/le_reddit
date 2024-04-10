@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../../components/navbar/Navbar";
-import IPost from "../../interfaces/post/view/IPost";
-import NoComments from "../../components/comment/empty/NoComments";
-import CreateCommentForm from "../../components/comment/create/Comment";
-import emptyPost from "../../samples/post/DefaultPost";
+import Navbar from "../../../components/navbar/Navbar";
+import IPost from "../../../interfaces/post/view/IPost";
+import NoComments from "../../../components/comment/empty/NoComments";
+import CreateCommentForm from "../../../components/comment/create/Comment";
+import emptyPost from "../../../samples/post/DefaultPost";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   MDXEditor,
@@ -13,8 +13,8 @@ import {
   quotePlugin,
   thematicBreakPlugin,
 } from "@mdxeditor/editor";
-import useAuth from "../../contexts/use_auth/UseAuth";
-import PostHeading from "../../components/post/heading/PostHeading";
+import useAuth from "../../../contexts/use_auth/UseAuth";
+import PostHeading from "../../../components/post/heading/PostHeading";
 
 const Post: React.FC = () => {
   const navigate = useNavigate();
