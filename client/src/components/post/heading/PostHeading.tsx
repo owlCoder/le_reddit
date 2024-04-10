@@ -2,12 +2,13 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import IPostHeading from "../../../interfaces/post/heading/IPostHeading";
 
-const PostHeading: React.FC<IPostHeading> = ({ imageBlobUrl, author }) => {
+const PostHeading: React.FC<IPostHeading> = ({ imageBlobUrl, author, isCommentHeading }) => {
   const navigate = useNavigate();
 
   return (
     <div className="p-4">
       <div className="flex items-center space-x-4">
+        {!isCommentHeading &&
         <button
           onClick={() => {
             navigate("/");
@@ -28,15 +29,19 @@ const PostHeading: React.FC<IPostHeading> = ({ imageBlobUrl, author }) => {
               d="M15 19l-7-7 7-7"
             />
           </svg>
-        </button>
+        </button>}
         <img
           className="w-8 h-8 rounded-full"
           src={imageBlobUrl}
           alt="Profile"
         />
         <div>
-          <p className="text-sm font-semibold">r/cloud</p>
+        {!isCommentHeading && <p className="text-sm font-semibold">r/cloud</p> }
+        {!isCommentHeading ?
           <p className="text-xs text-gray-500">{author}</p>
+          :
+          <p className="text-sm text-black font-semibold">{author}</p>
+        }
         </div>
       </div>
     </div>

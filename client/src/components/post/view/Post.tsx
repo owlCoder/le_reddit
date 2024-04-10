@@ -16,6 +16,7 @@ import PostHeading from "../heading/PostHeading";
 import GetPostByIdService from "../../../services/post/read/ReadPostService";
 import GetProfilePictureByEmailService from "../../../services/users/profile/GetProfilePictureService";
 import IPostProp from "../../../interfaces/post/prop/IPostProp";
+import Comment from "../../comment/view/Comment";
 
 const Post: React.FC<IPostProp> = ({ postId }) => {
   const [authorImage, setAuthorImage] = useState<string>("/reddit.svg");
@@ -49,7 +50,10 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
     <>
       {loaded && (
         <div>
-          <PostHeading imageBlobUrl={authorImage} author={"u/" + post.Author.split("@")[0]} />
+          <PostHeading
+            imageBlobUrl={authorImage}
+            author={"u/" + post.Author.split("@")[0]}
+          />
 
           <h1 className="font-semibold text-3xl pl-7">{post.Title}</h1>
           {/* Post content */}
@@ -77,16 +81,22 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
               <CreateCommentForm post={post} />
             </div>
           )}
-          <div className="p-4 mt-2">
+          
             {/* Render no comments if there are no comments */}
-            {post.Comments?.length === 0 ? <NoComments /> : <>
-            {post.Comments.map((comment) => (
-              console.log(comment)
-      ))}
-            </>}
+            {post.Comments?.length === 0 ? (
+              <div className="p-4 mt-2">
+              <NoComments />
+              </div>
+            ) : (
+              <>
+                {post.Comments.map((comment) => (
+                  <Comment key={comment.Id} comment={comment} />
+                ))}
+              </>
+            )}
             {/* You can add comment components with map and for each here */}
           </div>
-        </div>
+        
       )}
     </>
   );
