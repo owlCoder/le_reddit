@@ -12,7 +12,7 @@ import ImageIcon from "../../icons/image/ImageIcon";
 import ICreatePost from "../../../interfaces/post/create/ICreatePost";
 import ValidateCreatePostData from "../../../validators/post/create_post";
 import useAuth from "../../../contexts/use_auth/UseAuth";
-import CreatePostService from "../../../services/posts/create/CreatePostService";
+import CreatePostService from "../../../services/post/create/CreatePostService";
 import { useNavigate } from "react-router-dom";
 
 const CreatePostForm: React.FC = () => {

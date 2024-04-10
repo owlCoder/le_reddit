@@ -1,22 +1,17 @@
 import axios, { AxiosResponse } from "axios";
-import IPost from "../../../interfaces/post/view/IPost";
 import { API_ENDPOINT } from "../../../App";
 
-const GetPostByIdService = async (
-    id: string | undefined,
+const GetProfilePictureByEmailService = async (
+    email: string,
     token: string
-  ): Promise<IPost | null> => {
+  ): Promise<string> => {
   
-    if(!id || id === "") {
-      return null;
-    }
-
     try {
       const response: AxiosResponse = await axios.get(
-        API_ENDPOINT + `post/${id}`,
+        API_ENDPOINT + `user/images/${email}`,
         {
           headers: {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -24,12 +19,12 @@ const GetPostByIdService = async (
       if (response.status === 200 || response.status === 204) {
         return response.data;
       } else {
-        return null;
+        return "";
       }
     } catch {
-      return null;
+      return "";
     }
   };
   
-  export default GetPostByIdService;
+  export default GetProfilePictureByEmailService;
   

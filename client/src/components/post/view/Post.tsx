@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   MDXEditor,
   headingsPlugin,
@@ -15,9 +15,10 @@ import CreateCommentForm from "../../comment/create/Comment";
 import NoComments from "../../comment/empty/NoComments";
 import Navbar from "../../navbar/Navbar";
 import PostHeading from "../heading/PostHeading";
+import GetPostByIdService from "../../../services/post/read/ReadPostService";
+import GetProfilePictureByEmailService from "../../../services/users/profile/GetProfilePictureService";
 
 const Post: React.FC = () => {
-  const navigate = useNavigate();
   const [authorImage, setAuthorImage] = useState<string>("/reddit.svg");
   const { email, token } = useAuth();
   const { id } = useParams<{ id: string }>();
@@ -25,17 +26,34 @@ const Post: React.FC = () => {
 
   useEffect(() => {
     // Fetch post data by post_id
+    const fetchData = async () => {
+      const response: IPost | null = await GetPostByIdService(
+        id,
+        token?.token ?? ""
+      );
 
-    // fetch autor image
-    console.warn(id);
-  }, [id]);
+      if (response) {
+        setPost(response);
+
+        // now fetch profile picture of author by email
+        const image: string = await GetProfilePictureByEmailService(
+          response.author,
+          token?.token ?? ""
+        );
+
+        setAuthorImage(image);
+      }
+    };
+
+    fetchData();
+  }, [id, token]);
 
   return (
     <>
       <Navbar />
       <div className="flex justify-center mt-12">
         <div className="w-full max-w-screen-lg">
-       <PostHeading imageBlobUrl={authorImage} author={post.author} />
+          <PostHeading imageBlobUrl={authorImage} author={post.author} />
 
           <h1 className="font-semibold text-3xl pl-7">{post.title}</h1>
           {/* Post content */}
