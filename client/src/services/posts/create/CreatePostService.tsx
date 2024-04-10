@@ -2,7 +2,12 @@ import axios, { AxiosResponse } from "axios";
 import { API_ENDPOINT } from "../../../App";
 import ICreatePost from "../../../interfaces/post/create/ICreatePost";
 
-// post id if post create else "" not created post
+/**
+ * Creates a new post on the server.
+ * @param post The data for the post to be created.
+ * @param token The authorization token for the user.
+ * @returns A Promise that resolves with the ID of the created post if successful, otherwise an empty string.
+ */
 const CreatePostService = async (
   post: ICreatePost,
   token: string

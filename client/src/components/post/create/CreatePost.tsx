@@ -67,7 +67,7 @@ const CreatePostForm: React.FC = () => {
       );
 
       if (post_id !== "") {
-        console.log(post_id);
+       
         // navigate post --> pa prosledis id i bole te kok
       } else {
         setErrorMessage("Post can't be created.");
