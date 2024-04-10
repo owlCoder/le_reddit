@@ -5,7 +5,7 @@ const NoComments: React.FC = () => {
     <div className="flex px-0 py-16" id="empty-comments-banner">
       <div className="flex-shrink-0 w-20 mr-12">
         <img
-          src="images/thinking-snoo.png"
+          src="/images/thinking-snoo.png"
           alt="Thinking Snoo"
           className="snoo-empty-comments"
           loading="lazy"
