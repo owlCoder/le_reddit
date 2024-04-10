@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "../../components/navbar/Navbar";
+import NoComments from "../../components/comment/empty/NoComments";
 
 const Home: React.FC = () => {
 
@@ -13,9 +14,7 @@ const Home: React.FC = () => {
               Sign Up
             </h1>
 
-            <p className="mt-4 text-gray-500">
-              Join us and discover endless possibilities!
-            </p>
+           <NoComments />
             </div>
             </div>
             </section>
