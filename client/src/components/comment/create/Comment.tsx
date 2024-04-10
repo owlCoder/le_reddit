@@ -8,35 +8,26 @@ import {
   MDXEditorMethods,
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
-import ICreatePost from "../../../interfaces/post/create/ICreatePost";
-import ValidateCreatePostData from "../../../validators/post/create_post";
 import useAuth from "../../../contexts/use_auth/UseAuth";
-import CreatePostService from "../../../services/posts/create/CreatePostService";
 import IComment from "../../../interfaces/comment/IComment";
 import IPost from "../../../interfaces/post/view/IPost";
 import ValidateCommentData from "../../../validators/comment/create_comment_validator";
+import CreateCommentService from "../../../services/comment/create/CreateCommentService";
+import { useNavigate } from "react-router-dom";
 
-const CreateCommentForm: React.FC<IPost> = ({id, author}) => {
-  const { token, email } = useAuth();
+const CreateCommentForm: React.FC<IPost> = ({ id, author }) => {
+  const { token } = useAuth();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const ref = React.useRef<MDXEditorMethods>(null); // grab markdown text
+  const navigate = useNavigate();
 
   // State to manage form data
   const [formData, setFormData] = useState<IComment>({
     id: "",
     author: author,
     content: "",
-    postId: id
+    postId: id,
   });
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-      author: formData.author || (email ?? formData.author),
-    });
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,7 +46,7 @@ const CreateCommentForm: React.FC<IPost> = ({id, author}) => {
       );
 
       if (post_id !== "") {
-        // Navigate to the created post page or perform any other necessary action
+        navigate(`/post/${formData.postId}`); // refresh page
       } else {
         setErrorMessage("Comment can't be created.");
       }
@@ -79,9 +70,10 @@ const CreateCommentForm: React.FC<IPost> = ({id, author}) => {
   const handleCancel = () => {
     // Reset form data
     setFormData({
-      author: "",
-      title: "",
+      id: "",
+      author: author,
       content: "",
+      postId: id,
     });
   };
 
@@ -96,30 +88,7 @@ const CreateCommentForm: React.FC<IPost> = ({id, author}) => {
 
   return (
     <div className="max-w-4xl mx-auto bg-white rounded-lg">
-      <form
-        onSubmit={handleSubmit}
-        className="mt-8 space-y-6 p-4"
-        encType="multipart/form-data"
-      >
-        {/* Title input */}
-        <div>
-          <label
-            htmlFor="title"
-            className="block text-md font-medium text-gray-700"
-          >
-            Title
-          </label>
-          <div className="mt-1">
-            <input
-              id="title"
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleInputChange}
-              className="block w-full border-gray-300 h-10 px-2 border focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500 text-md font-regular"
-            />
-          </div>
-        </div>
+      <form onSubmit={handleSubmit} className="mt-8 space-y-6 p-4">
         {/* MDX Editor */}
         <div>
           <label
