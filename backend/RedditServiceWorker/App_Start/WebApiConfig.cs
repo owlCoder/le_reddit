@@ -23,6 +23,11 @@ namespace RedditServiceWorker
                 name: "ExtendedApi",
                 routeTemplate: "api/{controller}/{email}"
             );
+
+            config.Routes.MapHttpRoute(
+                name: "ProfilePictureApi",
+                routeTemplate: "api/{controller}/images/{email}"
+            );
         }
     }
 }
