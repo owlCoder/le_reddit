@@ -3,8 +3,7 @@ import StatusOnline from "./StatusOnline";
 import useAuth from "../../contexts/use_auth/UseAuth";
 import { removeTokenFromLocalStorage } from "../../services/jwt/JWTTokenizationService";
 import { useNavigate } from "react-router-dom";
-import IUser from "../../interfaces/users/user/IUser";
-import GetUserByEmail from "../../services/users/profile/GetAccountDataService";
+import GetProfilePictureByEmailService from "../../services/users/profile/GetProfilePictureService";
 
 const AccountInformation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,18 +24,20 @@ const AccountInformation: React.FC = () => {
     const fetchData = async () => {
       try {
         if (email) {
-          const userData: IUser | null = await GetUserByEmail(
-            email,
-            token?.token
+          const image: string = await GetProfilePictureByEmailService(
+            email
           );
-          if (userData) {
-            setProfilePicture(userData?.ImageBlobUrl)
-          } else {
-            setEmail("");
-            removeTokenFromLocalStorage();
-            setToken(null);
-            navigate("/");
+
+          console.log(email)
+          if (image !== "") {
+            setProfilePicture(image)
           }
+          // else {
+          //   setEmail("");
+          //   removeTokenFromLocalStorage();
+          //   setToken(null);
+          //   navigate("/");
+          // }
         }
       } catch (error) {
         navigate("/404");

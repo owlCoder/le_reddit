@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import {
   MDXEditor,
   headingsPlugin,
@@ -13,7 +12,6 @@ import IPost from "../../../interfaces/post/view/IPost";
 import emptyPost from "../../../samples/post/DefaultPost";
 import CreateCommentForm from "../../comment/create/Comment";
 import NoComments from "../../comment/empty/NoComments";
-import Navbar from "../../navbar/Navbar";
 import PostHeading from "../heading/PostHeading";
 import GetPostByIdService from "../../../services/post/read/ReadPostService";
 import GetProfilePictureByEmailService from "../../../services/users/profile/GetProfilePictureService";
@@ -40,7 +38,6 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
         // now fetch profile picture of author by email
         const image: string = await GetProfilePictureByEmailService(
           response.author,
-          token?.token ?? ""
         );
 
         setAuthorImage(image);

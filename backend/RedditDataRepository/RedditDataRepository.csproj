@@ -115,6 +115,7 @@
     <Compile Include="users\Read\CheckUserCredentials.cs" />
     <Compile Include="users\Read\IsUserExists.cs" />
     <Compile Include="users\Read\ReadUser.cs" />
+    <Compile Include="users\Read\ReadUserProfilePicture.cs" />
     <Compile Include="users\Update\UpdateUser.cs" />
   </ItemGroup>
   <ItemGroup>

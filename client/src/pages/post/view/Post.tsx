@@ -12,7 +12,7 @@ const PostPage: React.FC = () => {
       <Navbar />
       <div className="flex justify-center mt-12">
         <div className="w-full max-w-screen-lg">
-          <Post postId={id} />
+          <Post postId={id ?? ""} />
         </div>
       </div>
     </>
