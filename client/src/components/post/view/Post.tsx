@@ -10,7 +10,7 @@ import {
 import useAuth from "../../../contexts/use_auth/UseAuth";
 import IPost from "../../../interfaces/post/view/IPost";
 import emptyPost from "../../../samples/post/DefaultPost";
-import CreateCommentForm from "../../comment/create/Comment";
+import CreateCommentForm from "../../comment/create/CreateCommentForm";
 import NoComments from "../../comment/empty/NoComments";
 import PostHeading from "../heading/PostHeading";
 import GetPostByIdService from "../../../services/post/read/ReadPostService";
@@ -44,7 +44,7 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
     };
 
     fetchData();
-  }, [postId, token, isLoggedIn]);
+  }, [postId, token, isLoggedIn, post]);
 
   return (
     <>

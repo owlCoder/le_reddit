@@ -41,12 +41,21 @@ const CreateCommentForm: React.FC<{ post: IPost }> = ({
 
     if (errors.length === 0) {
       // Call API
-      const post_id: string = await CreateCommentService(
+      const success: boolean = await CreateCommentService(
         formData,
         token?.token ?? ""
       );
 
-      if (post_id !== "") {
+      if (success) {
+        setFormData({
+          Id: "",
+          Author: Author,
+          Content: "",
+          PostId: Id,
+        });
+        
+        ref.current?.setMarkdown(""); // reset editor
+
         Comments.push(formData); // show new comment on UI
         //navigate(`/post/${formData.PostId}`); // refresh page
       } else {
@@ -77,6 +86,8 @@ const CreateCommentForm: React.FC<{ post: IPost }> = ({
       Content: "",
       PostId: Id,
     });
+
+    ref.current?.setMarkdown(""); // reset editor
   };
 
   const handleContentChange = (markdown: string) => {

@@ -5,7 +5,7 @@ import IComment from "../../../interfaces/comment/IComment";
 const CreateCommentService = async (
   post: IComment,
   token: string
-): Promise<string> => {
+): Promise<boolean> => {
 
   try {
     const response: AxiosResponse = await axios.post(
@@ -20,12 +20,12 @@ const CreateCommentService = async (
     );
 
     if (response.status === 200 || response.status === 204) {
-      return response.data;
+      return true;
     } else {
-      return "";
+      return false;
     }
   } catch {
-    return "";
+    return false;
   }
 };
 
