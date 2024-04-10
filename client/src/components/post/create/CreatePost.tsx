@@ -144,7 +144,7 @@ const CreatePostForm: React.FC = () => {
               ref={ref}
               markdown=""
               placeholder="Write a fantastic poem, maybe a happy love story..."
-              className="h-72 w-full border border-gray-300 focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500"
+              className="min-h-72 w-full border border-gray-300 focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500"
               plugins={[
                 toolbarPlugin({
                   toolbarContents: () => (

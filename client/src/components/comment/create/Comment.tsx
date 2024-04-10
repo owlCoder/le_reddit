@@ -99,7 +99,7 @@ const CreateCommentForm: React.FC<{ post: IPost }> = ({
               ref={ref}
               markdown=""
               placeholder="Add a comment"
-              className="h-40 w-full border border-gray-300 focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500"
+              className="min-h-40 w-full border border-gray-300 focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500"
               plugins={[
                 toolbarPlugin({
                   toolbarContents: () => (
