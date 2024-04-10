@@ -13,12 +13,14 @@ import ICreatePost from "../../../interfaces/post/create/ICreatePost";
 import ValidateCreatePostData from "../../../validators/post/create_post";
 import useAuth from "../../../contexts/use_auth/UseAuth";
 import CreatePostService from "../../../services/posts/create/CreatePostService";
+import { useNavigate } from "react-router-dom";
 
 const CreatePostForm: React.FC = () => {
   const { token, email } = useAuth();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const ref = React.useRef<MDXEditorMethods>(null); // grab markdown text
+  const navigate = useNavigate();
 
   // State to manage form data
   const [formData, setFormData] = useState<ICreatePost>({
@@ -67,8 +69,7 @@ const CreatePostForm: React.FC = () => {
       );
 
       if (post_id !== "") {
-       
-        // navigate post --> pa prosledis id i bole te kok
+        navigate(`/post/${post_id}`);
       } else {
         setErrorMessage("Post can't be created.");
       }

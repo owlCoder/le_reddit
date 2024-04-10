@@ -15,7 +15,9 @@ import ValidateCommentData from "../../../validators/comment/create_comment_vali
 import CreateCommentService from "../../../services/comment/create/CreateCommentService";
 import { useNavigate } from "react-router-dom";
 
-const CreateCommentForm: React.FC<IPost> = ({ id, author }) => {
+const CreateCommentForm: React.FC<{ post: IPost }> = ({
+  post: { id, author },
+}) => {
   const { token } = useAuth();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const ref = React.useRef<MDXEditorMethods>(null); // grab markdown text

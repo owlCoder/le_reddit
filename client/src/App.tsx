@@ -5,6 +5,7 @@ import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile";
 import Create from "./pages/posts/create/Create";
 import Error404 from "./pages/errors/Error404";
+import Post from "./pages/post/Post";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/post/:id" element={<Post />} />
           <Route path="/create" element={<Create />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<Login />} />
