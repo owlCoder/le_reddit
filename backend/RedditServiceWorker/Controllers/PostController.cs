@@ -9,6 +9,7 @@ using RedditServiceWorker.Models.post;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -132,7 +133,7 @@ namespace RedditServiceWorker.Controllers
                 Post post = await ReadPost.Run(AzureTableStorageCloudAccount.GetCloudTable("posts"), "Post", postId);
 
                 // Create DTO object of post with comments
-                GetPost getPost = new GetPost(post.Id, post.Author, post.Title, post.Content, post.HasImage, post.ImageBlobUrl, comments);
+                GetPost getPost = new GetPost(post.Id, post.Author, post.Title, post.Content, post.HasImage, post.ImageBlobUrl, comments.OrderByDescending(x => x.Timestamp).ToList());
 
                 return Ok(getPost);
             }

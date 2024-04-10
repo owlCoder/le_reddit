@@ -56,8 +56,8 @@ const CreateCommentForm: React.FC<{ post: IPost }> = ({
         
         ref.current?.setMarkdown(""); // reset editor
 
-        Comments.push(formData); // show new comment on UI
-        //navigate(`/post/${formData.PostId}`); // refresh page
+        // show new comment on UI
+        [formData].concat(Comments);
       } else {
         setErrorMessage("Comment can't be created.");
       }
