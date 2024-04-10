@@ -51,29 +51,29 @@ namespace RedditServiceWorker.Controllers
         }
         #endregion
 
-        #region GET ALL COMMENTS BY POST ID
-        [Route("{postId}")]
-        [HttpPost]
-        [JwtAuthenticationFilter] // Requires JWT authentication
-        public async Task<IHttpActionResult> GetAllComments(string postId)
-        {
-            try
-            {
-                if(postId == null || postId == "") 
-                { 
-                    return BadRequest();
-                }
+        //#region GET ALL COMMENTS BY POST ID
+        //[Route("{postId}")]
+        //[HttpGet]
+        //[JwtAuthenticationFilter] // Requires JWT authentication
+        //public async Task<IHttpActionResult> GetAllComments(string postId)
+        //{
+        //    try
+        //    {
+        //        if(postId == null || postId == "") 
+        //        { 
+        //            return BadRequest();
+        //        }
 
-                List<Comment> comments = await ReadComments.Execute(AzureTableStorageCloudAccount.GetCloudTable("comments"), postId);
+        //        List<Comment> comments = await ReadComments.Execute(AzureTableStorageCloudAccount.GetCloudTable("comments"), postId);
                 
-                return Ok(comments);
-            }
-            catch (Exception e)
-            {
-                return InternalServerError(e);
-            }
-        }
-        #endregion
+        //        return Ok(comments);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return InternalServerError(e);
+        //    }
+        //}
+        //#endregion
 
         #region DELETE
         // TODO delete one comment by comment id

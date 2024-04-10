@@ -28,7 +28,6 @@ const AccountInformation: React.FC = () => {
             email
           );
 
-          console.log(email)
           if (image !== "") {
             setProfilePicture(image)
           }

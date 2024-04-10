@@ -1,13 +1,13 @@
 import IComment from "../../comment/IComment";
 
 interface IPost {
-  id: string;
-  author: string;
-  title: string;
-  content: string;
-  hasImage: boolean;
-  imageBlobUrl: string;
-  comments: IComment[];
+  Id: string;
+  Author: string;
+  Title: string;
+  Content: string;
+  HasImage: boolean;
+  ImageBlobUrl: string;
+  Comments: IComment[];
 }
 
 export default IPost;

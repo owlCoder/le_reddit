@@ -208,6 +208,7 @@
     </Compile>
     <Compile Include="Models\auth\Login.cs" />
     <Compile Include="Models\comment\CreateComment.cs" />
+    <Compile Include="Models\post\GetPost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebRole.cs" />
   </ItemGroup>

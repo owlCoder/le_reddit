@@ -7,7 +7,7 @@ const NoComments: React.FC = () => {
         <img
           src="/images/thinking-snoo.png"
           alt="Thinking Snoo"
-          className="w-20 h-32"
+          className="w-16 h-28"
           loading="lazy"
         />
       </div>

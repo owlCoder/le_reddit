@@ -1,8 +1,8 @@
 interface IComment {
-    id: string;
-    author: string;
-    postId: string; // for which post comment has been made
-    content: string;
+    Id: string;
+    Author: string;
+    PostId: string; // for which post comment has been made
+    Content: string;
 }
 
 export default IComment;

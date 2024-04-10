@@ -1,8 +1,13 @@
 ﻿using Common.cloud.account;
 using RedditDataRepository.blobs.images;
+using RedditDataRepository.classes.Comments;
 using RedditDataRepository.classes.Posts;
+using RedditDataRepository.comments.Read;
 using RedditDataRepository.posts.Create;
+using RedditDataRepository.posts.Read;
+using RedditServiceWorker.Models.post;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -112,8 +117,32 @@ namespace RedditServiceWorker.Controllers
             }
         }
 
+        [Route("{postId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> Get(string postId)
+        {
+            try
+            {
+                if (postId == null || postId == "")
+                {
+                    return BadRequest();
+                }
+
+                List<Comment> comments = await ReadComments.Execute(AzureTableStorageCloudAccount.GetCloudTable("comments"), postId);
+                Post post = await ReadPost.Run(AzureTableStorageCloudAccount.GetCloudTable("posts"), "Post", postId);
+
+                // Create DTO object of post with comments
+                GetPost getPost = new GetPost(post.Id, post.Author, post.Title, post.Content, post.HasImage, post.ImageBlobUrl, comments);
+
+                return Ok(getPost);
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
         /// delete post
         /// toodod
-        
+
     }
 }
