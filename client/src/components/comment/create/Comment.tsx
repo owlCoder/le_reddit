@@ -87,22 +87,17 @@ const CreateCommentForm: React.FC<IPost> = ({ id, author }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto bg-white rounded-lg">
+    <div className="bg-white rounded-lg">
       <form onSubmit={handleSubmit} className="mt-8 space-y-6 p-4">
         {/* MDX Editor */}
         <div>
-          <label
-            htmlFor="content"
-            className="block text-md font-medium text-gray-700"
-          >
-            Content
-          </label>
           <div className="mt-1">
             <MDXEditor
               onChange={handleContentChange}
               ref={ref}
               markdown=""
-              className="h-72 w-full border border-gray-300 focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500"
+              placeholder="Add a comment"
+              className="h-40 w-full border border-gray-300 focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500"
               plugins={[
                 toolbarPlugin({
                   toolbarContents: () => (

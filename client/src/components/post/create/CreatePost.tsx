@@ -123,17 +123,12 @@ const CreatePostForm: React.FC = () => {
       >
         {/* Title input */}
         <div>
-          <label
-            htmlFor="title"
-            className="block text-md font-medium text-gray-700"
-          >
-            Title
-          </label>
           <div className="mt-1">
             <input
               id="title"
               type="text"
               name="title"
+              placeholder="Title"
               value={formData.title}
               onChange={handleInputChange}
               className="block w-full border-gray-300 h-10 px-2 border focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500 text-md font-regular"
@@ -142,17 +137,12 @@ const CreatePostForm: React.FC = () => {
         </div>
         {/* MDX Editor */}
         <div>
-          <label
-            htmlFor="content"
-            className="block text-md font-medium text-gray-700"
-          >
-            Content
-          </label>
           <div className="mt-1">
             <MDXEditor
               onChange={handleContentChange}
               ref={ref}
               markdown=""
+              placeholder="Write a fantastic poem, maybe a happy love story..."
               className="h-72 w-full border border-gray-300 focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500"
               plugins={[
                 toolbarPlugin({
@@ -184,13 +174,7 @@ const CreatePostForm: React.FC = () => {
             />
             {/* Show image preview if available */}
             {imagePreview && (
-              <div className="mt-4">
-                <label
-                  htmlFor="content"
-                  className="block text-md font-medium text-gray-700"
-                >
-                  Image
-                </label>
+              <div className="mt-8 mb-4">
                 <img
                   src={imagePreview}
                   alt="Preview"
