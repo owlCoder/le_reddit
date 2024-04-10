@@ -17,18 +17,20 @@ import Navbar from "../../navbar/Navbar";
 import PostHeading from "../heading/PostHeading";
 import GetPostByIdService from "../../../services/post/read/ReadPostService";
 import GetProfilePictureByEmailService from "../../../services/users/profile/GetProfilePictureService";
+import IPostProp from "../../../interfaces/post/prop/IPostProp";
 
-const Post: React.FC = () => {
+const Post: React.FC<IPostProp> = ({ postId }) => {
   const [authorImage, setAuthorImage] = useState<string>("/reddit.svg");
-  const { email, token } = useAuth();
-  const { id } = useParams<{ id: string }>();
+  const { email, token, isLoggedIn } = useAuth();
   const [post, setPost] = useState<IPost>(emptyPost);
 
   useEffect(() => {
+    console.log(isLoggedIn);
+
     // Fetch post data by post_id
     const fetchData = async () => {
       const response: IPost | null = await GetPostByIdService(
-        id,
+        postId,
         token?.token ?? ""
       );
 
@@ -46,45 +48,44 @@ const Post: React.FC = () => {
     };
 
     fetchData();
-  }, [id, token]);
+  }, [postId, token, isLoggedIn]);
 
   return (
     <>
-      <Navbar />
-      <div className="flex justify-center mt-12">
-        <div className="w-full max-w-screen-lg">
-          <PostHeading imageBlobUrl={authorImage} author={post.author} />
+      <PostHeading imageBlobUrl={authorImage} author={post.author} />
 
-          <h1 className="font-semibold text-3xl pl-7">{post.title}</h1>
-          {/* Post content */}
-          <div className="p-4">
-            <MDXEditor
-              readOnly
-              markdown={post.content}
-              className="min-h-40 w-full focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500"
-              plugins={[
-                // Example Plugin Usage
-                headingsPlugin(),
-                listsPlugin(),
-                quotePlugin(),
-                thematicBreakPlugin(),
-                markdownShortcutPlugin(),
-              ]}
-            />
-          </div>
-          <br />
-          <hr className="h-0.5 bg-gray-100 border-0 dark:bg-gray-100" />
+      <h1 className="font-semibold text-3xl pl-7">{post.title}</h1>
+      {/* Post content */}
+      <div className="p-4">
+        <MDXEditor
+          readOnly
+          markdown={post.content}
+          className="min-h-40 w-full focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500"
+          plugins={[
+            // Example Plugin Usage
+            headingsPlugin(),
+            listsPlugin(),
+            quotePlugin(),
+            thematicBreakPlugin(),
+            markdownShortcutPlugin(),
+          ]}
+        />
+      </div>
+      <br />
+      <hr className="h-0.5 bg-gray-100 border-0 dark:bg-gray-100" />
 
-          {/* Comment form */}
-          <div className="p-0">
-            <CreateCommentForm post={post} />
-          </div>
-          <div className="p-4">
-            {/* Render no comments if there are no comments */}
-            {post.comments.length === 0 ? <NoComments /> : null}
-            {/* You can add comment components with map and for each here */}
-          </div>
+      {/* Comment form */}
+      {isLoggedIn && (
+        <div className="p-0">
+          <CreateCommentForm post={post} />
         </div>
+      )}
+      <div className="p-4 mt-2">
+        {/* Render no comments if there are no comments */}
+        {post.comments.length === 0 ? <NoComments /> : 
+        
+        <></>} 
+        {/* You can add comment components with map and for each here */}
       </div>
     </>
   );
