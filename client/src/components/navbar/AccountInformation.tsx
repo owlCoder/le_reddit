@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import StatusOnline from "./navbar/StatusOnline";
-import useAuth from "../contexts/use_auth/UseAuth";
-import { removeTokenFromLocalStorage } from "../services/jwt/JWTTokenizationService";
+import StatusOnline from "./StatusOnline";
+import useAuth from "../../contexts/use_auth/UseAuth";
+import { removeTokenFromLocalStorage } from "../../services/jwt/JWTTokenizationService";
 import { useNavigate } from "react-router-dom";
-import IUser from "../interfaces/users/user/IUser";
-import GetUserByEmail from "../services/users/profile/GetAccountDataService";
+import IUser from "../../interfaces/users/user/IUser";
+import GetUserByEmail from "../../services/users/profile/GetAccountDataService";
 
 const AccountInformation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import AccountInformation from "../AccountInformation";
+import AccountInformation from "./AccountInformation";
 import SearchBar from "../search/SearchBar";
 import useAuth from "../../contexts/use_auth/UseAuth";
 
