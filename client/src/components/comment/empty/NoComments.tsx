@@ -2,12 +2,12 @@ import React from "react";
 
 const NoComments: React.FC = () => {
   return (
-    <div className="flex px-0 py-16" id="empty-comments-banner">
+    <div className="flex px-0 py-0" id="empty-comments-banner">
       <div className="flex-shrink-0 w-20 mr-12">
         <img
           src="/images/thinking-snoo.png"
           alt="Thinking Snoo"
-          className="snoo-empty-comments"
+          className="w-20 h-32"
           loading="lazy"
         />
       </div>

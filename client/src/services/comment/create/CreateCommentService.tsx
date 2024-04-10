@@ -2,7 +2,6 @@ import axios, { AxiosResponse } from "axios";
 import { API_ENDPOINT } from "../../../App";
 import IComment from "../../../interfaces/comment/IComment";
 
-
 const CreateCommentService = async (
   post: IComment,
   token: string
