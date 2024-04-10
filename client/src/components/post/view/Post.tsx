@@ -25,7 +25,7 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
   const [post, setPost] = useState<IPost>(emptyPost);
   const [loaded, setLoaded] = useState<boolean>(false);
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     // Fetch post data by post_id
     const fetchData = async () => {
@@ -40,8 +40,7 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
         );
 
         setAuthorImage(image);
-      }
-      else {
+      } else {
         navigate("/404");
       }
 
@@ -49,7 +48,7 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
     };
 
     fetchData();
-  }, [postId, token, isLoggedIn, post]);
+  }, [postId, token, isLoggedIn, post, navigate]);
 
   return (
     <>
