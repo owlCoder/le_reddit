@@ -12,6 +12,8 @@ using System.Web.Http;
 using RedditServiceWorker.Models.comment;
 using RedditDataRepository.comments.Create;
 using RedditDataRepository.classes.Comments;
+using System.Collections.Generic;
+using RedditDataRepository.comments.Read;
 
 namespace RedditServiceWorker.Controllers
 {
@@ -49,8 +51,28 @@ namespace RedditServiceWorker.Controllers
         }
         #endregion
 
-        #region GET
-        // TODO get all comments by post id
+        #region GET ALL COMMENTS BY POST ID
+        [Route("{postId}")]
+        [HttpPost]
+        [JwtAuthenticationFilter] // Requires JWT authentication
+        public async Task<IHttpActionResult> GetAllComments(string postId)
+        {
+            try
+            {
+                if(postId == null || postId == "") 
+                { 
+                    return BadRequest();
+                }
+
+                List<Comment> comments = await ReadComments.Execute(AzureTableStorageCloudAccount.GetCloudTable("comments"), postId);
+                
+                return Ok(comments);
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
         #endregion
 
         #region DELETE
