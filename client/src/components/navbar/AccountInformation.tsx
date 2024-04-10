@@ -31,12 +31,6 @@ const AccountInformation: React.FC = () => {
           if (image !== "") {
             setProfilePicture(image)
           }
-          // else {
-          //   setEmail("");
-          //   removeTokenFromLocalStorage();
-          //   setToken(null);
-          //   navigate("/");
-          // }
         }
       } catch (error) {
         navigate("/404");

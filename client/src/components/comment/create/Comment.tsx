@@ -13,22 +13,21 @@ import IComment from "../../../interfaces/comment/IComment";
 import IPost from "../../../interfaces/post/view/IPost";
 import ValidateCommentData from "../../../validators/comment/create_comment_validator";
 import CreateCommentService from "../../../services/comment/create/CreateCommentService";
-import { useNavigate } from "react-router-dom";
 
 const CreateCommentForm: React.FC<{ post: IPost }> = ({
-  post: { id, author },
+  post: { Id, Author, Comments },
 }) => {
   const { token } = useAuth();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const ref = React.useRef<MDXEditorMethods>(null); // grab markdown text
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   // State to manage form data
   const [formData, setFormData] = useState<IComment>({
-    id: "",
-    author: author,
-    content: "",
-    postId: id,
+    Id: "",
+    Author: Author,
+    Content: "",
+    PostId: Id,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -48,7 +47,8 @@ const CreateCommentForm: React.FC<{ post: IPost }> = ({
       );
 
       if (post_id !== "") {
-        navigate(`/post/${formData.postId}`); // refresh page
+        Comments.push(formData); // show new comment on UI
+        //navigate(`/post/${formData.PostId}`); // refresh page
       } else {
         setErrorMessage("Comment can't be created.");
       }
@@ -72,10 +72,10 @@ const CreateCommentForm: React.FC<{ post: IPost }> = ({
   const handleCancel = () => {
     // Reset form data
     setFormData({
-      id: "",
-      author: author,
-      content: "",
-      postId: id,
+      Id: "",
+      Author: Author,
+      Content: "",
+      PostId: Id,
     });
   };
 
@@ -84,7 +84,7 @@ const CreateCommentForm: React.FC<{ post: IPost }> = ({
     // Update state or perform any necessary actions with the markdown content
     setFormData({
       ...formData,
-      content: markdown,
+      Content: markdown,
     });
   };
 

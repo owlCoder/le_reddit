@@ -79,7 +79,11 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
           )}
           <div className="p-4 mt-2">
             {/* Render no comments if there are no comments */}
-            {post.Comments?.length === 0 ? <NoComments /> : <></>}
+            {post.Comments?.length === 0 ? <NoComments /> : <>
+            {post.Comments.map((comment) => (
+              console.log(comment)
+      ))}
+            </>}
             {/* You can add comment components with map and for each here */}
           </div>
         </div>
