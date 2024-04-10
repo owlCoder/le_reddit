@@ -19,7 +19,7 @@ import IPostProp from "../../../interfaces/post/prop/IPostProp";
 
 const Post: React.FC<IPostProp> = ({ postId }) => {
   const [authorImage, setAuthorImage] = useState<string>("/reddit.svg");
-  const { email, token, isLoggedIn } = useAuth();
+  const { token, isLoggedIn } = useAuth();
   const [post, setPost] = useState<IPost>(emptyPost);
 
   useEffect(() => {
