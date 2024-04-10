@@ -117,21 +117,21 @@ const CreateCommentForm: React.FC<IPost> = ({ id, author }) => {
           <p className="mt-4 text-primary-600">{errorMessage}</p>
         )}
         {/* Button group */}
-        <div className="flex justify-between">
+        <div className="flex justify-end">
           {/* Cancel Button */}
           <button
             type="button"
             onClick={handleCancel}
-            className="inline-flex justify-center w-24 rounded-full px-4 py-2 text-base text-gray-700 bg-gray-300 border border-transparent font-semibold shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            className="inline-flex justify-center w-24 rounded-full px-4 py-2 text-base text-gray-700 bg-gray-300/50 border border-transparent font-semibold shadow-sm hover:bg-gray-300/85 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 mr-4"
           >
             Cancel
           </button>
           {/* Submit Button */}
           <button
             type="submit"
-            className="inline-flex justify-center w-24 rounded-full px-4 py-2 text-base text-white bg-primary-600 border border-transparent font-semibold shadow-sm hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+            className="inline-flex justify-center rounded-full px-4 py-2 text-base text-white bg-primary-600 border border-transparent font-semibold shadow-sm hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
           >
-            Post
+            Comment
           </button>
         </div>
       </form>
