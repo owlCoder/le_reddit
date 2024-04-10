@@ -18,7 +18,7 @@ interface ICreatePost {
   content: string;
 
   /**
-   * User's profile image.
+   * Post's profile image.
    */
   image: File | null;
 
