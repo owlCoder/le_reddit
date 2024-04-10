@@ -15,13 +15,14 @@ import useAuth from "../../../contexts/use_auth/UseAuth";
 import CreatePostService from "../../../services/posts/create/CreatePostService";
 
 const CreatePostForm: React.FC = () => {
-  const { token } = useAuth();
+  const { token, email } = useAuth();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const ref = React.useRef<MDXEditorMethods>(null); // grab markdown text
 
   // State to manage form data
   const [formData, setFormData] = useState<ICreatePost>({
+    author: "",
     title: "",
     content: "",
     image: null, // Initially, no image is selected
@@ -33,6 +34,7 @@ const CreatePostForm: React.FC = () => {
     setFormData({
       ...formData,
       [name]: value,
+      author: formData.author || (email ?? formData.author),
     });
   };
 
@@ -59,16 +61,17 @@ const CreatePostForm: React.FC = () => {
 
     if (errors.length === 0) {
       // Call API
-      const post_id: string = await CreatePostService(formData, token?.token ?? "");
+      const post_id: string = await CreatePostService(
+        formData,
+        token?.token ?? ""
+      );
 
-      if(post_id !== "") {
+      if (post_id !== "") {
         console.log(post_id);
         // navigate post --> pa prosledis id i bole te kok
-      }
-      else {
+      } else {
         setErrorMessage("Post can't be created.");
       }
-
     } else {
       // Show all errors
       setErrorMessage((prevErrorMessage) => {

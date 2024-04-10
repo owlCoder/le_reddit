@@ -7,6 +7,7 @@ const CreatePostService = async (
   post: ICreatePost,
   token: string
 ): Promise<string> => {
+
   try {
     const response: AxiosResponse = await axios.post(
       API_ENDPOINT + "post/create",

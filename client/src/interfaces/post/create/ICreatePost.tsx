@@ -8,6 +8,11 @@ interface ICreatePost {
   title: string;
 
   /**
+   * Gets or sets the author of the post.
+   */
+  author: string;
+
+  /**
    * Gets or sets the content of the post.
    */
   content: string;

@@ -15,6 +15,11 @@ namespace RedditDataRepository.classes.Posts
         public string Id { get; set; }
 
         /// <summary>
+        /// Gets or sets the author of the post.
+        /// </summary>
+        public string Author { get; set; }
+
+        /// <summary>
         /// Gets or sets the title of the post.
         /// </summary>
         public string Title { get; set; }
@@ -55,6 +60,7 @@ namespace RedditDataRepository.classes.Posts
 
             Title = provider.FormData["title"];
             Content = provider.FormData["content"];
+            Author = provider.FormData["author"];
             HasImage = bool.Parse(provider.FormData["hasImage"]);
         }
     }

@@ -18,6 +18,10 @@ const ValidateCreatePostData = (postData: ICreatePost): string[] => {
     if (!postData.content.trim()) {
       errors.push('content');
     }
+
+    if (!postData.author.trim()) {
+      errors.push('author');
+    }
     
     return errors;
   };
