@@ -22,6 +22,8 @@ import LoadingSpinner from "../../spinner/LoadingSpinner";
 import Popup from "../../PopUp/PopUp";
 import IPopUp from "../../../interfaces/popup/IPopUp";
 import DefaultPopUp from "../../../samples/popup/DefaultPop";
+import IComment from "../../../interfaces/comment/IComment";
+import IPopUpProp from "../../../interfaces/popup/IPopUpProp";
 
 const Post: React.FC<IPostProp> = ({ postId }) => {
   const [authorImage, setAuthorImage] = useState<string>("/reddit.svg");
@@ -30,8 +32,38 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const navigate = useNavigate();
   const [popup, setPopup] = useState<IPopUp>(DefaultPopUp);
+  const [open, setOpen] = useState<boolean>(false);
+  const [popupfunc, setpopupfunc] = useState<IPopUpProp>({
+    SetUpPopup: () => {},
+  });
+  const SetUpPopup = (
+    title: string,
+    description: string,
+    titleColor: string,
+    buttonConfirmColor: string,
+    buttonConfirmBackground: string,
+    onConfirm: () => void
+  ) => {
+    setPopup({
+      title: title,
+      description: description,
+      titleColor: titleColor,
+      buttonConfirmColor: buttonConfirmColor,
+      buttonConfirmBackground: buttonConfirmBackground,
+      onConfirm: onConfirm,
+      onClose: () => {setOpen(false)},
+      isOpen: true,
+    });
+
+    setOpen(true);
+  };
 
   useEffect(() => {
+    // set up popup
+    setpopupfunc({
+      SetUpPopup: SetUpPopup,
+    });
+
     // Fetch post data by post_id
     const fetchData = async () => {
       const response: IPost | null = await GetPostByIdService(postId);
@@ -53,13 +85,13 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
     };
 
     fetchData();
-  }, [postId, token, isLoggedIn, navigate]);
+  }, [postId, token, isLoggedIn, navigate, open]);
 
   return (
     <>
       {loaded ? (
         <div>
-          <Popup popup={popup} />
+          {open && <Popup popup={popup} />}
 
           <PostHeading
             imageBlobUrl={authorImage}
@@ -101,8 +133,10 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
             </div>
           ) : (
             <div className="mb-12">
-              {post.Comments.map((comment) => (
-                <Comment key={comment.Id} comment={comment} />
+              {post.Comments.map((comment: IComment, index: number) => (
+                <div key={index}>
+                  <Comment comment={comment} PopUp={popupfunc} />
+                </div>
               ))}
             </div>
           )}
