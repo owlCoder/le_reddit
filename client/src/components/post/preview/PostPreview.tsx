@@ -13,12 +13,14 @@ import PostHeading from "../heading/PostHeading";
 import PostStats from "../stats/PostStats";
 import GetProfilePictureByEmailService from "../../../services/users/profile/GetProfilePictureService";
 import useAuth from "../../../contexts/use_auth/UseAuth";
+import { useNavigate } from "react-router-dom";
 
 const PostPreview: React.FC<{ post: IPost }> = ({
-  post: { Author, Title, Content, HasImage, ImageBlobUrl },
+  post: { Id, Author, Title, Content, HasImage, ImageBlobUrl },
 }) => {
   const [authorImage, setAuthorImage] = useState<string>("");
   const { email } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetch = async () => {
@@ -49,29 +51,35 @@ const PostPreview: React.FC<{ post: IPost }> = ({
           />
         </div>
       </div>
+      <div
+        className="cursor-pointer"
+        onClick={() => {
+          navigate(`/post/${Id}`);
+        }}
+      >
+        <h1 className="font-semibold text-3xl pl-7">{Title}</h1>
+        {/* Post content */}
+        <div className="p-4">
+          <MDXEditor
+            readOnly
+            markdown={Content}
+            className="min-h-12 w-full focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500"
+            plugins={[
+              headingsPlugin(),
+              listsPlugin(),
+              quotePlugin(),
+              thematicBreakPlugin(),
+              markdownShortcutPlugin(),
+            ]}
+          />
 
-      <h1 className="font-semibold text-3xl pl-7">{Title}</h1>
-      {/* Post content */}
-      <div className="p-4">
-        <MDXEditor
-          readOnly
-          markdown={Content}
-          className="min-h-12 w-full focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500"
-          plugins={[
-            headingsPlugin(),
-            listsPlugin(),
-            quotePlugin(),
-            thematicBreakPlugin(),
-            markdownShortcutPlugin(),
-          ]}
-        />
-
-        {/* picture for post */}
-        {HasImage && <img src={ImageBlobUrl} />}
-
-        {/* upvote, downvote comments count */}
-        <PostStats upvotesDownvotesCount={100} numberOfComments={0} />
+          {/* picture for post */}
+          {HasImage && <img src={ImageBlobUrl} />}
+        </div>
       </div>
+      {/* upvote, downvote comments count */}
+      <PostStats upvotesDownvotesCount={100} numberOfComments={0} />
+
       <br />
 
       <hr className="mx-4" />
