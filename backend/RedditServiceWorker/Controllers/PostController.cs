@@ -1,5 +1,6 @@
 ﻿using Common.auth.guard;
 using Common.cloud.account;
+using Microsoft.WindowsAzure.Storage.Table;
 using RedditDataRepository.blobs.images;
 using RedditDataRepository.classes.Comments;
 using RedditDataRepository.classes.Posts;
@@ -20,6 +21,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Web.UI.WebControls;
 
 namespace RedditServiceWorker.Controllers
 {
@@ -29,6 +31,7 @@ namespace RedditServiceWorker.Controllers
     [RoutePrefix("api/post")]
     public class PostController : ApiController
     {
+        #region CREATE
         /// <summary>
         /// Creates a new post.
         /// </summary>
@@ -122,7 +125,15 @@ namespace RedditServiceWorker.Controllers
                 }
             }
         }
+        #endregion
 
+        #region GET
+        /// <summary>
+        /// Get a specific post by post id
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IHttpActionResult"/> representing the result of the operation with post object.
+        /// </returns>
         [Route("{postId}")]
         [HttpGet]
         public async Task<IHttpActionResult> Get(string postId)
@@ -152,8 +163,21 @@ namespace RedditServiceWorker.Controllers
                 return InternalServerError(e);
             }
         }
+        #endregion
 
         #region DELETE
+        /// <summary>
+        /// Deletes a post with the specified post ID.
+        /// </summary>
+        /// <param name="postId">The ID of the post to delete.</param>
+        /// <returns>
+        /// IHttpActionResult representing the result of the deletion operation.
+        /// Returns Ok() if the post and its associated comments were successfully deleted.
+        /// Returns Unauthorized() if the request is not authorized.
+        /// Returns BadRequest() if the comments associated with the post could not be deleted.
+        /// Returns NotFound() if the post to delete is not found.
+        /// Returns InternalServerError() if an unexpected error occurs during the deletion process.
+        /// </returns>
         [HttpDelete]
         [Route("{postId}")]
         [JwtAuthenticationFilter] // Requires JWT authentication
@@ -161,42 +185,64 @@ namespace RedditServiceWorker.Controllers
         {
             try
             {
-                // Retrieve the comment author by ID
+                // Retrieve the post author by ID
                 string author = await ReadPostAuthor.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId);
 
-                // Only author of comment can delete it
+                // Only the author of the post can delete it
                 if (!ResourceGuard.RunCheck(ActionContext, author))
                 {
                     // Return unauthorized if the request is not authorized
                     return Unauthorized();
                 }
 
-                bool delete_result = await DeletePost.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId);
+                // Delete the post
+                bool deleteResult = await DeletePost.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId);
 
-                if (delete_result)
+                if (deleteResult)
                 {
-                    // Delete all comments by post id
-                    bool delete = await RemoveComments.Execute(AzureTableStorageCloudAccount.GetCloudTable("comments"), postId);
+                    // Delete all comments associated with the post
+                    bool deleteCommentsResult = await RemoveComments.Execute(AzureTableStorageCloudAccount.GetCloudTable("comments"), postId);
 
-                    if (delete)
+                    if (deleteCommentsResult)
                     {
                         return Ok();
                     }
                     else
                     {
+                        // Return BadRequest if comments associated with the post could not be deleted
                         return BadRequest();
                     }
                 }
                 else
                 {
+                    // Return NotFound if the post to delete is not found
                     return NotFound();
                 }
             }
             catch (Exception e)
             {
+                // Return InternalServerError if an unexpected error occurs during the deletion process
                 return InternalServerError(e);
             }
         }
+        #endregion
+
+        #region GET ALL POSTS (TODO: DO PAGINATION!!!!)
+        [HttpGet]
+        [Route("all")]
+        public async Task<IHttpActionResult> All()
+        {
+            // ovo je samo implementacija da testiram frontend, treba uraditi od 0 kao i za ove gore
+            // posebni fajlovi i lepo read iz storage itd
+            // @danijel
+            // Create a TableQuery object to retrieve all comments for the specified post ID
+            var results = from g in AzureTableStorageCloudAccount.GetCloudTable("posts").CreateQuery<Post>()
+                          where g.PartitionKey == "Post"
+                          select g;
+
+            return Ok(results.ToList());
+        }
+
         #endregion
     }
 }
