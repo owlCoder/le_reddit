@@ -2,13 +2,13 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import IPostHeading from "../../../interfaces/post/heading/IPostHeading";
 
-const PostHeading: React.FC<IPostHeading> = ({ imageBlobUrl, author, isCommentHeading }) => {
+const PostHeading: React.FC<IPostHeading> = ({ imageBlobUrl, author, isCommentHeading, isPreviewMode }) => {
   const navigate = useNavigate();
 
   return (
     <div className="p-4">
       <div className="flex items-center space-x-4">
-        {!isCommentHeading &&
+        {!isCommentHeading && !isPreviewMode &&
         <button
           onClick={() => {
             navigate("/");

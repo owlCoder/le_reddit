@@ -13,14 +13,12 @@ import PostHeading from "../heading/PostHeading";
 import PostStats from "../stats/PostStats";
 import GetProfilePictureByEmailService from "../../../services/users/profile/GetProfilePictureService";
 import useAuth from "../../../contexts/use_auth/UseAuth";
-import { useNavigate } from "react-router-dom";
 
 const PostPreview: React.FC<{ post: IPost }> = ({
-  post: { Id, Author, Title, Content, HasImage, ImageBlobUrl, Comments },
+  post: { Author, Title, Content, HasImage, ImageBlobUrl },
 }) => {
   const [authorImage, setAuthorImage] = useState<string>("");
   const { email } = useAuth();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetch = async () => {
@@ -35,16 +33,12 @@ const PostPreview: React.FC<{ post: IPost }> = ({
 
   return (
     <>
-      <div
-        className="flex justify-between items-center mb-4"
-        onClick={() => {
-          navigate(`/post/${Id}`);
-        }}
-      >
+      <div className="flex justify-between items-center mb-4">
         <div>
           <PostHeading
             imageBlobUrl={authorImage}
             author={"u/" + Author.split("@")[0]}
+            isPreviewMode={true}
           />
         </div>
         <div className="flex items-center">
@@ -75,11 +69,8 @@ const PostPreview: React.FC<{ post: IPost }> = ({
         {/* picture for post */}
         {HasImage && <img src={ImageBlobUrl} />}
 
-        {/* upvote, downvore comments count */}
-        <PostStats
-          upvotesDownvotesCount={100}
-          numberOfComments={Comments.length}
-        />
+        {/* upvote, downvote comments count */}
+        <PostStats upvotesDownvotesCount={100} numberOfComments={0} />
       </div>
       <br />
 
