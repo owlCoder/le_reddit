@@ -27,6 +27,7 @@ import IPopUpProp from "../../../interfaces/popup/IPopUpProp";
 import TrashButton from "../../button/TrashButton";
 import DeletePostService from "../../../services/post/delete/DeletePostService";
 import PostStats from "../stats/PostStats";
+import SubscribeButton from "../../button/SubscribeButton";
 
 const Post: React.FC<IPostProp> = ({ postId }) => {
   const [authorImage, setAuthorImage] = useState<string>("/reddit.svg");
@@ -136,7 +137,8 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
                 author={"u/" + post.Author.split("@")[0]}
               />
             </div>
-            <div>
+            <div className="flex items-center">
+            <SubscribeButton onClick={() => {alert("Implementiraj me")}} />
               {isDeletePostAvailable && (
                 <TrashButton onClick={ConfirmPostDelete} />
               )}
