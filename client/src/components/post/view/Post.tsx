@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  MDXEditor,
-  headingsPlugin,
-  listsPlugin,
-  markdownShortcutPlugin,
-  quotePlugin,
-  thematicBreakPlugin,
-} from "@mdxeditor/editor";
+import { MDXEditor, headingsPlugin, listsPlugin, markdownShortcutPlugin, quotePlugin, thematicBreakPlugin, }  from "@mdxeditor/editor";
 import useAuth from "../../../contexts/use_auth/UseAuth";
 import IPost from "../../../interfaces/post/view/IPost";
 import emptyPost from "../../../samples/post/DefaultPost";
@@ -25,6 +18,7 @@ import DefaultPopUp from "../../../samples/popup/DefaultPop";
 import IComment from "../../../interfaces/comment/IComment";
 import IPopUpProp from "../../../interfaces/popup/IPopUpProp";
 import TrashButton from "../../button/TrashButton";
+import DeletePostService from "../../../services/post/delete/DeletePostService";
 
 const Post: React.FC<IPostProp> = ({ postId }) => {
   const [authorImage, setAuthorImage] = useState<string>("/reddit.svg");
@@ -63,6 +57,27 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
     setOpen(true);
   };
 
+  const DeletePost = async () => {
+    const success: boolean = await DeletePostService(postId, token?.token ?? "");
+
+    if (success) {
+      navigate("/");
+    }
+  };
+
+  const ConfirmPostDelete = async () => {
+    SetUpPopup(
+      "Delete post",
+      "Are you sure that you want to delete a post, all comments will be deleted too?",
+      "text-black",
+      "text-white",
+      "bg-red",
+      () => {
+        DeletePost();
+      }
+    );
+  };
+
   useEffect(() => {
     // set up popup
     setpopupfunc({
@@ -77,7 +92,7 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
         setPost(response);
 
         // if author access post, enable delete post
-        if(response.Author === email) {
+        if (response.Author === email) {
           setIsDeletePostAvailable(true);
         }
 
@@ -111,7 +126,9 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
               />
             </div>
             <div>
-            { isDeletePostAvailable && <TrashButton onClick={() => console.log("dd")} />}
+              {isDeletePostAvailable && (
+                <TrashButton onClick={ConfirmPostDelete} />
+              )}
             </div>
           </div>
 

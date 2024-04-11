@@ -9,6 +9,7 @@ using RedditDataRepository.Comments.Read;
 using RedditDataRepository.posts.Create;
 using RedditDataRepository.posts.Delete;
 using RedditDataRepository.posts.Read;
+using RedditDataRepository.Posts.Read;
 using RedditServiceWorker.Models.post;
 using System;
 using System.Collections.Generic;
@@ -161,7 +162,7 @@ namespace RedditServiceWorker.Controllers
             try
             {
                 // Retrieve the comment author by ID
-                string author = await ReadCommentAuthor.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId);
+                string author = await ReadPostAuthor.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId);
 
                 // Only author of comment can delete it
                 if (!ResourceGuard.RunCheck(ActionContext, author))
