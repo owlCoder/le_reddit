@@ -89,7 +89,6 @@ namespace RedditServiceWorker.Controllers
                 return InternalServerError(e);
             }
         }
-
         #endregion
     }
 }

@@ -1,9 +1,13 @@
-﻿using Common.cloud.account;
+﻿using Common.auth.guard;
+using Common.cloud.account;
 using RedditDataRepository.blobs.images;
 using RedditDataRepository.classes.Comments;
 using RedditDataRepository.classes.Posts;
+using RedditDataRepository.comments.Delete;
 using RedditDataRepository.comments.Read;
+using RedditDataRepository.Comments.Read;
 using RedditDataRepository.posts.Create;
+using RedditDataRepository.posts.Delete;
 using RedditDataRepository.posts.Read;
 using RedditServiceWorker.Models.post;
 using System;
@@ -147,8 +151,51 @@ namespace RedditServiceWorker.Controllers
                 return InternalServerError(e);
             }
         }
-        /// delete post
-        /// toodod
 
+        #region DELETE
+        [HttpDelete]
+        [Route("{postId}")]
+        [JwtAuthenticationFilter] // Requires JWT authentication
+        public async Task<IHttpActionResult> Delete(string postId)
+        {
+            try
+            {
+                // Retrieve the comment author by ID
+                string author = await ReadCommentAuthor.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId);
+
+                // Only author of comment can delete it
+                if (!ResourceGuard.RunCheck(ActionContext, author))
+                {
+                    // Return unauthorized if the request is not authorized
+                    return Unauthorized();
+                }
+
+                bool delete_result = await DeletePost.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId);
+
+                if (delete_result)
+                {
+                    // Delete all comments by post id
+                    bool delete = await RemoveComments.Execute(AzureTableStorageCloudAccount.GetCloudTable("comments"), postId);
+
+                    if (delete)
+                    {
+                        return Ok();
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
+        #endregion
     }
 }
