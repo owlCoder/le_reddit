@@ -1,12 +1,10 @@
 ﻿using Common.auth.guard;
 using Common.cloud.account;
-using Microsoft.WindowsAzure.Storage.Table;
 using RedditDataRepository.blobs.images;
 using RedditDataRepository.classes.Comments;
 using RedditDataRepository.classes.Posts;
 using RedditDataRepository.comments.Delete;
 using RedditDataRepository.comments.Read;
-using RedditDataRepository.Comments.Read;
 using RedditDataRepository.posts.Create;
 using RedditDataRepository.posts.Delete;
 using RedditDataRepository.posts.Read;
@@ -21,7 +19,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using System.Web.UI.WebControls;
 
 namespace RedditServiceWorker.Controllers
 {
@@ -148,7 +145,7 @@ namespace RedditServiceWorker.Controllers
                 List<Comment> comments = await ReadComments.Execute(AzureTableStorageCloudAccount.GetCloudTable("comments"), postId);
                 Post post = await ReadPost.Run(AzureTableStorageCloudAccount.GetCloudTable("posts"), "Post", postId);
 
-                if(post == null)
+                if (post == null)
                 {
                     return NotFound();
                 }

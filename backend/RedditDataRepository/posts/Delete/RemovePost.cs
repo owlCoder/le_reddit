@@ -1,5 +1,4 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
-using RedditDataRepository.classes.Comments;
 using RedditDataRepository.classes.Posts;
 using System.Threading.Tasks;
 

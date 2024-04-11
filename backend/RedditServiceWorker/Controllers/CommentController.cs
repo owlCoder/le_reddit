@@ -1,23 +1,13 @@
-﻿using Common.cloud.account;
-using RedditDataRepository.blobs.images;
-using RedditDataRepository.classes.Posts;
-using RedditDataRepository.posts.Create;
-using System.IO;
-using System.Net.Http;
-using System.Net;
-using System.Threading.Tasks;
-using System.Web;
-using System;
-using System.Web.Http;
-using RedditServiceWorker.Models.comment;
-using RedditDataRepository.comments.Create;
+﻿using Common.auth.guard;
+using Common.cloud.account;
 using RedditDataRepository.classes.Comments;
-using System.Collections.Generic;
-using RedditDataRepository.comments.Read;
-using RedditDataRepository.Comments.Read;
-using Common.auth.guard;
-using System.Web.Helpers;
+using RedditDataRepository.comments.Create;
 using RedditDataRepository.comments.Delete;
+using RedditDataRepository.Comments.Read;
+using RedditServiceWorker.Models.comment;
+using System;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace RedditServiceWorker.Controllers
 {
@@ -25,6 +15,11 @@ namespace RedditServiceWorker.Controllers
     public class CommentController : ApiController
     {
         #region CREATE
+        /// <summary>
+        /// Controller method for creating a new comment.
+        /// </summary>
+        /// <param name="_comment">The comment data to be created.</param>
+        /// <returns>An <see cref="IHttpActionResult"/> representing the result of the operation.</returns>
         [Route("create")]
         [HttpPost]
         [JwtAuthenticationFilter] // Requires JWT authentication
@@ -32,9 +27,10 @@ namespace RedditServiceWorker.Controllers
         {
             try
             {
+                // Create a new Comment object
                 Comment comment = new Comment(_comment.Author, _comment.PostId, _comment.Content);
-                
-                // Put post into table
+
+                // Insert the comment into the Azure table
                 bool insert_result = await InsertComment.Execute(AzureTableStorageCloudAccount.GetCloudTable("comments"), comment);
 
                 if (insert_result)
@@ -44,18 +40,24 @@ namespace RedditServiceWorker.Controllers
                 }
                 else
                 {
-
-                    return BadRequest("Comment creation failed"); // Return 400 Bad Request with an error message
+                    // Return 400 Bad Request with an error message
+                    return BadRequest("Comment creation failed");
                 }
             }
             catch (Exception e)
             {
+                // Return 500 Internal Server Error with the exception details
                 return InternalServerError(e);
             }
         }
         #endregion
 
         #region DELETE
+        /// <summary>
+        /// Controller method for deleting a comment by its ID.
+        /// </summary>
+        /// <param name="commentId">The ID of the comment to be deleted.</param>
+        /// <returns>An <see cref="IHttpActionResult"/> representing the result of the operation.</returns>
         [HttpDelete]
         [Route("{commentId}")]
         [JwtAuthenticationFilter] // Requires JWT authentication
@@ -63,29 +65,33 @@ namespace RedditServiceWorker.Controllers
         {
             try
             {
-                // Retrieve the comment author by ID
+                // Retrieve the author of the comment by its ID
                 string author = await ReadCommentAuthor.Execute(AzureTableStorageCloudAccount.GetCloudTable("comments"), commentId);
 
-                // Only author of comment can delete it
+                // Check if the current user is authorized to delete the comment
                 if (!ResourceGuard.RunCheck(ActionContext, author))
                 {
-                    // Return unauthorized if the request is not authorized
+                    // Return 401 Unauthorized if the request is not authorized
                     return Unauthorized();
                 }
 
+                // Delete the comment from the Azure table
                 bool delete_result = await DeleteComment.Execute(AzureTableStorageCloudAccount.GetCloudTable("comments"), commentId);
 
-                if(delete_result)
+                if (delete_result)
                 {
+                    // Return 200 OK if the comment is successfully deleted
                     return Ok();
                 }
                 else
                 {
+                    // Return 400 Bad Request if the deletion fails
                     return BadRequest();
                 }
             }
             catch (Exception e)
             {
+                // Return 500 Internal Server Error with the exception details
                 return InternalServerError(e);
             }
         }

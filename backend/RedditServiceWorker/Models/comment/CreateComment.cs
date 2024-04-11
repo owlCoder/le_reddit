@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace RedditServiceWorker.Models.comment
+﻿namespace RedditServiceWorker.Models.comment
 {
     /// <summary>
     /// Represents a comment in the new request.

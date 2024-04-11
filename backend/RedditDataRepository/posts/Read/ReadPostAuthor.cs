@@ -1,7 +1,5 @@
-﻿using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
+﻿using Microsoft.WindowsAzure.Storage.Table;
 using RedditDataRepository.classes.Posts;
-using System;
 using System.Threading.Tasks;
 
 namespace RedditDataRepository.Posts.Read
