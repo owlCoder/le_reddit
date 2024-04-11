@@ -18,6 +18,7 @@ import GetProfilePictureByEmailService from "../../../services/users/profile/Get
 import IPostProp from "../../../interfaces/post/prop/IPostProp";
 import Comment from "../../comment/view/Comment";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../../spinner/LoadingSpinner";
 
 const Post: React.FC<IPostProp> = ({ postId }) => {
   const [authorImage, setAuthorImage] = useState<string>("/reddit.svg");
@@ -48,11 +49,11 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
     };
 
     fetchData();
-  }, [postId, token, isLoggedIn, post, navigate]);
+  }, [postId, token, isLoggedIn, navigate]);
 
   return (
     <>
-      {loaded && (
+      {loaded ? (
         <div>
           <PostHeading
             imageBlobUrl={authorImage}
@@ -67,7 +68,6 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
               markdown={post.Content}
               className="min-h-12 w-full focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500"
               plugins={[
-                // Example Plugin Usage
                 headingsPlugin(),
                 listsPlugin(),
                 quotePlugin(),
@@ -101,6 +101,8 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
             </div>
           )}
         </div>
+      ) : (
+        <LoadingSpinner />
       )}
     </>
   );

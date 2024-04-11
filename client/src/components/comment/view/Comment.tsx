@@ -4,11 +4,13 @@ import "@mdxeditor/editor/style.css";
 import IComment from "../../../interfaces/comment/IComment";
 import PostHeading from "../../post/heading/PostHeading";
 import useAuth from "../../../contexts/use_auth/UseAuth";
+import GetProfilePictureByEmailService from "../../../services/users/profile/GetProfilePictureService";
 
 const Comment: React.FC<{ comment: IComment }> = ({
   comment: { Author, Content },
 }) => {
   const { email } = useAuth();
+  const [imageOfCommentAuthor, setImageOfCommentAuthor] = useState<string>("");
   const [isDeleteCommentAvailable, setIsDeleteCommentAvailable] =
     useState<boolean>(false);
 
@@ -16,7 +18,15 @@ const Comment: React.FC<{ comment: IComment }> = ({
     if (Author === email) {
       setIsDeleteCommentAvailable(true);
     }
-  }, [email, Author]);
+
+    const fetch = async () => {
+      // fetch profile picture
+      const picture: string = await GetProfilePictureByEmailService(Author);
+      setImageOfCommentAuthor(picture);
+    };
+
+    fetch();
+  }, [Author, email]);
 
   const handleDeleteComment = () => {
     // Add your logic here to delete the comment
@@ -30,7 +40,7 @@ const Comment: React.FC<{ comment: IComment }> = ({
         {isDeleteCommentAvailable && (
           <button
             onClick={handleDeleteComment}
-            className="absolute top-0 right-0 p-2 h-10 w-10 pt-4 text-red-600 font-semibold hover:text-red-500"
+            className="absolute top-0 right-0 p-2 mr-2 h-10 w-10 pt-4 text-red-600 font-semibold hover:text-red-500"
           >
             {/* SVG Trash Icon */}
             <svg
@@ -64,8 +74,8 @@ const Comment: React.FC<{ comment: IComment }> = ({
         )}
         <div>
           <PostHeading
-            imageBlobUrl="/reddit.svg"
-            author={Author}
+            imageBlobUrl={imageOfCommentAuthor}
+            author={Author.split("@")[0]}
             isCommentHeading={true}
           />
           <div className="mt-1">

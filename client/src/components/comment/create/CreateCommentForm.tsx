@@ -15,7 +15,7 @@ import ValidateCommentData from "../../../validators/comment/create_comment_vali
 import CreateCommentService from "../../../services/comment/create/CreateCommentService";
 
 const CreateCommentForm: React.FC<{ post: IPost }> = ({
-  post: { Id, Author, Comments },
+  post: { Id, Author },
 }) => {
   const { token } = useAuth();
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -55,11 +55,11 @@ const CreateCommentForm: React.FC<{ post: IPost }> = ({
           Content: "",
           PostId: Id,
         });
-        
+
         ref.current?.setMarkdown(""); // reset editor
 
         // show new comment on UI
-        [formData].concat(Comments);
+        window.location.reload();
       } else {
         setErrorMessage("Comment can't be created.");
       }
