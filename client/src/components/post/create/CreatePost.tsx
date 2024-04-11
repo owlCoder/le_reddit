@@ -21,6 +21,7 @@ const CreatePostForm: React.FC = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const ref = React.useRef<MDXEditorMethods>(null); // grab markdown text
   const navigate = useNavigate();
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   // State to manage form data
   const [formData, setFormData] = useState<ICreatePost>({
@@ -55,6 +56,8 @@ const CreatePostForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setSubmitting(true);
+
     // Reset errors
     setErrorMessage("");
 
@@ -88,6 +91,8 @@ const CreatePostForm: React.FC = () => {
         return newErrorMessage;
       });
     }
+
+    setSubmitting(false);
   };
 
   // Handle image upload
@@ -129,6 +134,7 @@ const CreatePostForm: React.FC = () => {
               id="title"
               type="text"
               name="title"
+              autoFocus
               placeholder="Title"
               value={formData.title}
               onChange={handleInputChange}
@@ -184,6 +190,7 @@ const CreatePostForm: React.FC = () => {
                 {/* Remove image button */}
                 <button
                   onClick={handleRemoveImage}
+                  disabled={submitting}
                   className="mt-4 bg-red-600 rounded-full hover:bg-red-500 text-white font-bold py-1.5 px-4  inline-block"
                 >
                   Remove
@@ -198,10 +205,11 @@ const CreatePostForm: React.FC = () => {
         {/* Submit Button */}
         <div className="flex justify-end">
           <button
+            disabled={submitting}
             type="submit"
             className="inline-flex justify-center w-24 rounded-full px-4 py-2 text-base text-white bg-primary-600 border border-transparent font-semibold shadow-sm hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
           >
-            Post
+            {submitting ? "Saving..." : "Post"}
           </button>
         </div>
       </form>

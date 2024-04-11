@@ -8,6 +8,7 @@ import emptyUser from "../../samples/users/user";
 import { removeTokenFromLocalStorage } from "../../services/jwt/JWTTokenizationService";
 import { ValidateUpdateData } from "../../validators/users/validate_new_user_info";
 import UpdateUserInformationService from "../../services/users/update/UpdateService";
+import LoadingSpinner from "../../components/spinner/LoadingSpinner";
 
 const Profile: React.FC = () => {
   const { email, token, isLoggedIn, setEmail, setToken } = useAuth();
@@ -18,12 +19,15 @@ const Profile: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [pageLoaded, setPageLoaded] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
     setPageLoaded(true);
   }, []);
 
   useEffect(() => {
+    setLoading(true);
+
     if (pageLoaded && !isLoggedIn) {
       navigate("/");
     }
@@ -87,20 +91,24 @@ const Profile: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Validate form data and update user data
 
+    setSubmitting(true);
+    // Validate form data and update user data
     // Client-Side data verification
     const errors: string[] = ValidateUpdateData(userData ?? emptyUser);
 
     if (errors.length === 0 && userData) {
       // Call service to pass data to API
-      const success: boolean = await UpdateUserInformationService(userData, image, token?.token ?? "");
+      const success: boolean = await UpdateUserInformationService(
+        userData,
+        image,
+        token?.token ?? ""
+      );
 
-      if(!success) {
+      if (!success) {
         setErrorMessage("Entered data are incorrect.");
         setSuccessMessage("");
-      }
-      else {
+      } else {
         setErrorMessage("");
         setSuccessMessage("Your information has been updated.");
       }
@@ -112,21 +120,22 @@ const Profile: React.FC = () => {
           newErrorMessage += error;
           if (index !== errors.length - 1) {
             newErrorMessage += ", ";
-          }
-          else {
+          } else {
             newErrorMessage += ".";
           }
         });
         return newErrorMessage;
       });
     }
+
+    setSubmitting(false);
   };
 
   return (
     <>
       <Navbar />
       {loading ? (
-        <div>Loading...</div>
+        <LoadingSpinner />
       ) : (
         <section className="flex items-center justify-center h-screen bg-slate-200/90 -mt-16 pb-12">
           <div className="max-w-lg bg-white rounded-lg shadow-lg p-8">
@@ -229,14 +238,15 @@ const Profile: React.FC = () => {
                 <p className="text-primary-600">{errorMessage}</p>
               )}
               {successMessage && (
-                <p className="text-emerald-600">{successMessage}</p>
+                <p className="text-emerald-600 text-center">{successMessage}</p>
               )}
               <div className="flex justify-end items-end">
                 <button
+                  disabled={submitting}
                   type="submit"
                   className="bg-primary-600 text-white rounded-lg py-2 px-4 font-bold text-sm shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all"
                 >
-                  Update
+                  {submitting ? "Saving..." : "Update"}
                 </button>
               </div>
             </form>

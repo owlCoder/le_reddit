@@ -21,4 +21,15 @@
 /* Hide div popup */
 .mdxeditor-popup-container {
     display: none !important;
-  }
+}
+
+/* Spinner spining animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
