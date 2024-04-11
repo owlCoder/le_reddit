@@ -1,7 +1,25 @@
+/**
+ * Represents a comment on a post.
+ */
 interface IComment {
+  /**
+   * The unique identifier of the comment.
+   */
   Id: string;
+
+  /**
+   * The author of the comment.
+   */
   Author: string;
-  PostId: string; // for which post comment has been made
+
+  /**
+   * The unique identifier of the post for which the comment has been made.
+   */
+  PostId: string;
+
+  /**
+   * The content of the comment.
+   */
   Content: string;
 }
 
