@@ -26,7 +26,7 @@ const Create: React.FC = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-slate-200 py-8 min-h-screen">
+      <div className="bg-slate-200/90 py-8 min-h-screen">
         <CreatePostForm />
       </div>
     </>

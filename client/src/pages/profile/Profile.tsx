@@ -128,7 +128,7 @@ const Profile: React.FC = () => {
       {loading ? (
         <div>Loading...</div>
       ) : (
-        <section className="flex items-center justify-center h-screen bg-gray-200 -mt-16 pb-12">
+        <section className="flex items-center justify-center h-screen bg-slate-200/90 -mt-16 pb-12">
           <div className="max-w-lg bg-white rounded-lg shadow-lg p-8">
             <h1 className="text-2xl font-bold text-center text-primary-600 mb-1">
               Profile
