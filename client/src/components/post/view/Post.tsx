@@ -144,24 +144,34 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
               )}
             </div>
           </div>
-
-          <h1 className="font-semibold text-3xl pl-7">{post.Title}</h1>
-          {/* Post content */}
-          <div className="p-4">
-            <MDXEditor
-              readOnly
-              markdown={post.Content}
-              className="min-h-12 w-full focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500"
-              plugins={[
-                headingsPlugin(),
-                listsPlugin(),
-                quotePlugin(),
-                thematicBreakPlugin(),
-                markdownShortcutPlugin(),
-              ]}
-            />
-            {/* upvote, downvore comments count */}
-           <PostStats upvotesDownvotesCount={100} numberOfComments={post.Comments.length} />
+          <div className="flex flex-col-reverse md:flex-row items-start w-full ml-4">
+            <div className="w-full">
+              <h1 className="font-semibold text-3xl pl-7">{post.Title}</h1>
+              {/* Post content */}
+              <div className="p-4">
+                <MDXEditor
+                  readOnly
+                  markdown={post.Content}
+                  className="min-h-12 w-full focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500"
+                  plugins={[
+                    headingsPlugin(),
+                    listsPlugin(),
+                    quotePlugin(),
+                    thematicBreakPlugin(),
+                    markdownShortcutPlugin(),
+                  ]}
+                />
+              </div>
+              {/* upvote, downvore comments count */}
+              <PostStats
+                upvotesDownvotesCount={100}
+                numberOfComments={post.Comments.length}
+              />
+            </div>
+             {/* Picture for post */}
+             {post.HasImage && (
+              <img src={post.ImageBlobUrl} className="w-40 h-40 rounded-2xl" />
+            )}
           </div>
           <br />
 

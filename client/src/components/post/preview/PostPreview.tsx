@@ -52,32 +52,35 @@ const PostPreview: React.FC<{ post: IPost }> = ({
         </div>
       </div>
       <div
-        className="cursor-pointer"
+        className="cursor-pointer flex"
         onClick={() => {
           navigate(`/post/${Id}`);
         }}
       >
-        <h1 className="font-semibold text-3xl pl-7">{Title}</h1>
-        {/* Post content */}
-        <div className="p-4">
-          <MDXEditor
-            readOnly
-            markdown={Content}
-            className="min-h-12 w-full focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500"
-            plugins={[
-              headingsPlugin(),
-              listsPlugin(),
-              quotePlugin(),
-              thematicBreakPlugin(),
-              markdownShortcutPlugin(),
-            ]}
-          />
-
-          {/* picture for post */}
-          {HasImage && <img src={ImageBlobUrl} />}
+        <div className="flex flex-col items-start w-full">
+          <h1 className="font-semibold text-3xl pl-7">{Title}</h1>
+          {/* Post content */}
+          <div className="p-4">
+            <MDXEditor
+              readOnly
+              markdown={Content}
+              className="min-h-12 w-full focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500"
+              plugins={[
+                headingsPlugin(),
+                listsPlugin(),
+                quotePlugin(),
+                thematicBreakPlugin(),
+                markdownShortcutPlugin(),
+              ]}
+            />
+          </div>
         </div>
+        {/* Picture for post */}
+        {HasImage && (
+          <img src={ImageBlobUrl} className="w-40 h-40 rounded-2xl" />
+        )}
       </div>
-      {/* upvote, downvote comments count */}
+      {/* Upvote, downvote comments count */}
       <PostStats upvotesDownvotesCount={100} numberOfComments={0} />
 
       <br />
