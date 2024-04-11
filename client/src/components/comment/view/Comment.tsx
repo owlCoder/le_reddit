@@ -5,11 +5,12 @@ import IComment from "../../../interfaces/comment/IComment";
 import PostHeading from "../../post/heading/PostHeading";
 import useAuth from "../../../contexts/use_auth/UseAuth";
 import GetProfilePictureByEmailService from "../../../services/users/profile/GetProfilePictureService";
+import DeleteCommentService from "../../../services/comment/delete/DeleteCommentService";
 
 const Comment: React.FC<{ comment: IComment }> = ({
-  comment: { Author, Content },
+  comment: { Author, Content, Id },
 }) => {
-  const { email } = useAuth();
+  const { email, token } = useAuth();
   const [imageOfCommentAuthor, setImageOfCommentAuthor] = useState<string>("");
   const [isDeleteCommentAvailable, setIsDeleteCommentAvailable] =
     useState<boolean>(false);
@@ -28,12 +29,19 @@ const Comment: React.FC<{ comment: IComment }> = ({
     fetch();
   }, [Author, email]);
 
-  const handleDeleteComment = () => {
-    // Add your logic here to delete the comment
-    console.log("Delete comment logic goes here");
+  const handleDeleteComment = async () => {
+    const success: boolean = await DeleteCommentService(Id, token?.token ?? "");
+
+    if(success) {
+      window.location.reload();
+    }
+    else {
+      alert("prc");
+    }
   };
 
   return (
+    <>
     <div className="relative bg-white rounded-lg ml-4">
       <form className="space-y-6 p-4 border border-gray-200 rounded-xl mb-2">
         {/* Delete button */}
@@ -88,7 +96,7 @@ const Comment: React.FC<{ comment: IComment }> = ({
           </div>
         </div>
       </form>
-    </div>
+    </div></>
   );
 };
 

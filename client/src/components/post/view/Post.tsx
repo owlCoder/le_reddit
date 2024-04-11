@@ -19,6 +19,9 @@ import IPostProp from "../../../interfaces/post/prop/IPostProp";
 import Comment from "../../comment/view/Comment";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../spinner/LoadingSpinner";
+import Popup from "../../PopUp/PopUp";
+import IPopUp from "../../../interfaces/popup/IPopUp";
+import DefaultPopUp from "../../../samples/popup/DefaultPop";
 
 const Post: React.FC<IPostProp> = ({ postId }) => {
   const [authorImage, setAuthorImage] = useState<string>("/reddit.svg");
@@ -26,6 +29,7 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
   const [post, setPost] = useState<IPost>(emptyPost);
   const [loaded, setLoaded] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [popup, setPopup] = useState<IPopUp>(DefaultPopUp);
 
   useEffect(() => {
     // Fetch post data by post_id
@@ -55,6 +59,8 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
     <>
       {loaded ? (
         <div>
+          <Popup popup={popup} />
+
           <PostHeading
             imageBlobUrl={authorImage}
             author={"u/" + post.Author.split("@")[0]}

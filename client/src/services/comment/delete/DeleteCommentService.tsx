@@ -1,16 +1,13 @@
 import axios, { AxiosResponse } from "axios";
 import { API_ENDPOINT } from "../../../App";
-import IComment from "../../../interfaces/comment/IComment";
 
-const CreateCommentService = async (
-  comment: IComment,
+const DeleteCommentService = async (
+  commentId: string,
   token: string
 ): Promise<boolean> => {
-
   try {
-    const response: AxiosResponse = await axios.post(
-      API_ENDPOINT + "comment/create",
-      comment,
+    const response: AxiosResponse = await axios.delete(
+      API_ENDPOINT + `comment/delete/?commentId=${commentId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -29,4 +26,4 @@ const CreateCommentService = async (
   }
 };
 
-export default CreateCommentService;
+export default DeleteCommentService;

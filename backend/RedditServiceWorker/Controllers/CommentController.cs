@@ -14,6 +14,10 @@ using RedditDataRepository.comments.Create;
 using RedditDataRepository.classes.Comments;
 using System.Collections.Generic;
 using RedditDataRepository.comments.Read;
+using RedditDataRepository.Comments.Read;
+using Common.auth.guard;
+using System.Web.Helpers;
+using RedditDataRepository.comments.Delete;
 
 namespace RedditServiceWorker.Controllers
 {
@@ -51,32 +55,41 @@ namespace RedditServiceWorker.Controllers
         }
         #endregion
 
-        //#region GET ALL COMMENTS BY POST ID
-        //[Route("{postId}")]
-        //[HttpGet]
-        //[JwtAuthenticationFilter] // Requires JWT authentication
-        //public async Task<IHttpActionResult> GetAllComments(string postId)
-        //{
-        //    try
-        //    {
-        //        if(postId == null || postId == "") 
-        //        { 
-        //            return BadRequest();
-        //        }
-
-        //        List<Comment> comments = await ReadComments.Execute(AzureTableStorageCloudAccount.GetCloudTable("comments"), postId);
-                
-        //        return Ok(comments);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return InternalServerError(e);
-        //    }
-        //}
-        //#endregion
-
         #region DELETE
-        // TODO delete one comment by comment id
+        [HttpDelete]
+        [Route("{commentId}")]
+        [JwtAuthenticationFilter] // Requires JWT authentication
+        public async Task<IHttpActionResult> Delete(string commentId)
+        {
+            try
+            {
+                // Retrieve the comment author by ID
+                string author = await ReadCommentAuthor.Execute(AzureTableStorageCloudAccount.GetCloudTable("comments"), commentId);
+
+                // Only author of comment can delete it
+                if (!ResourceGuard.RunCheck(ActionContext, author))
+                {
+                    // Return unauthorized if the request is not authorized
+                    return Unauthorized();
+                }
+
+                bool delete_result = await DeleteComment.Execute(AzureTableStorageCloudAccount.GetCloudTable("comments"), commentId);
+
+                if(delete_result)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
+
         #endregion
     }
 }
