@@ -175,7 +175,7 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
           </div>
           <br />
 
-          <hr className="mx-4" />
+          <hr className="mx-4 mt-4 mb-8" />
 
           {/* Comment form */}
           {isLoggedIn && (

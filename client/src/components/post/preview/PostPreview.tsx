@@ -81,11 +81,13 @@ const PostPreview: React.FC<{ post: IPost }> = ({
         )}
       </div>
       {/* Upvote, downvote comments count */}
+      <div className="ml-4">
       <PostStats upvotesDownvotesCount={100} numberOfComments={0} />
+      </div>
 
       <br />
 
-      <hr className="mx-4" />
+      <hr className="mx-4 mt-4 mb-8" />
     </>
   );
 };
