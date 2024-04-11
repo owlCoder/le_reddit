@@ -24,13 +24,16 @@ import IPopUp from "../../../interfaces/popup/IPopUp";
 import DefaultPopUp from "../../../samples/popup/DefaultPop";
 import IComment from "../../../interfaces/comment/IComment";
 import IPopUpProp from "../../../interfaces/popup/IPopUpProp";
+import TrashButton from "../../button/TrashButton";
 
 const Post: React.FC<IPostProp> = ({ postId }) => {
   const [authorImage, setAuthorImage] = useState<string>("/reddit.svg");
-  const { token, isLoggedIn } = useAuth();
+  const { token, isLoggedIn, email } = useAuth();
   const [post, setPost] = useState<IPost>(emptyPost);
   const [loaded, setLoaded] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [isDeletePostAvailable, setIsDeletePostAvailable] =
+    useState<boolean>(false);
   const [popup, setPopup] = useState<IPopUp>(DefaultPopUp);
   const [open, setOpen] = useState<boolean>(false);
   const [popupfunc, setpopupfunc] = useState<IPopUpProp>({
@@ -51,7 +54,9 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
       buttonConfirmColor: buttonConfirmColor,
       buttonConfirmBackground: buttonConfirmBackground,
       onConfirm: onConfirm,
-      onClose: () => {setOpen(false)},
+      onClose: () => {
+        setOpen(false);
+      },
       isOpen: true,
     });
 
@@ -71,6 +76,11 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
       if (response) {
         setPost(response);
 
+        // if author access post, enable delete post
+        if(response.Author === email) {
+          setIsDeletePostAvailable(true);
+        }
+
         // now fetch profile picture of author by email
         const image: string = await GetProfilePictureByEmailService(
           response.Author
@@ -85,7 +95,7 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
     };
 
     fetchData();
-  }, [postId, token, isLoggedIn, navigate, open]);
+  }, [postId, token, isLoggedIn, navigate, open, email]);
 
   return (
     <>
@@ -93,10 +103,17 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
         <div>
           {open && <Popup popup={popup} />}
 
-          <PostHeading
-            imageBlobUrl={authorImage}
-            author={"u/" + post.Author.split("@")[0]}
-          />
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              <PostHeading
+                imageBlobUrl={authorImage}
+                author={"u/" + post.Author.split("@")[0]}
+              />
+            </div>
+            <div>
+            { isDeletePostAvailable && <TrashButton onClick={() => console.log("dd")} />}
+            </div>
+          </div>
 
           <h1 className="font-semibold text-3xl pl-7">{post.Title}</h1>
           {/* Post content */}
