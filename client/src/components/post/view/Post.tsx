@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { MDXEditor, headingsPlugin, listsPlugin, markdownShortcutPlugin, quotePlugin, thematicBreakPlugin, }  from "@mdxeditor/editor";
+import {
+  MDXEditor,
+  headingsPlugin,
+  listsPlugin,
+  markdownShortcutPlugin,
+  quotePlugin,
+  thematicBreakPlugin,
+} from "@mdxeditor/editor";
 import useAuth from "../../../contexts/use_auth/UseAuth";
 import IPost from "../../../interfaces/post/view/IPost";
 import emptyPost from "../../../samples/post/DefaultPost";
@@ -19,6 +26,7 @@ import IComment from "../../../interfaces/comment/IComment";
 import IPopUpProp from "../../../interfaces/popup/IPopUpProp";
 import TrashButton from "../../button/TrashButton";
 import DeletePostService from "../../../services/post/delete/DeletePostService";
+import PostStats from "../stats/PostStats";
 
 const Post: React.FC<IPostProp> = ({ postId }) => {
   const [authorImage, setAuthorImage] = useState<string>("/reddit.svg");
@@ -58,7 +66,10 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
   };
 
   const DeletePost = async () => {
-    const success: boolean = await DeletePostService(postId, token?.token ?? "");
+    const success: boolean = await DeletePostService(
+      postId,
+      token?.token ?? ""
+    );
 
     if (success) {
       navigate("/");
@@ -147,8 +158,11 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
                 markdownShortcutPlugin(),
               ]}
             />
+            {/* upvote, downvore comments count */}
+           <PostStats upvotesDownvotesCount={100} numberOfComments={post.Comments.length} />
           </div>
           <br />
+
           <hr className="mx-4" />
 
           {/* Comment form */}
