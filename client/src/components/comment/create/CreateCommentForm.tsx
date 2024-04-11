@@ -20,7 +20,7 @@ const CreateCommentForm: React.FC<{ post: IPost }> = ({
   const { token } = useAuth();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const ref = React.useRef<MDXEditorMethods>(null); // grab markdown text
-  //const navigate = useNavigate();
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   // State to manage form data
   const [formData, setFormData] = useState<IComment>({
@@ -32,6 +32,8 @@ const CreateCommentForm: React.FC<{ post: IPost }> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    setSubmitting(true);
 
     // Reset errors
     setErrorMessage("");
@@ -76,6 +78,8 @@ const CreateCommentForm: React.FC<{ post: IPost }> = ({
         return newErrorMessage;
       });
     }
+
+    setSubmitting(false);
   };
 
   const handleCancel = () => {
@@ -109,6 +113,7 @@ const CreateCommentForm: React.FC<{ post: IPost }> = ({
               onChange={handleContentChange}
               ref={ref}
               markdown=""
+              readOnly={submitting}
               placeholder="Add a comment"
               className="min-h-40 w-full border border-gray-300 focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500"
               plugins={[
@@ -142,9 +147,10 @@ const CreateCommentForm: React.FC<{ post: IPost }> = ({
           {/* Submit Button */}
           <button
             type="submit"
+            disabled={submitting}
             className="inline-flex justify-center rounded-full px-4 py-2 text-base text-white bg-primary-600 border border-transparent font-semibold shadow-sm hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
           >
-            Comment
+            {submitting ? "Posting..." : "Comment"}
           </button>
         </div>
       </form>
