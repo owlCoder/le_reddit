@@ -102,7 +102,7 @@ const SignUp: React.FC = () => {
           setErrorMessage("Entered credentials are incorrect.");
         }
       } else {
-        setErrorMessage("Entered email address is used by another used.");
+        setErrorMessage("Entered email address is used by another user.");
       }
     } else {
       // Show all errors
