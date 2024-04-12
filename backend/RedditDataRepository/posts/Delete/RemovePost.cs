@@ -1,4 +1,5 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
+using RedditDataRepository.blobs.images;
 using RedditDataRepository.classes.Posts;
 using System.Threading.Tasks;
 
@@ -31,6 +32,13 @@ namespace RedditDataRepository.posts.Delete
                 if (retrieveResult.Result != null)
                 {
                     Post post = (Post)retrieveResult.Result;
+
+                    // If post has image delete it from blob storage
+                    if (post.HasImage)
+                    {
+                        await AzureBlobStorage.RemoveFileFromBlobStorage(post.ImageBlobUrl); 
+                    }
+
                     TableOperation deleteOperation = TableOperation.Delete(post);
                     TableResult deleteResult = await table.ExecuteAsync(deleteOperation);
                     return deleteResult.HttpStatusCode == 204;
