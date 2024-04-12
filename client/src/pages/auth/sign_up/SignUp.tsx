@@ -10,7 +10,7 @@
  */
 import React, { useEffect, useState } from "react";
 import IUser from "../../../interfaces/auth/sign_up/IUser";
-import defaultUser from "../../../samples/auth/sign_up/SignUp";
+import defaultUser from "../../../samples/auth/sign_up/signup";
 import { ValidateSignupData } from "../../../validators/auth/sign_up/validate_signup";
 import Navbar from "../../../components/navbar/Navbar";
 import SignUpService from "../../../services/auth/sign_up/SignUpService";
