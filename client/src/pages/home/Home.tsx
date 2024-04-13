@@ -6,13 +6,14 @@ import GetPostsService from "../../services/post/read/ReadPostsService";
 
 const Home: React.FC = () => {
   const [posts, setPosts] = useState<IPost[]>([]);
+  const [id, setId] = useState('0');
 
   useEffect(() => {
     const fetch = async () => {
-      const response: IPost[] | null = await GetPostsService("");
-
+      const response: IPost[] | null = await GetPostsService(id);
       if (response) {
         setPosts(response);
+        setId(response[response.length - 1].Id)
       }
     };
 

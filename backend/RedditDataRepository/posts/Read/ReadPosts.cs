@@ -11,7 +11,7 @@ namespace RedditDataRepository.posts.Read
         public static async Task<List<Post>> Execute(CloudTable table, string postId)
         {
             TableQuery<Post> query;
-            if (postId == null || postId.Equals(""))
+            if (postId.Equals("0"))
             {
                 query = new TableQuery<Post>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "Post")).Take(1);
             }
