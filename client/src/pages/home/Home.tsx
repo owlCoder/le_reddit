@@ -9,7 +9,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      const response: IPost[] | null = await GetPostsService();
+      const response: IPost[] | null = await GetPostsService("");
 
       if (response) {
         setPosts(response);

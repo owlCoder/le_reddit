@@ -240,6 +240,20 @@ namespace RedditServiceWorker.Controllers
             return Ok(results.ToList());
         }
 
+        [HttpGet]
+        [Route("{postId}/pagination")]
+        public async Task<IHttpActionResult> Pagination(string postId)
+        {
+            try
+            {
+                return Ok(await ReadPosts.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId));
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
+
         #endregion
     }
 }
