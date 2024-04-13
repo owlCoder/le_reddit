@@ -25,7 +25,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     const loadMorePosts = async () => {
       const newPosts: IPost[] | null = await GetPostsService(id);
-      if (newPosts) {
+      if (newPosts && newPosts.length > 0) {
         setPosts(prevPosts => [...prevPosts, ...newPosts]);
         setId(newPosts[newPosts.length - 1].Id);
       }
