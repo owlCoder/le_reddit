@@ -2,6 +2,7 @@
 using RedditDataRepository.classes.Posts;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 
 
 namespace RedditDataRepository.posts.Read
@@ -13,28 +14,23 @@ namespace RedditDataRepository.posts.Read
             TableQuery<Post> query;
             if (postId.Equals("0"))
             {
-                query = new TableQuery<Post>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "Post")).Take(1);
+                query = new TableQuery<Post>().Where(TableQuery.GenerateFilterCondition
+                ("PartitionKey", QueryComparisons.Equal, "Post"));
             }
             else
             {
                 query = new TableQuery<Post>().Where(TableQuery.CombineFilters(
                 TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "Post"),
                 TableOperators.And,
-                TableQuery.GenerateFilterCondition("Id", QueryComparisons.GreaterThan, postId))
-                ).Take(1);
+                TableQuery.GenerateFilterCondition("Id", QueryComparisons.LessThan, postId))
+                );
             }
             
             var posts = new List<Post>();
-            //TableContinuationToken continuationToken = null;
+            var queryResult = await table.ExecuteQuerySegmentedAsync(query, null);
+            posts.AddRange(queryResult.Results);
 
-            //do
-            //{
-                var queryResult = await table.ExecuteQuerySegmentedAsync(query, null);
-                posts.AddRange(queryResult.Results);
-            //    continuationToken = queryResult.ContinuationToken;
-            //} while (continuationToken != null);
-
-            return posts;
+            return posts.OrderByDescending(post => post.Timestamp).Take(1).ToList();
         }
     }
 }
