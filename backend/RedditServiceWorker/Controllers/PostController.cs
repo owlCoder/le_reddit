@@ -224,29 +224,25 @@ namespace RedditServiceWorker.Controllers
         }
         #endregion
 
-        #region GET ALL POSTS (TODO: DO PAGINATION!!!!)
-        [HttpGet]
-        [Route("all")]
-        public async Task<IHttpActionResult> All()
-        {
-            // ovo je samo implementacija da testiram frontend, treba uraditi od 0 kao i za ove gore
-            // posebni fajlovi i lepo read iz storage itd
-            // @danijel
-            // Create a TableQuery object to retrieve all comments for the specified post ID
-            var results = from g in AzureTableStorageCloudAccount.GetCloudTable("posts").CreateQuery<Post>()
-                          where g.PartitionKey == "Post"
-                          select g;
-
-            return Ok(results.ToList());
-        }
-
+        #region GET POSTS
+        
         [HttpGet]
         [Route("{postId}/pagination")]
         public async Task<IHttpActionResult> Pagination(string postId)
         {
             try
             {
-                return Ok(await ReadPosts.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId));
+                int remaining = 1;
+                List<Post> posts = new List<Post>();
+                
+                while(remaining > 0)
+                {
+                    var currentPosts = await ReadPosts.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId);
+                    posts.AddRange(currentPosts);
+                    remaining -= currentPosts.Count();
+                }
+
+                return Ok(posts);
             }
             catch (Exception e)
             {
