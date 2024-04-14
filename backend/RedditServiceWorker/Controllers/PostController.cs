@@ -237,7 +237,7 @@ namespace RedditServiceWorker.Controllers
                 
                 while(remaining > 0)
                 {
-                    var currentPosts = await ReadPosts.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId);
+                    var currentPosts = await ReadPosts.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId, remaining);
                     posts.AddRange(currentPosts);
                     remaining -= currentPosts.Count();
                 }

@@ -9,7 +9,7 @@ namespace RedditDataRepository.posts.Read
 {
     public class ReadPosts
     {
-        public static async Task<List<Post>> Execute(CloudTable table, string postId)
+        public static async Task<List<Post>> Execute(CloudTable table, string postId, int remaining)
         {
             TableQuery<Post> query;
             if (postId.Equals("0"))
@@ -30,7 +30,7 @@ namespace RedditDataRepository.posts.Read
             var queryResult = await table.ExecuteQuerySegmentedAsync(query, null);
             posts.AddRange(queryResult.Results);
 
-            return posts.OrderByDescending(post => post.Timestamp).Take(1).ToList();
+            return posts.OrderByDescending(post => post.Timestamp).Take(remaining).ToList();
         }
     }
 }
