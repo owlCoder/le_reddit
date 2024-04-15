@@ -33,12 +33,15 @@ namespace RedditDataRepository.posts.Read
 
             if (!string.IsNullOrEmpty(searchKeywords))
             {
-                //string[] searchTerms = searchKeywords.ToLower().Split(' ');
+                string[] searchTerms = searchKeywords.ToLower().Split(' ');
                 foreach(Post p in allPosts)
                 {
-                    if(p.Title.ToLower().Equals(searchKeywords.ToLower()))
+                    foreach(string s in searchTerms)
                     {
-                        posts.Add(p);
+                        if (p.Title.ToLower().Equals(s))
+                        {
+                            posts.Add(p);
+                        }
                     }
                 }
             }
