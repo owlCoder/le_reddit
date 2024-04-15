@@ -27,12 +27,12 @@ namespace RedditDataRepository.posts.Read
             }
 
             List<Post> allPosts = new List<Post>();
-            List<Post> posts = new List<Post>();
             var queryResult = await table.ExecuteQuerySegmentedAsync(query, null);
             allPosts.AddRange(queryResult.Results);
 
-            if (!string.IsNullOrEmpty(searchKeywords))
+            if (!searchKeywords.Contains('~'))
             {
+                List<Post> posts = new List<Post>();
                 string[] searchTerms = searchKeywords.ToLower().Split(' ');
                 foreach(Post p in allPosts)
                 {
@@ -44,9 +44,11 @@ namespace RedditDataRepository.posts.Read
                         }
                     }
                 }
+
+                return posts.OrderByDescending(post => post.Timestamp).Take(remaining).ToList();
             }
 
-            return posts.OrderByDescending(post => post.Timestamp).Take(remaining).ToList();
+            return allPosts.OrderByDescending(allPost => allPost.Timestamp).Take(remaining).ToList();
         }
     }
 }
