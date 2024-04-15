@@ -110,6 +110,7 @@
     <Compile Include="classes\Comments\Comment.cs" />
     <Compile Include="classes\Posts\Post.cs" />
     <Compile Include="classes\Users\User.cs" />
+    <Compile Include="classes\Votes\Vote.cs" />
     <Compile Include="comments\Create\InsertComment.cs" />
     <Compile Include="comments\Delete\RemoveComment.cs" />
     <Compile Include="comments\Delete\RemoveComments.cs" />
@@ -128,10 +129,7 @@
     <Compile Include="users\Read\ReadUserProfilePicture.cs" />
     <Compile Include="users\Update\UpdateUser.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="downvotes\" />
-    <Folder Include="upvotes\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />

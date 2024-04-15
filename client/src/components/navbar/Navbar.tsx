@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import AccountInformation from "./AccountInformation";
 import SearchBar from "../search/SearchBar";
 import useAuth from "../../contexts/use_auth/UseAuth";
+import ISearchBarQueryProps from "../../interfaces/search/ISearchBarQuery";
 
-const Navbar: React.FC = () => {
+const Navbar: React.FC<ISearchBarQueryProps> = ({setQuery}) => {
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
 
@@ -34,7 +35,7 @@ const Navbar: React.FC = () => {
               placeholder="Search Le Reddit..."
               onSearch={(query) => {
                 // Handle search functionality
-                console.log("Search query:", query);
+                setQuery(query);
               }}
             />
             <div className="flex items-center gap-x-1">

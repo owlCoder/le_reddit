@@ -3,7 +3,7 @@ using RedditDataRepository.classes.Posts;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Text.RegularExpressions;
 
 namespace RedditDataRepository.posts.Read
 {
@@ -38,7 +38,8 @@ namespace RedditDataRepository.posts.Read
                 {
                     foreach(string s in searchTerms)
                     {
-                        if (p.Title.ToLower().Equals(s))
+                        string title = Regex.Replace(p.Title.ToLower(), @"\s+", "");
+                        if (title.Contains(s))
                         {
                             posts.Add(p);
                         }

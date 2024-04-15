@@ -3,16 +3,25 @@ import Navbar from "../../components/navbar/Navbar";
 import IPost from "../../interfaces/post/view/IPost";
 import PostPreview from "../../components/post/preview/PostPreview";
 import GetPostsService from "../../services/post/read/ReadPostsService";
+import ISearchBarQueryProps from "../../interfaces/search/ISearchBarQuery";
 
-const Home: React.FC = () => {
+const Home: React.FC<ISearchBarQueryProps> = ({query, setQuery}) => {
   const [posts, setPosts] = useState<IPost[]>([]);
   const [id, setId] = useState('0');
+  
 
   const lastPostRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetch = async () => {
-      const response: IPost[] | null = await GetPostsService(id, '~');
+      let response: IPost[] | null;
+      if(query === ""){
+        setQuery("~");
+        response = await GetPostsService(id, "~");
+      }
+      else{
+        response = await GetPostsService(id, query);
+      }
       if (response && response.length > 0) {
         setPosts(response);
         setId(response[response.length - 1].Id)
@@ -20,11 +29,19 @@ const Home: React.FC = () => {
     };
 
     fetch();
-  }, []);
+  }, [query]);
 
   useEffect(() => {
     const loadMorePosts = async () => {
-      const newPosts: IPost[] | null = await GetPostsService(id, '~');
+      let newPosts: IPost[] | null;
+      if(query === ""){
+        setQuery("~");
+        newPosts = await GetPostsService(id, "~");
+      }
+      else{
+        newPosts = await GetPostsService(id, query);
+      }
+      
       if (newPosts && newPosts.length > 0) {
         setPosts(prevPosts => [...prevPosts, ...newPosts]);
         setId(newPosts[newPosts.length - 1].Id);
@@ -57,7 +74,7 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar setQuery={setQuery} query={query}/>
       <br/>
       {/* all current posts  */}
       {posts.map((post: IPost, index: number) => (

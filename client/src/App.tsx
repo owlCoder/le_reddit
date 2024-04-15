@@ -6,18 +6,21 @@ import Profile from "./pages/profile/Profile";
 import Create from "./pages/post/create/Create";
 import Error404 from "./pages/errors/Error404";
 import Post from "./pages/post/view/Post";
+import { useState } from "react";
 
 function App() {
+  const [query, setQuery] = useState<string>('~');
+
   return (
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home query={query} setQuery={setQuery} />} />
           <Route path="/post/:id" element={<Post />} />
           <Route path="/create" element={<Create />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Register />} />
+          <Route path="/login" element={<Login query={query} setQuery={setQuery} />} />
+          <Route path="/signup" element={<Register query={query} setQuery={setQuery} />} />
 
           <Route path="*" element={<Error404 />} />
         </Routes>

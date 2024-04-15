@@ -22,8 +22,9 @@ import IToken from "../../../interfaces/auth/jwt/IToken";
 import { saveTokenToLocalstorage } from "../../../services/jwt/JWTTokenizationService";
 import { jwtDecode } from "jwt-decode";
 import LoadingSpinner from "../../../components/spinner/LoadingSpinner";
+import ISearchBarQueryProps from "../../../interfaces/search/ISearchBarQuery";
 
-const SignUp: React.FC = () => {
+const SignUp: React.FC <ISearchBarQueryProps>= ({query, setQuery}) => {
   // State variables to manage form data, image, and error messages
   const [formData, setFormData] = useState<IUser>(defaultUser);
   const [image, setImage] = useState<File | null>(null);
@@ -130,7 +131,7 @@ const SignUp: React.FC = () => {
         <LoadingSpinner />
       ) : (
         <>
-          <Navbar />
+          <Navbar query={query} setQuery={setQuery}/>
           <section className="relative flex flex-wrap lg:h-screen lg:items-center">
             <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
               <div className="mx-auto max-w-lg text-center">

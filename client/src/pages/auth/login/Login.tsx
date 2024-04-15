@@ -20,8 +20,9 @@ import IToken from "../../../interfaces/auth/jwt/IToken";
 import { saveTokenToLocalstorage } from "../../../services/jwt/JWTTokenizationService";
 import { jwtDecode } from "jwt-decode";
 import LoadingSpinner from "../../../components/spinner/LoadingSpinner";
+import ISearchBarQueryProps from "../../../interfaces/search/ISearchBarQuery";
 
-const Login: React.FC = () => {
+const Login: React.FC <ISearchBarQueryProps>= ({query, setQuery}) => {
   // State variables to manage form data and error messages
   const [formData, setFormData] = useState<ILogin>(defaultLogin);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -105,7 +106,7 @@ const Login: React.FC = () => {
         <LoadingSpinner />
       ) : (
         <>
-          <Navbar />
+          <Navbar query={query} setQuery={setQuery}/>
           <section className="relative flex flex-wrap lg:h-screen lg:items-center overflow-hidden ease-in-out duration-700">
             <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
               <div className="mx-auto max-w-lg text-center">
