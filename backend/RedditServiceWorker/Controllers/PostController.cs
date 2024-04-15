@@ -227,17 +227,22 @@ namespace RedditServiceWorker.Controllers
         #region GET POSTS
         
         [HttpGet]
-        [Route("{postId}/pagination")]
-        public async Task<IHttpActionResult> Pagination(string postId)
+        [Route("{postId}/{searchKeywords}/pagination")]
+        public async Task<IHttpActionResult> Pagination(string postId, string searchKeywords)
         {
             try
             {
                 int remaining = 1;
                 List<Post> posts = new List<Post>();
+                string search = searchKeywords;
                 
                 while(remaining > 0)
                 {
-                    var currentPosts = await ReadPosts.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId, remaining);
+                    var currentPosts = await ReadPosts.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId, remaining, search);
+                    if(currentPosts.Count == 0)
+                    {
+                        break;
+                    }
                     posts.AddRange(currentPosts);
                     remaining -= currentPosts.Count();
                 }

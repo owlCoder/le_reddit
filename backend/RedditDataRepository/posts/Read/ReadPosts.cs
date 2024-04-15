@@ -9,7 +9,7 @@ namespace RedditDataRepository.posts.Read
 {
     public class ReadPosts
     {
-        public static async Task<List<Post>> Execute(CloudTable table, string postId, int remaining)
+        public static async Task<List<Post>> Execute(CloudTable table, string postId, int remaining, string searchKeywords)
         {
             TableQuery<Post> query;
             if (postId.Equals("0"))
@@ -25,10 +25,23 @@ namespace RedditDataRepository.posts.Read
                 TableQuery.GenerateFilterCondition("Id", QueryComparisons.LessThan, postId))
                 );
             }
-            
-            var posts = new List<Post>();
+
+            List<Post> allPosts = new List<Post>();
+            List<Post> posts = new List<Post>();
             var queryResult = await table.ExecuteQuerySegmentedAsync(query, null);
-            posts.AddRange(queryResult.Results);
+            allPosts.AddRange(queryResult.Results);
+
+            if (!string.IsNullOrEmpty(searchKeywords))
+            {
+                //string[] searchTerms = searchKeywords.ToLower().Split(' ');
+                foreach(Post p in allPosts)
+                {
+                    if(p.Title.ToLower().Equals(searchKeywords.ToLower()))
+                    {
+                        posts.Add(p);
+                    }
+                }
+            }
 
             return posts.OrderByDescending(post => post.Timestamp).Take(remaining).ToList();
         }

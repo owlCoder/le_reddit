@@ -12,7 +12,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      const response: IPost[] | null = await GetPostsService(id);
+      const response: IPost[] | null = await GetPostsService(id, 'da');
       if (response) {
         setPosts(response);
         setId(response[response.length - 1].Id)
@@ -24,7 +24,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const loadMorePosts = async () => {
-      const newPosts: IPost[] | null = await GetPostsService(id);
+      const newPosts: IPost[] | null = await GetPostsService(id, 'da');
       if (newPosts && newPosts.length > 0) {
         setPosts(prevPosts => [...prevPosts, ...newPosts]);
         setId(newPosts[newPosts.length - 1].Id);
