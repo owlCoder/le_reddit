@@ -7,7 +7,7 @@ import ISearchBarQueryProps from "../../interfaces/search/ISearchBarQuery";
 
 const Home: React.FC<ISearchBarQueryProps> = ({query, setQuery}) => {
   const [posts, setPosts] = useState<IPost[]>([]);
-  const [id, setId] = useState('0');
+  const [id, setId] = useState("0");
   
 
   const lastPostRef = useRef<HTMLDivElement>(null);
@@ -17,10 +17,10 @@ const Home: React.FC<ISearchBarQueryProps> = ({query, setQuery}) => {
       let response: IPost[] | null;
       if(query === ""){
         setQuery("~");
-        response = await GetPostsService(id, "~");
+        response = await GetPostsService("0", "~");
       }
       else{
-        response = await GetPostsService(id, query);
+        response = await GetPostsService("0", query);
       }
       if (response && response.length > 0) {
         setPosts(response);
