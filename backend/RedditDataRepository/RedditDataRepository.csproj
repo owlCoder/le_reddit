@@ -114,6 +114,7 @@
     <Compile Include="comments\Create\InsertComment.cs" />
     <Compile Include="comments\Delete\RemoveComment.cs" />
     <Compile Include="comments\Delete\RemoveComments.cs" />
+    <Compile Include="comments\Read\CountComments.cs" />
     <Compile Include="comments\Read\ReadCommentAuthor.cs" />
     <Compile Include="comments\Read\ReadComments.cs" />
     <Compile Include="posts\Create\InsertPost.cs" />

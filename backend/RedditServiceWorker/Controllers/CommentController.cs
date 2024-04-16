@@ -3,6 +3,7 @@ using Common.cloud.account;
 using RedditDataRepository.classes.Comments;
 using RedditDataRepository.comments.Create;
 using RedditDataRepository.comments.Delete;
+using RedditDataRepository.comments.Read;
 using RedditDataRepository.Comments.Read;
 using RedditServiceWorker.Models.comment;
 using System;
@@ -95,6 +96,25 @@ namespace RedditServiceWorker.Controllers
                 return InternalServerError(e);
             }
         }
+        #endregion
+
+        #region COUNT
+
+        [HttpGet]
+        [Route("count/{postId}")]
+        public async Task<IHttpActionResult> CountCommentsOnPost(string postId)
+        {
+            try
+            {
+                var result = await CountComments.Execute(AzureTableStorageCloudAccount.GetCloudTable("comments"), postId);
+                return Ok(result.Count);
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
+
         #endregion
     }
 }

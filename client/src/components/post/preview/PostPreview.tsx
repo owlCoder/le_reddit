@@ -14,11 +14,13 @@ import PostStats from "../stats/PostStats";
 import GetProfilePictureByEmailService from "../../../services/users/profile/GetProfilePictureService";
 import useAuth from "../../../contexts/use_auth/UseAuth";
 import { useNavigate } from "react-router-dom";
+import ReadNumberOfCommentsByPostId from "../../../services/post/read/ReadNumberOfCommentsByPostId";
 
 const PostPreview: React.FC<{ post: IPost }> = ({
   post: { Id, Author, Title, Content, HasImage, ImageBlobUrl },
 }) => {
   const [authorImage, setAuthorImage] = useState<string>("");
+  const [comments, setComments] = useState<number>(0);
   const { email } = useAuth();
   const navigate = useNavigate();
 
@@ -27,11 +29,23 @@ const PostPreview: React.FC<{ post: IPost }> = ({
       // fetch profile picture
       const picture: string = await GetProfilePictureByEmailService(Author);
       setAuthorImage(picture);
+      const commentNum: number = await ReadNumberOfCommentsByPostId(Id);
+      setComments(commentNum);
     };
 
     fetch();
   }, [Author, email]);
   useEffect(() => {}, []);
+
+  useEffect(() => {
+    const fetch = async () => {
+      // fetch comment number
+      const commentNum: number = await ReadNumberOfCommentsByPostId(Id);
+      setComments(commentNum);
+    };
+
+    fetch();
+  }, [Id, Title]);
 
   return (
     <>
@@ -82,7 +96,7 @@ const PostPreview: React.FC<{ post: IPost }> = ({
       </div>
       {/* Upvote, downvote comments count */}
       <div className="ml-4">
-      <PostStats upvotesDownvotesCount={100} numberOfComments={0} />
+      <PostStats upvotesDownvotesCount={100} numberOfComments={comments} />
       </div>
 
       <br />
