@@ -1,10 +1,8 @@
 ﻿using Common.cloud.account;
+using RedditDataRepository.classes.Votes;
 using RedditDataRepository.votes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 
 namespace RedditServiceWorker.Controllers
@@ -45,14 +43,60 @@ namespace RedditServiceWorker.Controllers
         [Route("upvote/{postId}/{userId}")]
         public async Task<IHttpActionResult> UpvotePost(string postId, string userId)
         {
+            try
+            {
+                // Create a new Vote object
+                Vote vote = new Vote(userId, postId, true);
 
+                // Insert the comment into the Azure table
+                bool insert_result = await Upvote.Execute(AzureTableStorageCloudAccount.GetCloudTable("votes"), vote);
+
+                if (insert_result)
+                {
+                    // Comment was successfully added to the table
+                    return Ok(); // Return 200 OK
+                }
+                else
+                {
+                    // Return 400 Bad Request with an error message
+                    return BadRequest("Vote failed");
+                }
+            }
+            catch (Exception e)
+            {
+                // Return 500 Internal Server Error with the exception details
+                return InternalServerError(e);
+            }
         }
 
         [HttpPost]
         [Route("downvote/{postId}/{userId}")]
         public async Task<IHttpActionResult> DownvotePost(string postId, string userId)
         {
+            try
+            {
+                // Create a new Vote object
+                Vote vote = new Vote(userId, postId, false);
 
+                // Insert the comment into the Azure table
+                bool insert_result = await Downvote.Execute(AzureTableStorageCloudAccount.GetCloudTable("votes"), vote);
+
+                if (insert_result)
+                {
+                    // Comment was successfully added to the table
+                    return Ok(); // Return 200 OK
+                }
+                else
+                {
+                    // Return 400 Bad Request with an error message
+                    return BadRequest("Vote failed");
+                }
+            }
+            catch (Exception e)
+            {
+                // Return 500 Internal Server Error with the exception details
+                return InternalServerError(e);
+            }
         }
     }
 }
