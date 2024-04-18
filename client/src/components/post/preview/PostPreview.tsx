@@ -27,6 +27,9 @@ const PostPreview: React.FC<{ post: IPost }> = ({
   const [isDownvoted, setIsDownvoted] = useState<boolean>(false);
 
   const handleUpvote = async () => {
+    if(!email){
+      return;
+    }
     if(isUpvoted){
       setIsUpvoted(false);
     }
@@ -39,6 +42,9 @@ const PostPreview: React.FC<{ post: IPost }> = ({
   };
 
   const handleDownvote = async () => {
+    if(!email){
+      return;
+    }
     if(isDownvoted){
       setIsDownvoted(false);
     }

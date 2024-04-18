@@ -3,7 +3,7 @@ using RedditDataRepository.classes.Votes;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RedditDataRepository.votes
+namespace RedditDataRepository.votes.Read
 {
     public class VoteExists
     {

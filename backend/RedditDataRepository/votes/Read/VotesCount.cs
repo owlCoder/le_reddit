@@ -3,7 +3,7 @@ using RedditDataRepository.classes.Votes;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace RedditDataRepository.votes
+namespace RedditDataRepository.votes.Read
 {
     public class VotesCount
     {

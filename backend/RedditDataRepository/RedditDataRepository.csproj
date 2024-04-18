@@ -129,10 +129,10 @@
     <Compile Include="users\Read\ReadUser.cs" />
     <Compile Include="users\Read\ReadUserProfilePicture.cs" />
     <Compile Include="users\Update\UpdateUser.cs" />
-    <Compile Include="votes\Downvote.cs" />
-    <Compile Include="votes\Upvote.cs" />
-    <Compile Include="votes\VoteExists.cs" />
-    <Compile Include="votes\VotesCount.cs" />
+    <Compile Include="votes\Create\Downvote.cs" />
+    <Compile Include="votes\Create\Upvote.cs" />
+    <Compile Include="votes\Read\VoteExists.cs" />
+    <Compile Include="votes\Read\VotesCount.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

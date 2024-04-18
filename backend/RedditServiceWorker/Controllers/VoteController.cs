@@ -1,6 +1,8 @@
 ﻿using Common.cloud.account;
 using RedditDataRepository.classes.Votes;
 using RedditDataRepository.votes;
+using RedditDataRepository.votes.Create;
+using RedditDataRepository.votes.Read;
 using System;
 using System.Threading.Tasks;
 using System.Web.Http;

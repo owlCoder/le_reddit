@@ -1,8 +1,9 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using RedditDataRepository.classes.Votes;
+using RedditDataRepository.votes.Read;
 using System.Threading.Tasks;
 
-namespace RedditDataRepository.votes
+namespace RedditDataRepository.votes.Create
 {
     public class Upvote
     {
