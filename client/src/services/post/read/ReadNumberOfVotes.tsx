@@ -1,12 +1,12 @@
 import axios, { AxiosResponse } from "axios";
 import { API_ENDPOINT } from "../../../App";
 
-const ReadNumberOfCommentsByPostId = async (
+const ReadNumberOfVotes = async (
   id: string
 ): Promise<number> => {
   try {
     const response: AxiosResponse = await axios.get(
-      API_ENDPOINT + `comment/count/${id}`
+      API_ENDPOINT + `vote/countVotes/${id}`
     );
 
     if (response.status === 200 || response.status === 204) {
@@ -19,4 +19,4 @@ const ReadNumberOfCommentsByPostId = async (
   }
 };
 
-export default ReadNumberOfCommentsByPostId;
+export default ReadNumberOfVotes;

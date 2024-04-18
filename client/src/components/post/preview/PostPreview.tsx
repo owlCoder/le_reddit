@@ -15,6 +15,7 @@ import GetProfilePictureByEmailService from "../../../services/users/profile/Get
 import useAuth from "../../../contexts/use_auth/UseAuth";
 import { useNavigate } from "react-router-dom";
 import ReadNumberOfCommentsByPostId from "../../../services/post/read/ReadNumberOfCommentsByPostId";
+import ReadNumberOfVotes from "../../../services/post/read/ReadNumberOfVotes";
 
 const PostPreview: React.FC<{ post: IPost }> = ({
   post: { Id, Author, Title, Content, HasImage, ImageBlobUrl },
@@ -25,6 +26,7 @@ const PostPreview: React.FC<{ post: IPost }> = ({
   const navigate = useNavigate();
   const [isUpvoted, setIsUpvoted] = useState<boolean>(false);
   const [isDownvoted, setIsDownvoted] = useState<boolean>(false);
+  const [voteCount, setVoteCount] = useState<number>(0);
 
   const handleUpvote = async () => {
     if(!email){
@@ -61,8 +63,6 @@ const PostPreview: React.FC<{ post: IPost }> = ({
       // fetch profile picture
       const picture: string = await GetProfilePictureByEmailService(Author);
       setAuthorImage(picture);
-      const commentNum: number = await ReadNumberOfCommentsByPostId(Id);
-      setComments(commentNum);
     };
 
     fetch();
@@ -74,6 +74,8 @@ const PostPreview: React.FC<{ post: IPost }> = ({
       // fetch comment number
       const commentNum: number = await ReadNumberOfCommentsByPostId(Id);
       setComments(commentNum);
+      const votes: number = await ReadNumberOfVotes(Id);
+      setVoteCount(votes);
     };
 
     fetch();
@@ -128,7 +130,7 @@ const PostPreview: React.FC<{ post: IPost }> = ({
       </div>
       {/* Upvote, downvote comments count */}
       <div className="ml-4">
-      <PostStats upvotesDownvotesCount={100} numberOfComments={comments} 
+      <PostStats upvotesDownvotesCount={voteCount} numberOfComments={comments} 
       onUpvote={handleUpvote}
       onDownvote={handleDownvote}
       isUpvoted={isUpvoted}
