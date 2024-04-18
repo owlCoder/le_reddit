@@ -34,8 +34,15 @@ const PostPreview: React.FC<{ post: IPost }> = ({
     }
     if(isUpvoted){
       setIsUpvoted(false);
+      setVoteCount(voteCount-1);
     }
     else{
+      if(isDownvoted){
+        setVoteCount(voteCount+2);
+      }
+      else{
+        setVoteCount(voteCount+1);
+      }
       setIsUpvoted(true);
       setIsDownvoted(false);
     }
@@ -49,8 +56,15 @@ const PostPreview: React.FC<{ post: IPost }> = ({
     }
     if(isDownvoted){
       setIsDownvoted(false);
+      setVoteCount(voteCount+1);
     }
     else{
+      if(isUpvoted){
+        setVoteCount(voteCount-2);
+      }
+      else{
+        setVoteCount(voteCount-1);
+      }
       setIsDownvoted(true);
       setIsUpvoted(false);
     }
