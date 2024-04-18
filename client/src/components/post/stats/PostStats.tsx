@@ -13,7 +13,7 @@ const PostStats: React.FC<IPostStatsProps & { onUpvote: () => void; onDownvote: 
     <div className="flex items-center space-x-4 mt-4 -mb-4">
       {/* Upvote Button */}
       <button  className={`flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 text-gray-500 ${
-          isUpvoted ? 'text-orange-500 bg-yellow-200' : 'hover:text-orange-500 hover:bg-gray-300'
+          isUpvoted ? 'text-orange-500 bg-primary-200' : 'hover:text-orange-500 hover:bg-gray-300'
         } focus:outline-none`}
         onClick={onUpvote}>
         <svg

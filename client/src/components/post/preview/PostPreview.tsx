@@ -16,6 +16,8 @@ import useAuth from "../../../contexts/use_auth/UseAuth";
 import { useNavigate } from "react-router-dom";
 import ReadNumberOfCommentsByPostId from "../../../services/post/read/ReadNumberOfCommentsByPostId";
 import ReadNumberOfVotes from "../../../services/post/read/ReadNumberOfVotes";
+import Upvote from "../../../services/post/create/Upvote";
+import Downvote from "../../../services/post/create/Downvote";
 
 const PostPreview: React.FC<{ post: IPost }> = ({
   post: { Id, Author, Title, Content, HasImage, ImageBlobUrl },
@@ -32,44 +34,51 @@ const PostPreview: React.FC<{ post: IPost }> = ({
     if(!email){
       return;
     }
-    if(isUpvoted){
-      setIsUpvoted(false);
-      setVoteCount(voteCount-1);
-    }
-    else{
-      if(isDownvoted){
-        setVoteCount(voteCount+2);
+
+    const voted = await Upvote(Id, email);
+
+    if(voted){
+      if(isUpvoted){
+        setIsUpvoted(false);
+        setVoteCount(voteCount-1);
       }
       else{
-        setVoteCount(voteCount+1);
+        if(isDownvoted){
+          setVoteCount(voteCount+2);
+        }
+        else{
+          setVoteCount(voteCount+1);
+        }
+        setIsUpvoted(true);
+        setIsDownvoted(false);
       }
-      setIsUpvoted(true);
-      setIsDownvoted(false);
     }
-
-    //await upvoteFunction(); // ovde da pozovem bcknd funkciju
+    
   };
 
   const handleDownvote = async () => {
     if(!email){
       return;
     }
-    if(isDownvoted){
-      setIsDownvoted(false);
-      setVoteCount(voteCount+1);
-    }
-    else{
-      if(isUpvoted){
-        setVoteCount(voteCount-2);
+
+    const voted = await Downvote(Id, email);
+
+    if(voted){
+      if(isDownvoted){
+        setIsDownvoted(false);
+        setVoteCount(voteCount+1);
       }
       else{
-        setVoteCount(voteCount-1);
+        if(isUpvoted){
+          setVoteCount(voteCount-2);
+        }
+        else{
+          setVoteCount(voteCount-1);
+        }
+        setIsDownvoted(true);
+        setIsUpvoted(false);
       }
-      setIsDownvoted(true);
-      setIsUpvoted(false);
     }
-
-    //await df() // isto pozivam back
   };
 
   useEffect(() => {
