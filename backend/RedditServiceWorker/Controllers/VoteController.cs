@@ -41,6 +41,7 @@ namespace RedditServiceWorker.Controllers
 
         [HttpPost]
         [Route("upvote/{postId}/{userId}")]
+        [JwtAuthenticationFilter]
         public async Task<IHttpActionResult> UpvotePost(string postId, string userId)
         {
             try
@@ -71,6 +72,7 @@ namespace RedditServiceWorker.Controllers
 
         [HttpPost]
         [Route("downvote/{postId}/{userId}")]
+        [JwtAuthenticationFilter]
         public async Task<IHttpActionResult> DownvotePost(string postId, string userId)
         {
             try

@@ -1,14 +1,21 @@
 import React from "react";
 import IPostStatsProps from "../../../interfaces/post/stats/IPostStatsProp";
 
-const PostStats: React.FC<IPostStatsProps> = ({
+const PostStats: React.FC<IPostStatsProps & { onUpvote: () => void; onDownvote: () => void; isUpvoted: boolean; isDownvoted: boolean }> = ({
   upvotesDownvotesCount,
   numberOfComments,
+  onUpvote,
+  onDownvote,
+  isUpvoted, 
+  isDownvoted,
 }) => {
   return (
     <div className="flex items-center space-x-4 mt-4 -mb-4">
       {/* Upvote Button */}
-      <button className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 text-gray-500 hover:text-red-500 hover:bg-gray-300 focus:outline-none">
+      <button  className={`flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 text-gray-500 ${
+          isUpvoted ? 'text-orange-500 bg-yellow-200' : 'hover:text-orange-500 hover:bg-gray-300'
+        } focus:outline-none`}
+        onClick={onUpvote}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-4 w-4"
@@ -27,7 +34,10 @@ const PostStats: React.FC<IPostStatsProps> = ({
         {upvotesDownvotesCount}
       </span>
       {/* Downvote Button */}
-      <button className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 text-gray-500 hover:text-blue-500 hover:bg-gray-300 focus:outline-none">
+      <button className={`flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 text-gray-500 ${
+          isDownvoted ? 'text-blue-500 bg-blue-200' : 'hover:text-blue-500 hover:bg-gray-300'
+        } focus:outline-none`}
+        onClick={onDownvote}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-4 w-4"

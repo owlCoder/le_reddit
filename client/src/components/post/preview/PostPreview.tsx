@@ -23,6 +23,32 @@ const PostPreview: React.FC<{ post: IPost }> = ({
   const [comments, setComments] = useState<number>(0);
   const { email } = useAuth();
   const navigate = useNavigate();
+  const [isUpvoted, setIsUpvoted] = useState<boolean>(false);
+  const [isDownvoted, setIsDownvoted] = useState<boolean>(false);
+
+  const handleUpvote = async () => {
+    if(isUpvoted){
+      setIsUpvoted(false);
+    }
+    else{
+      setIsUpvoted(true);
+      setIsDownvoted(false);
+    }
+
+    //await upvoteFunction(); // ovde da pozovem bcknd funkciju
+  };
+
+  const handleDownvote = async () => {
+    if(isDownvoted){
+      setIsDownvoted(false);
+    }
+    else{
+      setIsDownvoted(true);
+      setIsUpvoted(false);
+    }
+
+    //await df() // isto pozivam back
+  };
 
   useEffect(() => {
     const fetch = async () => {
@@ -96,7 +122,12 @@ const PostPreview: React.FC<{ post: IPost }> = ({
       </div>
       {/* Upvote, downvote comments count */}
       <div className="ml-4">
-      <PostStats upvotesDownvotesCount={100} numberOfComments={comments} />
+      <PostStats upvotesDownvotesCount={100} numberOfComments={comments} 
+      onUpvote={handleUpvote}
+      onDownvote={handleDownvote}
+      isUpvoted={isUpvoted}
+      isDownvoted={isDownvoted}
+      />
       </div>
 
       <br />
