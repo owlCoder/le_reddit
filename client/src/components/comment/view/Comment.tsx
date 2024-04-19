@@ -46,7 +46,7 @@ const Comment: React.FC<{ comment: IComment, PopUp: IPopUpProp }> = ({
       "Are you sure that you want to delete a comment?",
       "text-black",
       "text-white",
-      "bg-red",
+      "bg-red-600/80",
       () => {
         DeleteComment();
       }

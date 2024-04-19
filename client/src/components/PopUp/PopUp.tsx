@@ -24,11 +24,11 @@ const Popup: React.FC<{ popup: IPopUp }> = ({
                 {title}
               </h2>
               <p className={`mt-4 text-md`}>{description}</p>
-              <div className="mt-12 flex gap-2">
+              <div className="mt-12 flex gap-4 justify-center">
                 <button
                   onClick={onConfirm}
                   type="button"
-                  className={`rounded-full ${buttonConfirmBackground}-500 hover:${buttonConfirmBackground}-400 px-4 py-2 text-sm font-medium ${buttonConfirmColor}`}
+                  className={`rounded-full ${buttonConfirmBackground} hover:bg-gray-400/80 px-4 py-2 text-sm font-medium ${buttonConfirmColor}`}
                 >
                   Yes, I'm sure
                 </button>
