@@ -10,18 +10,18 @@ namespace RedditDataRepository.classes.Votes
 
         public string PostId { get; set; }
 
-        public string UserId { get; set; }
+        public string Email { get; set; }
 
         public bool Voted { get; set; }
 
         public Vote() { }
 
-        public Vote(string userId, string postId, bool voted)
+        public Vote(string email, string postId, bool voted)
         {
             Id = Guid.NewGuid().ToString();
             PartitionKey = "Vote";
             RowKey = Id;
-            UserId = userId;
+            Email = email;
             PostId = postId;
             Voted = voted;
         }

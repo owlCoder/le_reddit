@@ -7,11 +7,11 @@ namespace RedditDataRepository.votes.Read
 {
     public class VoteExists
     {
-        public static async Task<Vote> DoesVoteExist(CloudTable table, string postId, string userId)
+        public static async Task<Vote> DoesVoteExist(CloudTable table, string postId, string email)
         {
             string partitionFilter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "Vote");
             string postIdFilter = TableQuery.GenerateFilterCondition("PostId", QueryComparisons.Equal, postId);
-            string userIdFilter = TableQuery.GenerateFilterCondition("UserId", QueryComparisons.Equal, userId);
+            string userIdFilter = TableQuery.GenerateFilterCondition("Email", QueryComparisons.Equal, email);
 
             string combinedFilter = TableQuery.CombineFilters(partitionFilter, TableOperators.And, postIdFilter);
             combinedFilter = TableQuery.CombineFilters(combinedFilter, TableOperators.And, userIdFilter);

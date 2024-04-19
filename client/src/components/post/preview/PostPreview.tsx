@@ -62,7 +62,7 @@ const PostPreview: React.FC<{ post: IPost }> = ({
       return;
     }
 
-    const voted = await Downvote(Id, email);
+    const voted = await Downvote(Id, email, token?.token ?? "");
 
     if(voted){
       if(isDownvoted){

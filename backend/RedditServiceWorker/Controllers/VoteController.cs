@@ -5,6 +5,7 @@ using RedditDataRepository.votes.Create;
 using RedditDataRepository.votes.Read;
 using System;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 
 namespace RedditServiceWorker.Controllers
@@ -42,13 +43,13 @@ namespace RedditServiceWorker.Controllers
         }
 
         [HttpGet]
-        [Route("upvote/{postId}/{email}")]
+        [Route("upvote/{postId}/{encodedEmail}")]
         [JwtAuthenticationFilter]
-        public async Task<IHttpActionResult> UpvotePost(string postId, string email)
+        public async Task<IHttpActionResult> UpvotePost(string postId, string encodedEmail)
         {
             try
             {
-
+                string email = HttpUtility.UrlDecode(encodedEmail);
 
                 // Create a new Vote object
                 Vote vote = new Vote(email, postId, true);
@@ -74,15 +75,17 @@ namespace RedditServiceWorker.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("downvote/{postId}/{userId}")]
+        [HttpGet]
+        [Route("downvote/{postId}/{encodedEmail}")]
         [JwtAuthenticationFilter]
-        public async Task<IHttpActionResult> DownvotePost(string postId, string userId)
+        public async Task<IHttpActionResult> DownvotePost(string postId, string encodedEmail)
         {
             try
             {
+                string email = HttpUtility.UrlDecode(encodedEmail);
+
                 // Create a new Vote object
-                Vote vote = new Vote(userId, postId, false);
+                Vote vote = new Vote(email, postId, false);
 
                 // Insert the comment into the Azure table
                 bool insert_result = await Downvote.Execute(AzureTableStorageCloudAccount.GetCloudTable("votes"), vote);

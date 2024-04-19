@@ -14,15 +14,10 @@ namespace RedditDataRepository.votes.Create
 
             try
             {
-                Vote v = await VoteExists.DoesVoteExist(table, vote.PostId, vote.UserId);
+                Vote v = await VoteExists.DoesVoteExist(table, vote.PostId, vote.Email);
 
                 if (v == null || !v.Voted)
                 {
-                    if(v != null)
-                    {
-                        v.Voted = true;
-                    }
-                    
                     // Create a TableOperation object to insert or replace the entity
                     TableOperation insertOrReplaceOperation = TableOperation.InsertOrReplace(vote);
 
