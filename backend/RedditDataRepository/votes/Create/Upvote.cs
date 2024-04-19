@@ -29,7 +29,7 @@ namespace RedditDataRepository.votes.Create
                 }
                 else
                 {
-                    TableOperation delete = TableOperation.Delete(vote);
+                    TableOperation delete = TableOperation.Delete(v);
                     
                     TableResult result = await table.ExecuteAsync(delete);
                     

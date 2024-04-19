@@ -26,8 +26,8 @@ const PostPreview: React.FC<{ post: IPost }> = ({
   const [comments, setComments] = useState<number>(0);
   const { email } = useAuth();
   const navigate = useNavigate();
-  const [isUpvoted, setIsUpvoted] = useState<boolean>(false);
-  const [isDownvoted, setIsDownvoted] = useState<boolean>(false);
+  const [isUpvoted, setIsUpvoted] = useState<boolean>(localStorage.getItem(`post_${Id}_upvoted`) === "true");
+  const [isDownvoted, setIsDownvoted] = useState<boolean>(localStorage.getItem(`post_${Id}_downvoted`) === "true");
   const [voteCount, setVoteCount] = useState<number>(0);
   const {token} = useAuth();
 
@@ -42,6 +42,7 @@ const PostPreview: React.FC<{ post: IPost }> = ({
       if(isUpvoted){
         setIsUpvoted(false);
         setVoteCount(voteCount-1);
+        localStorage.removeItem(`post_${Id}_upvoted`);
       }
       else{
         if(isDownvoted){
@@ -52,6 +53,8 @@ const PostPreview: React.FC<{ post: IPost }> = ({
         }
         setIsUpvoted(true);
         setIsDownvoted(false);
+        localStorage.setItem(`post_${Id}_upvoted`, "true");
+        localStorage.removeItem(`post_${Id}_downvoted`);
       }
     }
     
@@ -68,6 +71,7 @@ const PostPreview: React.FC<{ post: IPost }> = ({
       if(isDownvoted){
         setIsDownvoted(false);
         setVoteCount(voteCount+1);
+        localStorage.removeItem(`post_${Id}_downvoted`);
       }
       else{
         if(isUpvoted){
@@ -78,6 +82,8 @@ const PostPreview: React.FC<{ post: IPost }> = ({
         }
         setIsDownvoted(true);
         setIsUpvoted(false);
+        localStorage.setItem(`post_${Id}_downvoted`, "true");
+        localStorage.removeItem(`post_${Id}_upvoted`);
       }
     }
   };
