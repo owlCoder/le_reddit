@@ -41,15 +41,17 @@ namespace RedditServiceWorker.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("upvote/{postId}/{userId}")]
+        [HttpGet]
+        [Route("upvote/{postId}/{email}")]
         [JwtAuthenticationFilter]
-        public async Task<IHttpActionResult> UpvotePost(string postId, string userId)
+        public async Task<IHttpActionResult> UpvotePost(string postId, string email)
         {
             try
             {
+
+
                 // Create a new Vote object
-                Vote vote = new Vote(userId, postId, true);
+                Vote vote = new Vote(email, postId, true);
 
                 // Insert the comment into the Azure table
                 bool insert_result = await Upvote.Execute(AzureTableStorageCloudAccount.GetCloudTable("votes"), vote);

@@ -23,6 +23,11 @@ namespace RedditServiceWorker
                 name: "ExtendedApi",
                 routeTemplate: "api/{controller}/{email}"
             );
+
+            config.Routes.MapHttpRoute(
+                name: "votesapi",
+                routeTemplate: "api/{controller}/upvote/{postId}/{email}"
+            );
         }
     }
 }
