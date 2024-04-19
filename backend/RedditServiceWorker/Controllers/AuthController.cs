@@ -58,9 +58,9 @@ namespace RedditServiceWorker.Controllers
                 return StatusCode(HttpStatusCode.UnsupportedMediaType);
             }
 
-            if (Directory.Exists("~/App_Data")
-{
-                Directory.Create("~/App_Data");
+            if (Directory.Exists("~/App_Data"))
+            {
+                Directory.CreateDirectory("~/App_Data");
             }
 
             // Store form data locally
