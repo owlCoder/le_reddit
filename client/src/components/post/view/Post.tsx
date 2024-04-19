@@ -28,6 +28,9 @@ import TrashButton from "../../button/TrashButton";
 import DeletePostService from "../../../services/post/delete/DeletePostService";
 import PostStats from "../stats/PostStats";
 import SubscribeButton from "../../button/SubscribeButton";
+import Upvote from "../../../services/post/create/Upvote";
+import Downvote from "../../../services/post/create/Downvote";
+import ReadNumberOfVotes from "../../../services/post/read/ReadNumberOfVotes";
 
 const Post: React.FC<IPostProp> = ({ postId }) => {
   const [authorImage, setAuthorImage] = useState<string>("/reddit.svg");
@@ -42,6 +45,11 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
   const [popupfunc, setpopupfunc] = useState<IPopUpProp>({
     SetUpPopup: () => {},
   });
+  const [voteStatus, setVoteStatus] = useState<string | null>(
+    localStorage.getItem(`post_${postId}_voteStatus`)
+  );
+  const [voteCount, setVoteCount] = useState<number>(0);
+
   const SetUpPopup = (
     title: string,
     description: string,
@@ -119,10 +127,54 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
       }
 
       setLoaded(true);
+
+      const votes: number = await ReadNumberOfVotes(postId);
+      setVoteCount(votes);
     };
 
     fetchData();
   }, [postId, token, isLoggedIn, navigate, open, email]);
+
+  const handleUpvote = async () => {
+    if(!email){
+      return;
+    }
+
+    const voted = await Upvote(postId, email, token?.token ?? "");
+
+    if (voted) {
+      if (voteStatus === "upvoted") {
+        setVoteStatus(null);
+        setVoteCount(voteCount - 1);
+        localStorage.removeItem(`post_${postId}_voteStatus`);
+      } else {
+        setVoteStatus("upvoted");
+        setVoteCount(voteCount + (voteStatus === "downvoted" ? 2 : 1));
+        localStorage.setItem(`post_${postId}_voteStatus`, "upvoted");
+      }
+    }
+    
+  };
+
+  const handleDownvote = async () => {
+    if(!email){
+      return;
+    }
+
+    const voted = await Downvote(postId, email, token?.token ?? "");
+
+    if(voted){
+      if (voteStatus === "downvoted") {
+        setVoteStatus(null);
+        setVoteCount(voteCount + 1);
+        localStorage.removeItem(`post_${postId}_voteStatus`);
+      } else {
+        setVoteStatus("downvoted");
+        setVoteCount(voteCount - (voteStatus === "upvoted" ? 2 : 1));
+        localStorage.setItem(`post_${postId}_voteStatus`, "downvoted");
+      }
+    }
+  };
 
   return (
     <>
@@ -164,9 +216,12 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
               </div>
               {/* upvote, downvore comments count */}
               <PostStats
-                upvotesDownvotesCount={100}
+                upvotesDownvotesCount={voteCount}
                 numberOfComments={post.Comments.length}
-              />
+                  onUpvote={handleUpvote}
+                  onDownvote={handleDownvote}
+                  isUpvoted={voteStatus === "upvoted"}
+                  isDownvoted={voteStatus === "downvoted"}            />
             </div>
              {/* Picture for post */}
              {post.HasImage && (
