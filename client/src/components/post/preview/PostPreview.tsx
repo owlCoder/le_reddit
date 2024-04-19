@@ -26,10 +26,11 @@ const PostPreview: React.FC<{ post: IPost }> = ({
   const [comments, setComments] = useState<number>(0);
   const { email } = useAuth();
   const navigate = useNavigate();
-  const [isUpvoted, setIsUpvoted] = useState<boolean>(localStorage.getItem(`post_${Id}_upvoted`) === "true");
-  const [isDownvoted, setIsDownvoted] = useState<boolean>(localStorage.getItem(`post_${Id}_downvoted`) === "true");
   const [voteCount, setVoteCount] = useState<number>(0);
   const {token} = useAuth();
+  const [voteStatus, setVoteStatus] = useState<string | null>(
+    localStorage.getItem(`post_${Id}_voteStatus`)
+  );
 
   const handleUpvote = async () => {
     if(!email){
@@ -38,23 +39,15 @@ const PostPreview: React.FC<{ post: IPost }> = ({
 
     const voted = await Upvote(Id, email, token?.token ?? "");
 
-    if(voted){
-      if(isUpvoted){
-        setIsUpvoted(false);
-        setVoteCount(voteCount-1);
-        localStorage.removeItem(`post_${Id}_upvoted`);
-      }
-      else{
-        if(isDownvoted){
-          setVoteCount(voteCount+2);
-        }
-        else{
-          setVoteCount(voteCount+1);
-        }
-        setIsUpvoted(true);
-        setIsDownvoted(false);
-        localStorage.setItem(`post_${Id}_upvoted`, "true");
-        localStorage.removeItem(`post_${Id}_downvoted`);
+    if (voted) {
+      if (voteStatus === "upvoted") {
+        setVoteStatus(null);
+        setVoteCount(voteCount - 1);
+        localStorage.removeItem(`post_${Id}_voteStatus`);
+      } else {
+        setVoteStatus("upvoted");
+        setVoteCount(voteCount + (voteStatus === "downvoted" ? 2 : 1));
+        localStorage.setItem(`post_${Id}_voteStatus`, "upvoted");
       }
     }
     
@@ -68,22 +61,14 @@ const PostPreview: React.FC<{ post: IPost }> = ({
     const voted = await Downvote(Id, email, token?.token ?? "");
 
     if(voted){
-      if(isDownvoted){
-        setIsDownvoted(false);
-        setVoteCount(voteCount+1);
-        localStorage.removeItem(`post_${Id}_downvoted`);
-      }
-      else{
-        if(isUpvoted){
-          setVoteCount(voteCount-2);
-        }
-        else{
-          setVoteCount(voteCount-1);
-        }
-        setIsDownvoted(true);
-        setIsUpvoted(false);
-        localStorage.setItem(`post_${Id}_downvoted`, "true");
-        localStorage.removeItem(`post_${Id}_upvoted`);
+      if (voteStatus === "downvoted") {
+        setVoteStatus(null);
+        setVoteCount(voteCount + 1);
+        localStorage.removeItem(`post_${Id}_voteStatus`);
+      } else {
+        setVoteStatus("downvoted");
+        setVoteCount(voteCount - (voteStatus === "upvoted" ? 2 : 1));
+        localStorage.setItem(`post_${Id}_voteStatus`, "downvoted");
       }
     }
   };
@@ -110,6 +95,16 @@ const PostPreview: React.FC<{ post: IPost }> = ({
 
     fetch();
   }, [Id, Title]);
+
+  useEffect(() => {
+    setVoteStatus(localStorage.getItem(`post_${Id}_voteStatus`));
+  }, [Id, email]);
+
+  useEffect(() => {
+    if (!email) {
+      localStorage.removeItem(`post_${Id}_voteStatus`);
+    }
+  }, [email]);
 
   return (
     <>
@@ -163,8 +158,8 @@ const PostPreview: React.FC<{ post: IPost }> = ({
       <PostStats upvotesDownvotesCount={voteCount} numberOfComments={comments} 
       onUpvote={handleUpvote}
       onDownvote={handleDownvote}
-      isUpvoted={isUpvoted}
-      isDownvoted={isDownvoted}
+      isUpvoted={voteStatus === "upvoted"}
+      isDownvoted={voteStatus === "downvoted"}
       />
       </div>
 

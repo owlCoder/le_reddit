@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import IPostStatsProps from "../../../interfaces/post/stats/IPostStatsProp";
 
 const PostStats: React.FC<IPostStatsProps & { onUpvote: () => void; onDownvote: () => void; isUpvoted: boolean; isDownvoted: boolean }> = ({
@@ -9,6 +9,19 @@ const PostStats: React.FC<IPostStatsProps & { onUpvote: () => void; onDownvote: 
   isUpvoted, 
   isDownvoted,
 }) => {
+  useEffect(() => {
+    if (!isUpvoted || !isDownvoted) {
+      localStorage.removeItem('postVoteStatus');
+    }
+  }, [isUpvoted, isDownvoted]);
+
+  useEffect(() => {
+    const voteStatus = localStorage.getItem('postVoteStatus');
+    if (voteStatus) {
+      localStorage.removeItem('postVoteStatus');
+    }
+  }, []);
+
   return (
     <div className="flex items-center space-x-4 mt-4 -mb-4">
       {/* Upvote Button */}
@@ -35,7 +48,7 @@ const PostStats: React.FC<IPostStatsProps & { onUpvote: () => void; onDownvote: 
       </span>
       {/* Downvote Button */}
       <button className={`flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 text-gray-500 ${
-          isDownvoted ? 'text-blue-500 bg-blue-200' : 'hover:text-blue-500 hover:bg-gray-300'
+          isDownvoted ? 'text-blue-900 bg-blue-300' : 'hover:text-blue-500 hover:bg-gray-300'
         } focus:outline-none`}
         onClick={onDownvote}>
         <svg
