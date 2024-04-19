@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import IPost from "../../../interfaces/post/view/IPost";
 import {
   MDXEditor,
@@ -29,13 +29,14 @@ const PostPreview: React.FC<{ post: IPost }> = ({
   const [isUpvoted, setIsUpvoted] = useState<boolean>(false);
   const [isDownvoted, setIsDownvoted] = useState<boolean>(false);
   const [voteCount, setVoteCount] = useState<number>(0);
+  const {token} = useAuth();
 
   const handleUpvote = async () => {
     if(!email){
       return;
     }
 
-    const voted = await Upvote(Id, email);
+    const voted = await Upvote(Id, email, token?.token ?? "");
 
     if(voted){
       if(isUpvoted){
