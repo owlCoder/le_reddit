@@ -1,14 +1,22 @@
 import React, { useEffect } from "react";
 import IPostStatsProps from "../../../interfaces/post/stats/IPostStatsProp";
+import { useNavigate } from "react-router-dom";
 
-const PostStats: React.FC<IPostStatsProps & { onUpvote: () => void; onDownvote: () => void; isUpvoted: boolean; isDownvoted: boolean }> = ({
+const PostStats: React.FC<IPostStatsProps & { onUpvote: () => void; onDownvote: () => void; isUpvoted: boolean; isDownvoted: boolean; postId: string }> = ({
   upvotesDownvotesCount,
   numberOfComments,
   onUpvote,
   onDownvote,
   isUpvoted, 
   isDownvoted,
+  postId,
 }) => {
+  const navigate = useNavigate();
+
+  const redirectToPost = () => {
+    navigate(`/post/${postId}`);
+  };
+
   useEffect(() => {
     if (!isUpvoted || !isDownvoted) {
       localStorage.removeItem('postVoteStatus');
@@ -65,7 +73,7 @@ const PostStats: React.FC<IPostStatsProps & { onUpvote: () => void; onDownvote: 
         </svg>
       </button>
       {/* Comment Count */}
-      <div className="flex items-center bg-gray-200 rounded-full px-2 py-1 hover:bg-gray-200/70 hover:text-gray-600">
+      <div onClick={redirectToPost} className="flex items-center bg-gray-200 rounded-full px-2 py-1 hover:bg-gray-200/70 hover:text-gray-600 cursor-pointer">
         <svg
           className="text-gray-500 mr-2 h-5 w-5"
           viewBox="0 0 32 32"

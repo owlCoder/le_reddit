@@ -51,6 +51,7 @@ const AccountInformation: React.FC = () => {
     removeTokenFromLocalStorage();
     setToken(null);
     navigate("/");
+    location.reload();
   };
 
 

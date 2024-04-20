@@ -31,6 +31,7 @@ const PostPreview: React.FC<{ post: IPost }> = ({
   const [voteStatus, setVoteStatus] = useState<string | null>(
     localStorage.getItem(`post_${Id}_voteStatus`)
   );
+  
 
   const handleUpvote = async () => {
     if(!email){
@@ -160,6 +161,7 @@ const PostPreview: React.FC<{ post: IPost }> = ({
       onDownvote={handleDownvote}
       isUpvoted={voteStatus === "upvoted"}
       isDownvoted={voteStatus === "downvoted"}
+      postId={Id}
       />
       </div>
 
