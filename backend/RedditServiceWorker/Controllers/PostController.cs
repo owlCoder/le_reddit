@@ -227,18 +227,17 @@ namespace RedditServiceWorker.Controllers
         #region GET POSTS
         
         [HttpGet]
-        [Route("{postId}/{searchKeywords}/pagination")]
-        public async Task<IHttpActionResult> Pagination(string postId, string searchKeywords)
+        [Route("{postId}/{searchKeywords}/pagination/{sort}/{title}")]
+        public async Task<IHttpActionResult> Pagination(string postId, string searchKeywords, int sort, string title)
         {
             try
             {
                 int remaining = 1;
                 List<Post> posts = new List<Post>();
-                string search = searchKeywords;
                 
                 while(remaining > 0)
                 {
-                    var currentPosts = await ReadPosts.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId, remaining, search);
+                    var currentPosts = await ReadPosts.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId, remaining, searchKeywords, sort, title);
                     if(currentPosts.Count == 0)
                     {
                         break;
@@ -256,5 +255,48 @@ namespace RedditServiceWorker.Controllers
         }
 
         #endregion
+
+        /*#region GET USERS POSTS
+
+        [HttpGet]
+        [Route("{postId}/{searchKeywords}/{encodedEmail}/userPosts")]
+        public async Task<IHttpActionResult> UserPosts(string postId, string searchKeywords, string encodedEmail)
+        {
+            try
+            {
+                string email = HttpUtility.UrlDecode(encodedEmail);
+
+                int remaining = 1;
+                List<Post> posts = new List<Post>();
+                List<Post> userPosts = new List<Post>();
+
+                while (remaining > 0)
+                {
+                    var currentPosts = await ReadPosts.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId, remaining, searchKeywords);
+                    if (currentPosts.Count == 0)
+                    {
+                        break;
+                    }
+                    posts.AddRange(currentPosts);
+                    foreach(Post p in posts)
+                    {
+                        if (p.Author.Equals(email))
+                        {
+                            userPosts.Add(p);
+                        }
+                    }
+
+                    remaining -= userPosts.Count();
+                }
+
+                return Ok(posts);
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
+
+        #endregion*/
     }
 }

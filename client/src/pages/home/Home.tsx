@@ -4,10 +4,12 @@ import IPost from "../../interfaces/post/view/IPost";
 import PostPreview from "../../components/post/preview/PostPreview";
 import GetPostsService from "../../services/post/read/ReadPostsService";
 import ISearchBarQueryProps from "../../interfaces/search/ISearchBarQuery";
+import useAuth from "../../contexts/use_auth/UseAuth";
 
 const Home: React.FC<ISearchBarQueryProps> = ({query, setQuery}) => {
   const [posts, setPosts] = useState<IPost[]>([]);
   const [id, setId] = useState("0");
+  const { email } = useAuth();
   
 
   const lastPostRef = useRef<HTMLDivElement>(null);
