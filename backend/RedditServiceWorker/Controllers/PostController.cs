@@ -228,7 +228,7 @@ namespace RedditServiceWorker.Controllers
         
         [HttpGet]
         [Route("{postId}/{searchKeywords}/pagination/{sort}/{title}")]
-        public async Task<IHttpActionResult> Pagination(string postId, string searchKeywords, int sort, string title)
+        public async Task<IHttpActionResult> Pagination(string postId, string searchKeywords, int sort, string title, DateTime time)
         {
             try
             {
@@ -237,7 +237,7 @@ namespace RedditServiceWorker.Controllers
                 
                 while(remaining > 0)
                 {
-                    var currentPosts = await ReadPosts.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId, remaining, searchKeywords, sort, title);
+                    var currentPosts = await ReadPosts.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId, remaining, searchKeywords, sort, title, time);
                     if(currentPosts.Count == 0)
                     {
                         break;
