@@ -56,7 +56,7 @@ const PostStats: React.FC<IPostStatsProps & { onUpvote: () => void; onDownvote: 
       </span>
       {/* Downvote Button */}
       <button className={`flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 text-gray-500 ${
-          isDownvoted ? 'text-blue-900 bg-blue-300' : 'hover:text-blue-500 hover:bg-gray-300'
+          isDownvoted ? 'text-blue-900 bg-blue-400' : 'hover:text-blue-500 hover:bg-gray-300'
         } focus:outline-none`}
         onClick={onDownvote}>
         <svg
