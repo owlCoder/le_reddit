@@ -10,7 +10,7 @@ namespace RedditDataRepository.posts.Read
 {
     public class ReadPosts
     {
-        public static async Task<List<Post>> Execute(CloudTable table, string postId, int remaining, string searchKeywords, int sort, string postTitle, DateTime time)
+        public static async Task<List<Post>> Execute(CloudTable table, string postId, int remaining, string searchKeywords, int sort, DateTime time)
         {
             TableQuery<Post> query;
             if (postId.Equals("0") || sort != 0)
@@ -30,6 +30,14 @@ namespace RedditDataRepository.posts.Read
             List<Post> allPosts = new List<Post>();
             var queryResult = await table.ExecuteQuerySegmentedAsync(query, null);
             allPosts.AddRange(queryResult.Results);
+
+            var singleQuery = new TableQuery<Post>().Where(TableQuery.CombineFilters(
+            TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "Post"),
+            TableOperators.And,
+            TableQuery.GenerateFilterCondition("Id", QueryComparisons.Equal, postId)));
+            var currentPost = await table.ExecuteQuerySegmentedAsync(singleQuery, null);
+            var result = currentPost.FirstOrDefault();
+            string postTitle = result.Title;
 
             if (!searchKeywords.Contains('~'))
             {

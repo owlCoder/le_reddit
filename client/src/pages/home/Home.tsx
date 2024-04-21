@@ -10,12 +10,15 @@ const Home: React.FC<ISearchBarQueryProps> = ({query, setQuery}) => {
   const [posts, setPosts] = useState<IPost[]>([]);
   const [id, setId] = useState("0");
   const { email } = useAuth();
+  const [sort, setSort] = useState<number>(0);
+  const [time, setTime] = useState<Date>(new Date());
   
 
   const lastPostRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetch = async () => {
+      setTime(new Date());
       let response: IPost[] | null;
       if(query === ""){
         setQuery("~");
@@ -26,7 +29,7 @@ const Home: React.FC<ISearchBarQueryProps> = ({query, setQuery}) => {
       }
       if (response && response.length > 0) {
         setPosts(response);
-        setId(response[response.length - 1].Id)
+        setId(response[response.length - 1].Id);
       }
     };
 
