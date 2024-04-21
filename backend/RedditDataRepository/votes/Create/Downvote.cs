@@ -16,8 +16,22 @@ namespace RedditDataRepository.votes.Create
             {
                 Vote v = await VoteExists.DoesVoteExist(table, vote.PostId, vote.Email);
 
-                if (v == null || v.Voted)
+                if (v == null)
                 {
+                    // Create a TableOperation object to insert or replace the entity
+                    TableOperation insertOrReplaceOperation = TableOperation.InsertOrReplace(vote);
+
+                    // Execute the operation asynchronously
+                    TableResult result = await table.ExecuteAsync(insertOrReplaceOperation);
+
+                    // Check if the operation was successful
+                    return result.HttpStatusCode == 200 || result.HttpStatusCode == 204;
+                }
+                else if (v.Voted)
+                {
+                    TableOperation delete = TableOperation.Delete(v);
+                    TableResult deleteResult = await table.ExecuteAsync(delete);
+
                     // Create a TableOperation object to insert or replace the entity
                     TableOperation insertOrReplaceOperation = TableOperation.InsertOrReplace(vote);
 
