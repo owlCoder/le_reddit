@@ -33,7 +33,7 @@ const Home: React.FC<ISearchBarQueryProps> = ({query, setQuery}) => {
     };
 
     fetch();
-  }, [query]);
+  }, [query, sort]);
 
   useEffect(() => {
     const loadMorePosts = async () => {
