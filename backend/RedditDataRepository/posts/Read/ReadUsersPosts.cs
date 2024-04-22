@@ -25,7 +25,7 @@ namespace RedditDataRepository.posts.Read
             {
                 string partitionFilter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "Post");
                 string authorFilter = TableQuery.GenerateFilterCondition("Author", QueryComparisons.Equal, email);
-                string postIdFilter = TableQuery.GenerateFilterCondition("PostId", QueryComparisons.LessThan, postId);
+                string postIdFilter = TableQuery.GenerateFilterCondition("Id", QueryComparisons.LessThan, postId);
                 string combinedFilter = TableQuery.CombineFilters(partitionFilter, TableOperators.And, postIdFilter);
                 combinedFilter = TableQuery.CombineFilters(combinedFilter, TableOperators.And, authorFilter);
                 query = new TableQuery<Post>().Where(combinedFilter);
@@ -44,7 +44,7 @@ namespace RedditDataRepository.posts.Read
             {
                 string partitionFilter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "Post");
                 string authorFilter = TableQuery.GenerateFilterCondition("Author", QueryComparisons.Equal, email);
-                string postIdFilter = TableQuery.GenerateFilterCondition("PostId", QueryComparisons.Equal, postId);
+                string postIdFilter = TableQuery.GenerateFilterCondition("Id", QueryComparisons.Equal, postId);
                 string combinedFilter = TableQuery.CombineFilters(partitionFilter, TableOperators.And, postIdFilter);
                 combinedFilter = TableQuery.CombineFilters(combinedFilter, TableOperators.And, authorFilter);
                 var singleQuery = new TableQuery<Post>().Where(combinedFilter);
