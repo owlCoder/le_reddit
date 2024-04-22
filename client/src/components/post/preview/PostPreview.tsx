@@ -18,6 +18,7 @@ import ReadNumberOfCommentsByPostId from "../../../services/post/read/ReadNumber
 import ReadNumberOfVotes from "../../../services/post/read/ReadNumberOfVotes";
 import Upvote from "../../../services/post/create/Upvote";
 import Downvote from "../../../services/post/create/Downvote";
+import Subscribe from "../../../services/post/create/SubscribeService";
 
 const PostPreview: React.FC<{ post: IPost }> = ({
   post: { Id, Author, Title, Content, HasImage, ImageBlobUrl },
@@ -74,6 +75,10 @@ const PostPreview: React.FC<{ post: IPost }> = ({
     }
   };
 
+  const HandleSubscribe = async () =>{
+    await Subscribe(Id, email ?? "", token?.token ?? "");
+  };
+
   useEffect(() => {
     const fetch = async () => {
       // fetch profile picture
@@ -107,6 +112,7 @@ const PostPreview: React.FC<{ post: IPost }> = ({
     }
   }, [email]);
 
+
   return (
     <>
       <div className="flex justify-between items-center mb-4">
@@ -120,7 +126,7 @@ const PostPreview: React.FC<{ post: IPost }> = ({
         <div className="flex items-center">
           <SubscribeButton
             onClick={() => {
-              alert("Implementiraj me");
+              HandleSubscribe
             }}
           />
         </div>

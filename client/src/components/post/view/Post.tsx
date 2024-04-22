@@ -31,6 +31,7 @@ import SubscribeButton from "../../button/SubscribeButton";
 import Upvote from "../../../services/post/create/Upvote";
 import Downvote from "../../../services/post/create/Downvote";
 import ReadNumberOfVotes from "../../../services/post/read/ReadNumberOfVotes";
+import Subscribe from "../../../services/post/create/SubscribeService";
 
 const Post: React.FC<IPostProp> = ({ postId }) => {
   const [authorImage, setAuthorImage] = useState<string>("/reddit.svg");
@@ -176,6 +177,10 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
     }
   };
 
+  const HandleSubscribe = async () =>{
+    await Subscribe(postId, email ?? "", token?.token ?? "");
+  }
+
   return (
     <>
       {loaded ? (
@@ -190,7 +195,7 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
               />
             </div>
             <div className="flex items-center">
-            <SubscribeButton onClick={() => {alert("Implementiraj me")}} />
+            <SubscribeButton onClick={() => {HandleSubscribe}} />
               {isDeletePostAvailable && (
                 <TrashButton onClick={ConfirmPostDelete} />
               )}
@@ -221,7 +226,9 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
                   onUpvote={handleUpvote}
                   onDownvote={handleDownvote}
                   isUpvoted={voteStatus === "upvoted"}
-                  isDownvoted={voteStatus === "downvoted"}            />
+                  isDownvoted={voteStatus === "downvoted"}    
+                  postId={postId}
+                  />
             </div>
              {/* Picture for post */}
              {post.HasImage && (

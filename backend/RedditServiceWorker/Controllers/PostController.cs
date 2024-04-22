@@ -292,5 +292,17 @@ namespace RedditServiceWorker.Controllers
         }
 
         #endregion
+
+        #region SUBSCRIBE
+
+        [HttpGet]
+        [Route("{postId}/{encodedEmail}/subscribe")]
+        [JwtAuthenticationFilter]
+        public async Task<IHttpActionResult> Subscribe(string postId, string encodedEmail)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }
