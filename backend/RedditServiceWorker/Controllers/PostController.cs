@@ -262,6 +262,7 @@ namespace RedditServiceWorker.Controllers
 
         [HttpGet]
         [Route("{postId}/{searchKeywords}/userPosts/{sort}/{time}/{encodedEmail}")]
+        [JwtAuthenticationFilter]
         public async Task<IHttpActionResult> UserPosts(string postId, string searchKeywords, int sort, string time, string encodedEmail)
         {
             try
