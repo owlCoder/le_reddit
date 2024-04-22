@@ -31,13 +31,21 @@ namespace RedditDataRepository.posts.Read
             var queryResult = await table.ExecuteQuerySegmentedAsync(query, null);
             allPosts.AddRange(queryResult.Results);
 
-            var singleQuery = new TableQuery<Post>().Where(TableQuery.CombineFilters(
-            TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "Post"),
-            TableOperators.And,
-            TableQuery.GenerateFilterCondition("Id", QueryComparisons.Equal, postId)));
-            var currentPost = await table.ExecuteQuerySegmentedAsync(singleQuery, null);
-            var result = currentPost.FirstOrDefault();
-            string postTitle = result.Title;
+            string postTitle;
+            if (postId.Equals("0"))
+            {
+                postTitle = "~";
+            }
+            else
+            {
+                var singleQuery = new TableQuery<Post>().Where(TableQuery.CombineFilters(
+                TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "Post"),
+                TableOperators.And,
+                TableQuery.GenerateFilterCondition("Id", QueryComparisons.Equal, postId)));
+                var currentPost = await table.ExecuteQuerySegmentedAsync(singleQuery, null);
+                var result = currentPost.FirstOrDefault();
+                postTitle = result.Title;
+            }
 
             if (!searchKeywords.Contains('~'))
             {

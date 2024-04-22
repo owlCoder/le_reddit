@@ -228,16 +228,18 @@ namespace RedditServiceWorker.Controllers
         
         [HttpGet]
         [Route("{postId}/{searchKeywords}/pagination/{sort}/{time}")]
-        public async Task<IHttpActionResult> Pagination(string postId, string searchKeywords, int sort, DateTime time)
+        public async Task<IHttpActionResult> Pagination(string postId, string searchKeywords, int sort, string time)
         {
             try
             {
+                DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(time));
+                DateTime newtime = dateTimeOffset.UtcDateTime; 
                 int remaining = 1;
                 List<Post> posts = new List<Post>();
                 
                 while(remaining > 0)
                 {
-                    var currentPosts = await ReadPosts.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId, remaining, searchKeywords, sort, time);
+                    var currentPosts = await ReadPosts.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId, remaining, searchKeywords, sort, newtime);
                     if(currentPosts.Count == 0)
                     {
                         break;

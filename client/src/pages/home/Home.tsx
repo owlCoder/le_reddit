@@ -22,10 +22,10 @@ const Home: React.FC<ISearchBarQueryProps> = ({query, setQuery}) => {
       let response: IPost[] | null;
       if(query === ""){
         setQuery("~");
-        response = await GetPostsService("0", "~");
+        response = await GetPostsService("0", "~", sort, time);
       }
       else{
-        response = await GetPostsService("0", query);
+        response = await GetPostsService("0", query, sort, time);
       }
       if (response && response.length > 0) {
         setPosts(response);
@@ -41,10 +41,10 @@ const Home: React.FC<ISearchBarQueryProps> = ({query, setQuery}) => {
       let newPosts: IPost[] | null;
       if(query === ""){
         setQuery("~");
-        newPosts = await GetPostsService(id, "~");
+        newPosts = await GetPostsService(id, "~", sort, time);
       }
       else{
-        newPosts = await GetPostsService(id, query);
+        newPosts = await GetPostsService(id, query, sort, time);
       }
       
       if (newPosts && newPosts.length > 0) {
