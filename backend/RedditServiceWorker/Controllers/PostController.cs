@@ -258,37 +258,28 @@ namespace RedditServiceWorker.Controllers
 
         #endregion
 
-        /*#region GET USERS POSTS
+        #region GET USERS POSTS
 
         [HttpGet]
-        [Route("{postId}/{searchKeywords}/{encodedEmail}/userPosts")]
-        public async Task<IHttpActionResult> UserPosts(string postId, string searchKeywords, string encodedEmail)
+        [Route("{postId}/{searchKeywords}/userPosts/{sort}/{time}/{encodedEmail}")]
+        public async Task<IHttpActionResult> UserPosts(string postId, string searchKeywords, int sort, string time, string encodedEmail)
         {
             try
             {
-                string email = HttpUtility.UrlDecode(encodedEmail);
-
+                DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(time));
+                DateTime newtime = dateTimeOffset.UtcDateTime;
                 int remaining = 1;
                 List<Post> posts = new List<Post>();
-                List<Post> userPosts = new List<Post>();
 
                 while (remaining > 0)
                 {
-                    var currentPosts = await ReadPosts.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId, remaining, searchKeywords);
+                    var currentPosts = await ReadUsersPosts.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId, remaining, searchKeywords, sort, newtime, HttpUtility.UrlDecode(encodedEmail));
                     if (currentPosts.Count == 0)
                     {
                         break;
                     }
                     posts.AddRange(currentPosts);
-                    foreach(Post p in posts)
-                    {
-                        if (p.Author.Equals(email))
-                        {
-                            userPosts.Add(p);
-                        }
-                    }
-
-                    remaining -= userPosts.Count();
+                    remaining -= currentPosts.Count();
                 }
 
                 return Ok(posts);
@@ -299,6 +290,6 @@ namespace RedditServiceWorker.Controllers
             }
         }
 
-        #endregion*/
+        #endregion
     }
 }
