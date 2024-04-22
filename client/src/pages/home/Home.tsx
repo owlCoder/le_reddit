@@ -5,6 +5,7 @@ import PostPreview from "../../components/post/preview/PostPreview";
 import GetPostsService from "../../services/post/read/ReadPostsService";
 import ISearchBarQueryProps from "../../interfaces/search/ISearchBarQuery";
 import useAuth from "../../contexts/use_auth/UseAuth";
+import DropdownMenu from "../../components/dropdownmenu/DropdownMenu";
 
 const Home: React.FC<ISearchBarQueryProps> = ({query, setQuery}) => {
   const [posts, setPosts] = useState<IPost[]>([]);
@@ -12,8 +13,6 @@ const Home: React.FC<ISearchBarQueryProps> = ({query, setQuery}) => {
   const { email } = useAuth();
   const [sort, setSort] = useState<number>(0);
   const [time, setTime] = useState<Date>(new Date());
-  
-
   const lastPostRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -81,6 +80,11 @@ const Home: React.FC<ISearchBarQueryProps> = ({query, setQuery}) => {
     <>
       <Navbar setQuery={setQuery} query={query}/>
       <br/>
+      <div className="flex justify-end mx-48 relative mb-8">
+  <div className="mr-2">
+    <DropdownMenu setSort={setSort} />
+  </div>
+</div>
       {/* all current posts  */}
       {posts.map((post: IPost, index: number) => (
         <div className="mx-48"
