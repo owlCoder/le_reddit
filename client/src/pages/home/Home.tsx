@@ -50,6 +50,7 @@ const Home: React.FC<ISearchBarQueryProps> = ({query, setQuery}) => {
     };
 
     fetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, sort, userOrAll]);
 
   useEffect(() => {
@@ -100,6 +101,7 @@ const Home: React.FC<ISearchBarQueryProps> = ({query, setQuery}) => {
 
     return () => {
       if (lastPostRef.current) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         observer.unobserve(lastPostRef.current);
       }
     };

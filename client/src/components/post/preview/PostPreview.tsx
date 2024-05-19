@@ -138,13 +138,13 @@ const PostPreview: React.FC<{ post: IPost }> = ({
         }}
       >
         <div className="flex flex-col items-start w-full">
-          <h1 className="font-semibold text-3xl pl-7">{Title}</h1>
+          <h1 className="font-semibold text-3xl pl-7 break-words line-clamp-2">{Title.substring(0, 50)}</h1>
           {/* Post content */}
           <div className="p-4">
             <MDXEditor
               readOnly
-              markdown={Content}
-              className="min-h-12 w-full focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500"
+              markdown={Content.substring(0, 200)}
+              className="min-h-12 w-full focus:outline-none rounded-lg focus:ring-primary-500 focus:border-primary-500  break-words line-clamp-5"
               plugins={[
                 headingsPlugin(),
                 listsPlugin(),
