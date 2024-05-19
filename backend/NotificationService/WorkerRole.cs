@@ -24,7 +24,9 @@ namespace NotificationService
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private readonly ManualResetEvent runCompleteEvent = new ManualResetEvent(false);
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async override void Run()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             Trace.TraceInformation("NotificationService is running");
 
