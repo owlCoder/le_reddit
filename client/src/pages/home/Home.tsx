@@ -16,7 +16,6 @@ const Home: React.FC<ISearchBarQueryProps> = ({query, setQuery}) => {
   const {token} = useAuth();
   const [sort, setSort] = useState<number>(0);
   const [time, setTime] = useState<Date>(new Date());
-  const lastPostRef = useRef<HTMLDivElement>(null);
   const [ userOrAll, setUserOrAll] = useState<boolean>(false);
 
   useEffect(() => {
@@ -43,9 +42,11 @@ const Home: React.FC<ISearchBarQueryProps> = ({query, setQuery}) => {
         }
       }
       
-      if (response && response.length > 0) {
+      if (response) {
         setPosts(response);
-        setId(response[response.length - 1].Id);
+        if(response.length > 0){
+          setId(response[response.length - 1].Id);
+        }
       }
       
     };
