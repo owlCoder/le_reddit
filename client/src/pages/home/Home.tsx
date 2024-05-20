@@ -56,32 +56,34 @@ const Home: React.FC<ISearchBarQueryProps> = ({query, setQuery}) => {
   const loadMorePosts = async () => {
     let newPosts: IPost[] | null;
 
-    if(!userOrAll){
-      if(query === ""){
-        setQuery("~");
-        newPosts = await GetPostsService(id, "~", sort, time);
-      }
-      else{
-        newPosts = await GetPostsService(id, query, sort, time);
-      }
-    }
-    else{
-      if(query === ""){
-        setQuery("~");
-        newPosts = await GetUsersPostsService(id, "~", sort, time, email ?? "", token?.token ?? "");
-      }
-      else{
-        newPosts = await GetUsersPostsService(id, query, sort, time, email ?? "", token?.token ?? "");
-      }
-    }
-    
-    if (newPosts && newPosts.length > 0) {
-      setPosts(prevPosts => [...prevPosts, ...newPosts]);
-      setId(newPosts[newPosts.length - 1].Id);
+    if (!userOrAll) {
+        if (query === "") {
+            setQuery("~");
+            newPosts = await GetPostsService(id, "~", sort, time);
+        } else {
+            newPosts = await GetPostsService(id, query, sort, time);
+        }
+    } else {
+        if (query === "") {
+            setQuery("~");
+            newPosts = await GetUsersPostsService(id, "~", sort, time, email ?? "", token?.token ?? "");
+        } else {
+            newPosts = await GetUsersPostsService(id, query, sort, time, email ?? "", token?.token ?? "");
+        }
     }
 
-    console.log(query);
-  };
+    if (newPosts && newPosts.length > 0) {
+        // Combine the existing posts with the new posts
+        const combinedPosts = [...posts, ...newPosts];
+        // Use a Map to filter out duplicate posts based on their IDs
+        const uniquePostsMap = new Map(combinedPosts.map(post => [post.Id, post]));
+        const uniquePosts = Array.from(uniquePostsMap.values());
+        
+        setPosts(uniquePosts);
+        setId(newPosts[newPosts.length - 1].Id);
+    }
+};
+
 
   return (
     <>

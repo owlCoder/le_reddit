@@ -313,7 +313,7 @@ namespace RedditServiceWorker.Controllers
                 List<Post> posts = new List<Post>();
 
                 // Perform pagination until remaining posts to retrieve is zero
-                while (remaining > 0)
+                while (remaining > 3)
                 {
                     // Retrieve posts based on pagination parameters and user
                     var currentPosts = await ReadUsersPosts.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId, remaining, searchKeywords, sort, newtime, HttpUtility.UrlDecode(encodedEmail));
