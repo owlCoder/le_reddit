@@ -125,9 +125,9 @@ const PostPreview: React.FC<{ post: IPost }> = ({
         </div>
         <div className="flex items-center">
           <SubscribeButton
-            onClick={() => {
+            onClick={
               HandleSubscribe
-            }}
+            }
           />
         </div>
       </div>
