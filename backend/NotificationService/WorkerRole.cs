@@ -16,6 +16,8 @@ using RedditDataRepository.logs.Create;
 using RedditDataRepository.classes.Logs;
 using RedditDataRepository.comments.Read;
 using RedditServiceWorker;
+using Common;
+using RedditDataRepository.tables;
 
 namespace NotificationService
 {
@@ -31,9 +33,11 @@ namespace NotificationService
             Trace.TraceInformation("NotificationService is running");
 
             CloudQueue queue = AzureQueueHelper.GetQueue("notifications");
+            CloudQueue adminQueue = AzureQueueHelper.GetQueue("adminnotificationqueue");
+            AlertEmailRepository adminEmailRepo = new AlertEmailRepository();
             try
             {
-                RunAsync(this.cancellationTokenSource.Token, queue).Wait();
+                RunAsync(this.cancellationTokenSource.Token, queue, adminQueue, adminEmailRepo).Wait();
             }
             finally
             {
@@ -71,34 +75,49 @@ namespace NotificationService
             Trace.TraceInformation("NotificationService has stopped");
         }
 
-        private async Task RunAsync(CancellationToken cancellationToken, CloudQueue queue)
+        private async Task RunAsync(CancellationToken cancellationToken, CloudQueue queue, CloudQueue adminQueue, AlertEmailRepository adminEmailRepo)
         {
             // TODO: Replace the following with your own logic.
             while (!cancellationToken.IsCancellationRequested)
             {
                 // Trace.TraceInformation("Working");
-
+                string adminMessage = NotificationQueue.DequeueComment(adminQueue);
                 string commentId = NotificationQueue.DequeueComment(queue);
-                if (commentId == null)
+                if (commentId == null && adminMessage == null)
                 {
                     await Task.Delay(1000);
                     continue;
                 }
-                // Send notifications to email
-                List<string> emails = await CommentService.GetPostEmails(commentId);
-                string commentText = (await ReadComment.Run(AzureTableStorageCloudAccount.GetCloudTable("comments"), commentId)).Content;
-                int numOfEmailsSent = 0;
-                foreach (string email in emails)
+                if(commentId != null)
                 {
-                    if (await CommentService.SendEmail(email, commentText))
+                    // Send notifications to email
+                    List<string> emails = await CommentService.GetPostEmails(commentId);
+                    string commentText = (await ReadComment.Run(AzureTableStorageCloudAccount.GetCloudTable("comments"), commentId)).Content;
+                    int numOfEmailsSent = 0;
+                    foreach (string email in emails)
                     {
-                        ++numOfEmailsSent;
+                        if (await CommentService.SendEmail(email, commentText))
+                        {
+                            ++numOfEmailsSent;
+                        }
+                    }
+                    // Save date and time and number of emails sent
+                    if (!(await InsertEmailLog.Execute(AzureTableStorageCloudAccount.GetCloudTable("emailLogs"), new EmailLog(DateTime.Now, commentId, numOfEmailsSent))))
+                    {
+                        Trace.TraceError("Error inserting email log into table.");
                     }
                 }
-                // Save date and time and number of emails sent
-                if (!(await InsertEmailLog.Execute(AzureTableStorageCloudAccount.GetCloudTable("emailLogs"), new EmailLog(DateTime.Now, commentId, numOfEmailsSent))))
+                if(adminMessage != null)
                 {
-                    Trace.TraceError("Error inserting email log into table.");
+                    List<AlertEmailDTO> alertEmailDTOs = adminEmailRepo.ReadAll().Select(alertEmail => new AlertEmailDTO(alertEmail.RowKey, alertEmail.Email)).ToList();
+                    if (alertEmailDTOs.Count == 0)
+                    {
+                        continue;
+                    }
+                    foreach(AlertEmailDTO dto in alertEmailDTOs)
+                    {
+                        CommentService.SendEmail(dto.Email, adminMessage); // No need to await the operation as it will only slow down the sending process, and we are not required to check the result of sending this email
+                    }
                 }
             }
         }
