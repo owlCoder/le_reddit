@@ -250,7 +250,7 @@ namespace RedditServiceWorker.Controllers
                 DateTime newtime = dateTimeOffset.UtcDateTime;
 
                 // Initialize remaining number of posts to be retrieved and a list to store retrieved posts
-                int remaining = 1;
+                int remaining = 3;
                 List<Post> posts = new List<Post>();
 
                 // Perform pagination until remaining posts to retrieve is zero

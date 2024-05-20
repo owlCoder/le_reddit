@@ -47,65 +47,41 @@ const Home: React.FC<ISearchBarQueryProps> = ({query, setQuery}) => {
         setPosts(response);
         setId(response[response.length - 1].Id);
       }
+      
     };
 
     fetch();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, sort, userOrAll]);
 
-  useEffect(() => {
-    const loadMorePosts = async () => {
-      let newPosts: IPost[] | null;
+  const loadMorePosts = async () => {
+    let newPosts: IPost[] | null;
 
-      if(!userOrAll){
-        if(query === ""){
-          setQuery("~");
-          newPosts = await GetPostsService(id, "~", sort, time);
-        }
-        else{
-          newPosts = await GetPostsService(id, query, sort, time);
-        }
+    if(!userOrAll){
+      if(query === ""){
+        setQuery("~");
+        newPosts = await GetPostsService(id, "~", sort, time);
       }
       else{
-        if(query === ""){
-          setQuery("~");
-          newPosts = await GetUsersPostsService(id, "~", sort, time, email ?? "", token?.token ?? "");
-        }
-        else{
-          newPosts = await GetUsersPostsService(id, query, sort, time, email ?? "", token?.token ?? "");
-        }
+        newPosts = await GetPostsService(id, query, sort, time);
       }
-      
-      if (newPosts && newPosts.length > 0) {
-        setPosts(prevPosts => [...prevPosts, ...newPosts]);
-        setId(newPosts[newPosts.length - 1].Id);
+    }
+    else{
+      if(query === ""){
+        setQuery("~");
+        newPosts = await GetUsersPostsService(id, "~", sort, time, email ?? "", token?.token ?? "");
       }
-    };
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          loadMorePosts();
-        }
-      },
-      {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.1 
+      else{
+        newPosts = await GetUsersPostsService(id, query, sort, time, email ?? "", token?.token ?? "");
       }
-    );
-
-    if (lastPostRef.current) {
-      observer.observe(lastPostRef.current);
+    }
+    
+    if (newPosts && newPosts.length > 0) {
+      setPosts(prevPosts => [...prevPosts, ...newPosts]);
+      setId(newPosts[newPosts.length - 1].Id);
     }
 
-    return () => {
-      if (lastPostRef.current) {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        observer.unobserve(lastPostRef.current);
-      }
-    };
-  }, [id]);
+    console.log(query);
+  };
 
   return (
     <>
@@ -127,9 +103,13 @@ const Home: React.FC<ISearchBarQueryProps> = ({query, setQuery}) => {
           key={index}
         >
           <PostPreview post={post} />
-          {index === posts.length - 1 && <div ref={lastPostRef}></div>}
         </div>
       ))}
+      <div className="flex justify-center my-8">
+        <button onClick={loadMorePosts} className={`rounded-full bg-primary-600 hover:bg-primary-500 px-4 py-2 text-sm font-medium text-white`}>
+          Load More
+        </button>
+      </div>
     </>
   );
 };
