@@ -33,8 +33,8 @@ const PostStats: React.FC<IPostStatsProps & { onUpvote: () => void; onDownvote: 
   return (
     <div className="flex items-center space-x-4 mt-4 -mb-4">
       {/* Upvote Button */}
-      <button  className={`flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 text-gray-500 ${
-          isUpvoted ? 'text-orange-500 bg-primary-200' : 'hover:text-orange-500 hover:bg-gray-300'
+      <button  className={`flex items-center justify-center w-8 h-8 rounded-full hover:text-orange-500 hover:bg-gray-300 ${
+          isUpvoted ? 'text-orange-500 bg-primary-200' : ' bg-gray-200 text-gray-500'
         } focus:outline-none`}
         onClick={onUpvote}>
         <svg
@@ -55,8 +55,8 @@ const PostStats: React.FC<IPostStatsProps & { onUpvote: () => void; onDownvote: 
         {upvotesDownvotesCount}
       </span>
       {/* Downvote Button */}
-      <button className={`flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 text-gray-500 ${
-          isDownvoted ? 'text-blue-800 bg-blue-200' : 'hover:text-blue-500 hover:bg-gray-300'
+      <button className={`flex items-center justify-center w-8 h-8 rounded-full hover:text-blue-500 hover:bg-gray-300 ${
+          isDownvoted ? 'text-blue-500 bg-blue-200' : ' bg-gray-200 text-gray-500'
         } focus:outline-none`}
         onClick={onDownvote}>
         <svg

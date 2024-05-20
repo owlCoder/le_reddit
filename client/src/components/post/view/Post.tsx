@@ -92,7 +92,7 @@ const Post: React.FC<IPostProp> = ({ postId }) => {
       "Are you sure that you want to delete a post, all comments will be deleted too?",
       "text-black",
       "text-white",
-      "bg-red",
+      "bg-primary",
       () => {
         DeletePost();
       }

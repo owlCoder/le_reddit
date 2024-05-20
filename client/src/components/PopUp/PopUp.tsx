@@ -28,7 +28,7 @@ const Popup: React.FC<{ popup: IPopUp }> = ({
                 <button
                   onClick={onConfirm}
                   type="button"
-                  className={`rounded-full ${buttonConfirmBackground} hover:bg-gray-400/80 px-4 py-2 text-sm font-medium ${buttonConfirmColor}`}
+                  className={`rounded-full ${buttonConfirmBackground + "-600"} ${"hover:" + buttonConfirmBackground + "-500"} px-4 py-2 text-sm font-medium ${buttonConfirmColor}`}
                 >
                   Yes, I'm sure
                 </button>
