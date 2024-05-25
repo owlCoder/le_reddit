@@ -1,10 +1,10 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using RedditDataRepository.classes.Posts;
-using System.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System;
+using System.Threading.Tasks;
 
 namespace RedditDataRepository.posts.Read
 {
@@ -58,9 +58,9 @@ namespace RedditDataRepository.posts.Read
             {
                 List<Post> posts = new List<Post>();
                 string[] searchTerms = searchKeywords.ToLower().Split(' ');
-                foreach(Post p in allPosts)
+                foreach (Post p in allPosts)
                 {
-                    foreach(string s in searchTerms)
+                    foreach (string s in searchTerms)
                     {
                         string title = Regex.Replace(p.Title.ToLower(), @"\s+", "");
                         if (title.Contains(s))
@@ -82,7 +82,7 @@ namespace RedditDataRepository.posts.Read
                         return posts.OrderByDescending(post => post.Timestamp).SkipWhile(post => !post.Timestamp.Equals(timestamp)).Skip(1).Take(remaining).ToList();
                     }
                 }
-                else if(sort == 1)
+                else if (sort == 1)
                 {
                     if (postTitle.Equals("~"))
                     {
@@ -118,7 +118,7 @@ namespace RedditDataRepository.posts.Read
                     return allPosts.OrderByDescending(post => post.Timestamp).SkipWhile(post => !post.Timestamp.Equals(timestamp)).Skip(1).Take(remaining).ToList();
                 }
             }
-            else if(sort == 1)
+            else if (sort == 1)
             {
                 if (postTitle.Equals("~"))
                 {

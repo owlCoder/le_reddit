@@ -2,11 +2,7 @@
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RedditDataRepository.queues
 {
@@ -38,7 +34,7 @@ namespace RedditDataRepository.queues
         public static string DequeueMessage(CloudQueue queue)
         {
             CloudQueueMessage queueMessage = queue.GetMessage();
-            if(queueMessage != null)
+            if (queueMessage != null)
             {
                 return queueMessage.AsString;
             }

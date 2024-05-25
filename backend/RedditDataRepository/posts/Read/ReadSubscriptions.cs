@@ -1,9 +1,7 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using RedditDataRepository.classes.Posts;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RedditDataRepository.posts.Read
@@ -17,7 +15,7 @@ namespace RedditDataRepository.posts.Read
             var result = table.ExecuteQuery(tableQuery);
 
             List<Subscription> subs = result.ToList();
-            foreach(Subscription sub in subs)
+            foreach (Subscription sub in subs)
             {
                 emails.Add(sub.Email);
             }

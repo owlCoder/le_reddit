@@ -1,9 +1,5 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using RedditDataRepository.classes.Logs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RedditDataRepository.logs.Create
@@ -12,7 +8,7 @@ namespace RedditDataRepository.logs.Create
     {
         public static async Task<bool> Execute(CloudTable table, EmailLog log)
         {
-            if(table == null || log == null)
+            if (table == null || log == null)
             {
                 return false;
             }

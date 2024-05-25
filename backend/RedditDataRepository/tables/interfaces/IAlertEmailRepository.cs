@@ -1,22 +1,25 @@
 ﻿using RedditDataRepository.tables.entities;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ServiceModel;
 
 namespace RedditDataRepository.tables.interfaces
 {
+    [ServiceContract]
     public interface IAlertEmailRepository
     {
+        [OperationContract]
         bool Create(AlertEmail alertEmail);
 
+        [OperationContract]
         AlertEmail Read(string id);
 
+        [OperationContract]
         IQueryable<AlertEmail> ReadAll();
 
+        [OperationContract]
         bool Update(string id, AlertEmail alertEmail);
 
+        [OperationContract]
         bool Delete(string id);
     }
 }

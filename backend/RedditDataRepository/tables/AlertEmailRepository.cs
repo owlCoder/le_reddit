@@ -4,10 +4,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 using RedditDataRepository.tables.entities;
 using RedditDataRepository.tables.interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RedditDataRepository.tables
 {
@@ -54,8 +51,8 @@ namespace RedditDataRepository.tables
             try
             {
                 var alertEmail = (from g in _table.CreateQuery<AlertEmail>()
-                                   where g.PartitionKey == "AlertEmail" && g.RowKey == id
-                                   select g).FirstOrDefault();
+                                  where g.PartitionKey == "AlertEmail" && g.RowKey == id
+                                  select g).FirstOrDefault();
                 return alertEmail ?? new AlertEmail();
             }
             catch (Exception)
@@ -87,8 +84,8 @@ namespace RedditDataRepository.tables
             try
             {
                 var existingAlertEmail = (from g in _table.CreateQuery<AlertEmail>()
-                                           where g.PartitionKey == "AlertEmail" && g.RowKey == id
-                                           select g).FirstOrDefault();
+                                          where g.PartitionKey == "AlertEmail" && g.RowKey == id
+                                          select g).FirstOrDefault();
 
                 if (existingAlertEmail != null)
                 {
@@ -117,8 +114,8 @@ namespace RedditDataRepository.tables
                 return false;
 
             var alertEmailToDelete = (from g in _table.CreateQuery<AlertEmail>()
-                                       where g.PartitionKey == "AlertEmail" && g.RowKey == id
-                                       select g).FirstOrDefault();
+                                      where g.PartitionKey == "AlertEmail" && g.RowKey == id
+                                      select g).FirstOrDefault();
 
             if (alertEmailToDelete != null)
             {

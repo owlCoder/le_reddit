@@ -1,9 +1,6 @@
 ﻿using Common;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdminToolsConsoleApp
 {
@@ -34,7 +31,7 @@ namespace AdminToolsConsoleApp
         {
             List<AlertEmailDTO> emails = adminToolService.ReadAllEmails();
             Console.WriteLine("\n========================== ALL EMAILS =========================== ");
-            foreach(var email in emails)
+            foreach (var email in emails)
             {
                 Console.WriteLine($"ID: {email.Id}, Email: {email.Email}");
             }

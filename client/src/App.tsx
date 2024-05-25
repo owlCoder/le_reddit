@@ -7,12 +7,15 @@ import Create from "./pages/post/create/Create";
 import Error404 from "./pages/errors/Error404";
 import Post from "./pages/post/view/Post";
 import { useState } from "react";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const [query, setQuery] = useState<string>('~');
 
   return (
     <>
+      <Toaster toastOptions={{duration: 5000}} />
+
       <Router>
         <Routes>
           <Route path="/" element={<Home query={query} setQuery={setQuery} />} />

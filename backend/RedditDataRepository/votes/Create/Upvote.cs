@@ -35,7 +35,7 @@ namespace RedditDataRepository.votes.Create
 
                     // Execute the operation asynchronously
                     TableResult result = await table.ExecuteAsync(insertOrReplaceOperation);
-                    
+
                     // Check if the operation was successful
                     return result.HttpStatusCode == 200 || result.HttpStatusCode == 204;
                 }
@@ -58,9 +58,9 @@ namespace RedditDataRepository.votes.Create
                 {
                     // Vote exists and is already a downvote, remove it
                     TableOperation delete = TableOperation.Delete(v);
-                    
+
                     TableResult result = await table.ExecuteAsync(delete);
-                    
+
                     return result.HttpStatusCode == 200 || result.HttpStatusCode == 204;
                 }
             }

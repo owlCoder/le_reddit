@@ -3,21 +3,14 @@ using RedditDataRepository.classes.Comments;
 using RedditDataRepository.classes.Posts;
 using RedditDataRepository.comments.Read;
 using RedditDataRepository.posts.Read;
-using System;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Text;
 //using System.Text.Json;
 //using System.Net.Http.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-using Mailjet.Client;
-using Mailjet.Client.Resources;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 
 namespace NotificationService
 {

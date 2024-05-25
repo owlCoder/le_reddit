@@ -36,7 +36,7 @@ namespace RedditDataRepository.posts.Delete
                     // If post has image delete it from blob storage
                     if (post.HasImage)
                     {
-                        await AzureBlobStorage.RemoveFileFromBlobStorage(post.ImageBlobUrl); 
+                        await AzureBlobStorage.RemoveFileFromBlobStorage(post.ImageBlobUrl);
                     }
 
                     TableOperation deleteOperation = TableOperation.Delete(post);

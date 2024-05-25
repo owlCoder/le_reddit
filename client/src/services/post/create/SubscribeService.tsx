@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { API_ENDPOINT } from "../../../App";
+import toast from "react-hot-toast";
 
 const Subscribe = async (
   PostId: string,
@@ -18,8 +19,10 @@ const Subscribe = async (
     );
 
     if (response.status === 200 || response.status === 204) {
+      toast.success("You have been subscribed to the post!");
       return true;
     } else {
+      toast.error("You already subscribed to the post!");
       return false;
     }
   } catch {

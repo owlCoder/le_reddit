@@ -1,13 +1,9 @@
-﻿using Microsoft.Azure;
-using Microsoft.WindowsAzure.Storage;
+﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using RedditDataRepository.tables.entities;
 using RedditDataRepository.tables.interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RedditDataRepository.tables
 {
@@ -53,8 +49,8 @@ namespace RedditDataRepository.tables
             try
             {
                 var healthCheck = (from g in _table.CreateQuery<HealthCheck>()
-                               where g.PartitionKey == "HealthCheck" && g.RowKey == dateTime
-                               select g).FirstOrDefault();
+                                   where g.PartitionKey == "HealthCheck" && g.RowKey == dateTime
+                                   select g).FirstOrDefault();
                 return healthCheck ?? new HealthCheck();
             }
             catch (Exception)
@@ -86,8 +82,8 @@ namespace RedditDataRepository.tables
             try
             {
                 var existingHealthCheck = (from g in _table.CreateQuery<HealthCheck>()
-                                       where g.PartitionKey == "HealthCheck" && g.RowKey == dateTime
-                                       select g).FirstOrDefault();
+                                           where g.PartitionKey == "HealthCheck" && g.RowKey == dateTime
+                                           select g).FirstOrDefault();
 
                 if (existingHealthCheck != null)
                 {
@@ -117,8 +113,8 @@ namespace RedditDataRepository.tables
                 return false;
 
             var healthCheckToDelete = (from g in _table.CreateQuery<HealthCheck>()
-                                   where g.PartitionKey == "HealthCheck" && g.RowKey == dateTime
-                                   select g).FirstOrDefault();
+                                       where g.PartitionKey == "HealthCheck" && g.RowKey == dateTime
+                                       select g).FirstOrDefault();
 
             if (healthCheckToDelete != null)
             {

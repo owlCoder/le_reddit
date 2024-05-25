@@ -264,6 +264,10 @@ namespace RedditServiceWorker.Controllers
                     {
                         break;
                     }
+                    else if (posts.Count <= remaining)
+                    {
+                        return Ok(currentPosts);
+                    }
 
                     // Add retrieved posts to the list and update remaining count
                     posts.AddRange(currentPosts);
@@ -309,11 +313,11 @@ namespace RedditServiceWorker.Controllers
                 DateTime newtime = dateTimeOffset.UtcDateTime;
 
                 // Initialize remaining number of posts to be retrieved and a list to store retrieved posts
-                int remaining = 1;
+                int remaining = 3;
                 List<Post> posts = new List<Post>();
 
                 // Perform pagination until remaining posts to retrieve is zero
-                while (remaining > 3)
+                while (remaining > 0)
                 {
                     // Retrieve posts based on pagination parameters and user
                     var currentPosts = await ReadUsersPosts.Execute(AzureTableStorageCloudAccount.GetCloudTable("posts"), postId, remaining, searchKeywords, sort, newtime, HttpUtility.UrlDecode(encodedEmail));
@@ -322,6 +326,10 @@ namespace RedditServiceWorker.Controllers
                     if (currentPosts.Count == 0)
                     {
                         break;
+                    }
+                    else if (posts.Count <= remaining)
+                    {
+                        return Ok(currentPosts);
                     }
 
                     // Add retrieved posts to the list and update remaining count
@@ -370,15 +378,22 @@ namespace RedditServiceWorker.Controllers
                 }
                 // Check if user exists
                 string email = HttpUtility.UrlDecode(encodedEmail);
-                if(!(await IsUserExists.RunCheckAsync(AzureTableStorageCloudAccount.GetCloudTable("users"), email)))
+                if (!(await IsUserExists.RunCheckAsync(AzureTableStorageCloudAccount.GetCloudTable("users"), email)))
                 {
                     return BadRequest();
                 }
                 // Checking if user is who he represents he is
-                if(!ResourceGuard.RunCheck(ActionContext, email))
+                if (!ResourceGuard.RunCheck(ActionContext, email))
                 {
                     return Unauthorized();
                 }
+                // Add check is subscription already exists
+                var already_subsrcibed = await ReadSubscriptions.Run(AzureTableStorageCloudAccount.GetCloudTable("subscriptions"), postId);
+
+                // If it is already subkrajzed return none
+                if (already_subsrcibed.FirstOrDefault(p => p == email) != null)
+                    return BadRequest();
+
                 // Adding subscription 
                 var insertResult = await SubscribeToPost.Execute(AzureTableStorageCloudAccount.GetCloudTable("subscriptions"), postId, email);
                 if (insertResult)

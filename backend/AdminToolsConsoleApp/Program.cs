@@ -1,11 +1,6 @@
 ﻿using Common;
-using RedditDataRepository.tables;
-using RedditDataRepository.tables.entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ServiceModel;
 
 namespace AdminToolsConsoleApp
 {
@@ -17,12 +12,22 @@ namespace AdminToolsConsoleApp
             serviceConnector.Connect("net.tcp://localhost:10100/AdminToolService");
             IAdminToolService adminToolService = serviceConnector.GetProxy();
 
+            //var wtf = new ChannelFactory<IAdminToolService>
+            //(
+            //    new NetTcpBinding(),
+            //    "net.tcp://localhost:10100/AdminToolService"
+            //);
+
+            //IAdminToolService adminToolService = wtf.CreateChannel();
+
+            //var mocinasisa = adminToolService.ReadAllEmails();
+
             Executor executor = new Executor();
 
             Console.WriteLine("Enter password to proceed:");
             string password = Console.ReadLine();
 
-            if (password != "8279531640")
+            if (password != "opako")
             {
                 Console.WriteLine("Incorrect password. Exiting...");
                 Console.ReadKey();

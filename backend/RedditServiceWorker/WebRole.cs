@@ -8,7 +8,7 @@ namespace RedditServiceWorker
     {
         public override bool OnStart()
         {
-            StartHealthServer();
+            StartHealthServer(); // ovo zakomentarisi da ubije fakticki reddit service
             return base.OnStart();
         }
 

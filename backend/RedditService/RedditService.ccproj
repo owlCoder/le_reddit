@@ -40,6 +40,22 @@
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HealthMonitoringWorkerRole\HealthMonitoringWorkerRole.csproj">
+      <Name>HealthMonitoringWorkerRole</Name>
+      <Project>{bf5d4434-ab43-4136-8024-85418859bbcd}</Project>
+      <Private>True</Private>
+      <RoleType>Worker</RoleType>
+      <RoleName>HealthMonitoringWorkerRole</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
+    <ProjectReference Include="..\HealthStatusWebRole\HealthStatusWebRole.csproj">
+      <Name>HealthStatusWebRole</Name>
+      <Project>{9e0f24ee-2ba6-424d-9aca-a555068b31b2}</Project>
+      <Private>True</Private>
+      <RoleType>Web</RoleType>
+      <RoleName>HealthStatusWebRole</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
     <ProjectReference Include="..\NotificationService\NotificationService.csproj">
       <Name>NotificationService</Name>
       <Project>{659ead4f-86b4-4ce0-9912-c5f31ed1fba7}</Project>
@@ -58,10 +74,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="HealthMonitoringWorkerRoleContent\" />
+    <Folder Include="HealthStatusWebRoleContent\" />
     <Folder Include="NotificationServiceContent\" />
     <Folder Include="RedditServiceWorkerContent\" />
   </ItemGroup>
   <ItemGroup>
+    <DiagnosticsConfiguration Include="HealthMonitoringWorkerRoleContent\diagnostics.wadcfgx" />
+    <DiagnosticsConfiguration Include="HealthStatusWebRoleContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="NotificationServiceContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="RedditServiceWorkerContent\diagnostics.wadcfgx" />
   </ItemGroup>

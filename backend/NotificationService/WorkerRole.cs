@@ -1,7 +1,14 @@
+using Common;
+using Common.cloud.account;
 using Common.cloud.queue;
-using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.ServiceRuntime;
+using Microsoft.WindowsAzure.Storage.Queue;
+using RedditDataRepository.classes.Logs;
+using RedditDataRepository.comments.Read;
+using RedditDataRepository.logs.Create;
+using RedditDataRepository.queues;
+using RedditDataRepository.tables;
+using RedditServiceWorker;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,15 +16,6 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage.Queue;
-using RedditDataRepository.queues;
-using Common.cloud.account;
-using RedditDataRepository.logs.Create;
-using RedditDataRepository.classes.Logs;
-using RedditDataRepository.comments.Read;
-using RedditServiceWorker;
-using Common;
-using RedditDataRepository.tables;
 
 namespace NotificationService
 {
@@ -39,6 +37,7 @@ namespace NotificationService
             {
                 RunAsync(this.cancellationTokenSource.Token, queue, adminQueue, adminEmailRepo).Wait();
             }
+            catch { }
             finally
             {
                 this.runCompleteEvent.Set();
@@ -88,7 +87,7 @@ namespace NotificationService
                     await Task.Delay(1000);
                     continue;
                 }
-                if(commentId != null)
+                if (commentId != null)
                 {
                     // Send notifications to email
                     List<string> emails = await CommentService.GetPostEmails(commentId);
@@ -107,16 +106,16 @@ namespace NotificationService
                         Trace.TraceError("Error inserting email log into table.");
                     }
                 }
-                if(adminMessage != null)
+                if (adminMessage != null)
                 {
                     List<AlertEmailDTO> alertEmailDTOs = adminEmailRepo.ReadAll().Select(alertEmail => new AlertEmailDTO(alertEmail.RowKey, alertEmail.Email)).ToList();
                     if (alertEmailDTOs.Count == 0)
                     {
                         continue;
                     }
-                    foreach(AlertEmailDTO dto in alertEmailDTOs)
+                    foreach (AlertEmailDTO dto in alertEmailDTOs)
                     {
-                        CommentService.SendEmail(dto.Email, adminMessage); // No need to await the operation as it will only slow down the sending process, and we are not required to check the result of sending this email
+                        await CommentService.SendEmail(dto.Email, adminMessage); // No need to await the operation as it will only slow down the sending process, and we are not required to check the result of sending this email
                     }
                 }
             }

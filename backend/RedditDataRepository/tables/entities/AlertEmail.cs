@@ -1,14 +1,12 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace RedditDataRepository.tables.entities
 {
+    [DataContract]
     public class AlertEmail : TableEntity
     {
+        [DataMember]
         public string Email { get; set; }
 
         public AlertEmail(string email, string id)
