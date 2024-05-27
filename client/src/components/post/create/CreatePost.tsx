@@ -14,6 +14,7 @@ import ValidateCreatePostData from "../../../validators/post/create_post";
 import useAuth from "../../../contexts/use_auth/UseAuth";
 import CreatePostService from "../../../services/post/create/CreatePostService";
 import { useNavigate } from "react-router-dom";
+import ImageCompressor from "image-compressor.js";
 
 const CreatePostForm: React.FC = () => {
   const { token, email } = useAuth();
@@ -96,18 +97,41 @@ const CreatePostForm: React.FC = () => {
   };
 
   // Handle image upload
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
     if (file) {
-      setFormData({
-        ...formData,
-        image: file,
-        hasImage: true,
-      });
+      const reader = new FileReader();
 
-      // Set image preview
-      setImagePreview(URL.createObjectURL(file));
+      reader.onload = async () => {
+        try {
+          const compressedFile = await new Promise<File>((resolve, reject) => {
+            new ImageCompressor(file, {
+              quality: 0.6,
+              maxWidth: 800,
+              maxHeight: 600,
+              success(result) {
+                resolve(result as File);
+              },
+              error(err) {
+                reject(err);
+              },
+            });
+          });
+
+          setFormData({
+            ...formData,
+            image: compressedFile,
+            hasImage: true,
+          });
+
+          setImagePreview(URL.createObjectURL(compressedFile));
+        } catch (error) {
+          console.error("Image compression failed:", error);
+        }
+      };
+
+      reader.readAsDataURL(file);
     }
   };
 

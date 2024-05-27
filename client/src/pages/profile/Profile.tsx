@@ -10,8 +10,9 @@ import { ValidateUpdateData } from "../../validators/users/validate_new_user_inf
 import UpdateUserInformationService from "../../services/users/update/UpdateService";
 import LoadingSpinner from "../../components/spinner/LoadingSpinner";
 import ISearchBarQueryProps from "../../interfaces/search/ISearchBarQuery";
+import ImageCompressor from "image-compressor.js";
 
-const Profile: React.FC <ISearchBarQueryProps>= ({query, setQuery}) => {
+const Profile: React.FC<ISearchBarQueryProps> = ({ query, setQuery }) => {
   const { email, token, isLoggedIn, setEmail, setToken } = useAuth();
   const [userData, setUserData] = useState<IUser | null>(emptyUser);
   const [image, setImage] = useState<File | null>(null);
@@ -72,9 +73,30 @@ const Profile: React.FC <ISearchBarQueryProps>= ({query, setQuery}) => {
   }, [email, token, navigate, isLoggedIn, pageLoaded, setEmail, setToken]);
 
   // Function to handle image file change
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (event.target.files && event.target.files[0]) {
-      setImage(event.target.files[0]);
+      const file = event.target.files[0];
+
+      try {
+        const compressedFile = await new Promise<File>((resolve, reject) => {
+          new ImageCompressor(file, {
+            quality: 0.6,
+            maxWidth: 800,
+            maxHeight: 600,
+            success(result) {
+              resolve(result as File);
+            },
+            error(err) {
+              reject(err);
+            },
+          });
+        });
+        setImage(compressedFile);
+      } catch (error) {
+        console.error("Image compression failed:", error);
+      }
     }
   };
 
@@ -134,7 +156,7 @@ const Profile: React.FC <ISearchBarQueryProps>= ({query, setQuery}) => {
 
   return (
     <>
-      <Navbar query={query} setQuery={setQuery}/>
+      <Navbar query={query} setQuery={setQuery} />
       {loading ? (
         <LoadingSpinner />
       ) : (

@@ -23,8 +23,9 @@ import { saveTokenToLocalstorage } from "../../../services/jwt/JWTTokenizationSe
 import { jwtDecode } from "jwt-decode";
 import LoadingSpinner from "../../../components/spinner/LoadingSpinner";
 import ISearchBarQueryProps from "../../../interfaces/search/ISearchBarQuery";
+import ImageCompressor from "image-compressor.js";
 
-const SignUp: React.FC <ISearchBarQueryProps>= ({query, setQuery}) => {
+const SignUp: React.FC<ISearchBarQueryProps> = ({ query, setQuery }) => {
   // State variables to manage form data, image, and error messages
   const [formData, setFormData] = useState<IUser>(defaultUser);
   const [image, setImage] = useState<File | null>(null);
@@ -55,13 +56,36 @@ const SignUp: React.FC <ISearchBarQueryProps>= ({query, setQuery}) => {
   };
 
   // Function to handle image file change
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (event.target.files && event.target.files[0]) {
-      setImage(event.target.files[0]);
-      setFormData({
-        ...formData,
-        image: event.target.files[0],
-      });
+      const file = event.target.files[0];
+
+      try {
+        const compressedFile = await new Promise<File>((resolve, reject) => {
+          new ImageCompressor(file, {
+            quality: 0.6,
+            maxWidth: 800,
+            maxHeight: 600,
+            success(result) {
+              resolve(result as File);
+            },
+            error(err) {
+              reject(err);
+            },
+          });
+        });
+
+        setImage(compressedFile);
+
+        setFormData({
+          ...formData,
+          image: compressedFile,
+        });
+      } catch (error) {
+        console.error("Image compression failed:", error);
+      }
     }
   };
 
@@ -131,7 +155,7 @@ const SignUp: React.FC <ISearchBarQueryProps>= ({query, setQuery}) => {
         <LoadingSpinner />
       ) : (
         <>
-          <Navbar query={query} setQuery={setQuery}/>
+          <Navbar query={query} setQuery={setQuery} />
           <section className="relative flex flex-wrap lg:h-screen lg:items-center">
             <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
               <div className="mx-auto max-w-lg text-center">
