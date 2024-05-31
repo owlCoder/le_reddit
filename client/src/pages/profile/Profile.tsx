@@ -50,9 +50,7 @@ const Profile: React.FC<ISearchBarQueryProps> = ({ query, setQuery }) => {
             const blob: Blob = await response.blob();
 
             // Create a File object from the Blob
-            const file = new File([blob], "", {
-              type: "image/jpeg",
-            });
+            const file = new File([blob], "");
 
             setImage(file);
           } else {
@@ -63,7 +61,7 @@ const Profile: React.FC<ISearchBarQueryProps> = ({ query, setQuery }) => {
           }
         }
       } catch (error) {
-        navigate("/404");
+        //navigate("/404");
       } finally {
         setLoading(false);
       }
