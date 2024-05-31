@@ -17,7 +17,7 @@ import CreateCommentService from "../../../services/comment/create/CreateComment
 const CreateCommentForm: React.FC<{ post: IPost }> = ({
   post: { Id, Author },
 }) => {
-  const { token } = useAuth();
+  const { token, email } = useAuth();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const ref = React.useRef<MDXEditorMethods>(null); // grab markdown text
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -25,7 +25,7 @@ const CreateCommentForm: React.FC<{ post: IPost }> = ({
   // State to manage form data
   const [formData, setFormData] = useState<IComment>({
     Id: "",
-    Author: Author,
+    Author: email ?? Author,
     Content: "",
     PostId: Id,
   });
@@ -51,7 +51,7 @@ const CreateCommentForm: React.FC<{ post: IPost }> = ({
       if (success) {
         setFormData({
           Id: "",
-          Author: Author,
+          Author: email ?? Author,
           Content: "",
           PostId: Id,
         });
