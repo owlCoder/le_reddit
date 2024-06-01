@@ -1,6 +1,4 @@
-# Le Reddit
-
-<center><img style="height: 64px; margin-bottom: -20px;" src="https://raw.githubusercontent.com/owlCoder/public_api_buckets/main/reddit.svg" /><br/><h1>Le Reddit</h1></center>
+<img style="height: 40px; margin-top: 12px;" src="https://raw.githubusercontent.com/owlCoder/public_api_buckets/main/reddit.svg" alt="Le Reddit Logo"><span style="font-size: 30px; margin-left: 5px;">&nbsp;Le Reddit</span></img>
 
 ## Techology Stack
 ![Azure](https://img.shields.io/badge/azure-%230072C6.svg?style=for-the-badge&logo=microsoftazure&logoColor=white)
